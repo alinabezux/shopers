@@ -1,4 +1,5 @@
 const Type = require('../db/models/Type');
+const Category = require("../db/models/Category");
 
 module.exports = {
     createType: async (req, res, next) => {
@@ -46,4 +47,5 @@ module.exports = {
             next(e)
         }
     },
+
 }

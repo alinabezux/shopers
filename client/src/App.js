@@ -1,25 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {Bonus, Footer, Header, Wishlist} from "./components";
+import {AccountPage, CartPage, HomePage, LoginPage, ProductPage, ShopPage} from "./pages";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <Header/>
+            <Routes>
+                <Route path={'/'} element={<HomePage/>}/>
+                <Route path={'/shop'} element={<ShopPage/>}/>
+                <Route path={'/product/:productId'} element={<ProductPage/>}/>
+                <Route path={'/login'} element={<LoginPage/>}/>
+                <Route path={'/account/'} element={<AccountPage/>}>
+                    <Route path={'wishlist'} element={<Wishlist/>}/>
+                    <Route path={'bonus'} element={<Bonus/>}/>
+                </Route>
+                <Route path={'/cart'} element={<CartPage/>}/>
+                <Route path={'/checkout'} element={<HomePage/>}/>
+                <Route path={'/admin'} element={<HomePage/>}/>
+            </Routes>
+            <Footer/>
+        </BrowserRouter>
+    );
 }
 
 export default App;

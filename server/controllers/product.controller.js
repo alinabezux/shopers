@@ -1,10 +1,11 @@
 const Product = require('../db/models/Product');
+const S3service = require("../services/S3.service");
 
 module.exports = {
     createProduct: async (req, res, next) => {
         try {
             const {price} = req.body;
-            let cashback = price * 0.02;
+            const cashback = Math.trunc(price * 0.02);
             const product = await Product.create({...req.body, cashback});
 
             return res.status(201).json(product);
@@ -15,11 +16,25 @@ module.exports = {
     },
     getAllProducts: async (req, res, next) => {
         try {
-            if (req.query.article) {
-                const item = await Product.findOne({article: req.query.article});
-                return res.status(200).json(item)
+            let {_category, _type} = req.query;
+            let products;
+            // if(const products = await Product.find({});
+
+            if (!_category && !_type) {
+                products = await Product.find({})
+                // products = await Product.find({}).limit(limit).skip((page - 1) * limit);
+                // count = await Product.countDocuments();
             }
-            const products = await Product.find({});
+            if (_category && !_type) {
+                products = await Product.find({_category})
+                // products = await Product.find({_category}).limit(limit).skip((page - 1) * limit);
+                // count = await Product.countDocuments({category});
+            }
+            if (_category && _type) {
+                products = await Product.find({_category, _type})
+                // products = await Product.find({category, type}).limit(limit).skip((page - 1) * limit);
+                // count = await Product.countDocuments({category, type});
+            }
 
             return res.status(200).json(products)
         } catch (e) {
@@ -29,22 +44,33 @@ module.exports = {
     getProductById: async (req, res, next) => {
         try {
             const item = await Product.findById(req.params.productId);
-
             return res.status(200).json(item);
         } catch (e) {
             next(e);
         }
     },
-    // uploadImage: async (req, res, next) => {
+    /// не працює
+    // getProductByArticle: async (req, res, next) => {
     //     try {
-    //         const sendData = await S3Service.uploadPublicFile(req.files.image, 'products', req.params.productId);
-    //         const newProduct = await Product.findByIdAndUpdate(req.params.productId, {image: sendData.Location}, {new: true});
-    //
-    //         res.json(newProduct);
+    //         const item = await Product.findOne({article: req.params.article});
+    //         return res.status(200).json(item);
     //     } catch (e) {
     //         next(e);
     //     }
     // },
+    uploadImage: async (req, res, next) => {
+        try {
+            const sendData = await S3service.uploadPublicFile(req.files.images, 'products', req.params.productId);
+            const newProduct = await Product.findByIdAndUpdate(
+                req.params.productId,
+                {$push: {images: sendData.Location}},
+                {new: true});
+
+            res.json(newProduct);
+        } catch (e) {
+            next(e);
+        }
+    },
 
     updateProduct: async (req, res, next) => {
         try {

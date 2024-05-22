@@ -1,8 +1,15 @@
 body {
+    margin: 0;
     background-color: #F2F2F2;
+    font-family: "Geologica", sans-serif;
 }
 
-/*.App {*/
-/*    text-align: center;*/
+.App {
+
+
+}
+
+/*h4 {*/
+/*    margin: 5px;*/
 /*}*/
 

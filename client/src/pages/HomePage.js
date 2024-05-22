@@ -1,10 +1,12 @@
 import React from 'react';
+import {Container} from "@mui/material";
+import Products from "../components/Product/Products";
 
 const HomePage = () => {
     return (
-        <div>
-
-        </div>
+        <Container>
+            <Products/>
+        </Container>
     );
 };
 

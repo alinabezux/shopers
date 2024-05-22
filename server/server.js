@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const fileUpload = require('express-fileupload');
 const cors = require('cors');
 mongoose.set('strictQuery', false);
 require('dotenv').config();
@@ -7,13 +8,13 @@ require('dotenv').config();
 const configs = require('./configs/configs');
 const router = require('./routes')
 
-
-
 let app = express();
 
 app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+
+app.use(fileUpload());
 app.use('/api', router)
 
 app.get('/', (req, res) => {

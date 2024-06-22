@@ -3,6 +3,7 @@ import {productsService} from "../../services";
 
 const initialState = {
     products: [],
+    selectedProduct: {},
     product: {},
 
     loading: false,
@@ -37,7 +38,11 @@ const getById = createAsyncThunk(
 const productSlice = createSlice({
     name: 'productSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        setSelectedProduct: (state, action) => {
+            state.selectedProduct = action.payload
+        }
+    },
     extraReducers: builder =>
         builder
             .addCase(getAll.fulfilled, (state, action) => {
@@ -71,10 +76,10 @@ const productSlice = createSlice({
 
 })
 
-const {reducer: productReducer} = productSlice;
+const {reducer: productReducer, actions: {setSelectedProduct}} = productSlice;
 
 const productActions = {
-    getAll, getById
+    getAll, getById, setSelectedProduct
 }
 
 export {

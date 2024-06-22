@@ -25,11 +25,10 @@ const Products = () => {
             // page: currentPageProducts,
             // isGettingAll: false
         }))
-    }, [dispatch
-        // selectedCategory.category,
-        // selectedType.type,
-        // currentPageProducts
-    ]);
+    }, [dispatch]);
+    // selectedCategory.category,
+    // selectedType.type,
+    // currentPageProducts
 
 
     // const handleSetCurrentPageProducts = async (pageNumber) => {
@@ -39,25 +38,24 @@ const Products = () => {
     // const paginationItemsProducts = generatePagination(totalPagesProducts, currentPageProducts, handleSetCurrentPageProducts);
 
     return (
-        <>
-            <Container>
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    flexWrap="wrap"
-                    alignItems="center"
-                    justifyContent="center"
-                    gap={2}
-                >
-                    {
-                        products.map(product =>
-                            <ProductCard key={product._id} product={product}/>)
-                    }
-                </Box>
-                {error && <h1>Error:(</h1>}
-            </Container>
+        <Container>
+            <Box
+                display="flex"
+                flexDirection="row"
+                flexWrap="wrap"
+                alignItems="center"
+                justifyContent="center"
+                gap={2}
+                sx={{mt: "20px"}}
+            >
+                {
+                    products.map(product =>
+                        <ProductCard key={product._id} product={product}/>)
+                }
+            </Box>
+            {error && <h1>Error:(</h1>}
             {/*<Pagination style={{display: "flex", justifyContent: "center"}}>{paginationItemsProducts}</Pagination>*/}
-        </>
+        </Container>
     );
 };
 

@@ -3,7 +3,7 @@ import {
     Accordion, AccordionDetails, AccordionSummary,
     Box,
     Divider,
-    IconButton,
+    IconButton, Link,
     Stack,
     Typography
 } from "@mui/material";
@@ -27,7 +27,7 @@ const DrawerMenu = ({open, onClose}) => {
     }, [dispatch]);
 
     useEffect(() => {
-            dispatch(typeActions.getAll())
+        dispatch(typeActions.getAll())
     }, [dispatch, selectedCategory])
 
     return (
@@ -40,18 +40,19 @@ const DrawerMenu = ({open, onClose}) => {
                         color="inherit"
                         aria-label="open drawer"
                         sx={{mr: 2}}
-                    ><CloseIcon fontSize="large"
-                                onClick={onClose}
-                    />
+                        onClick={onClose}
+                    ><CloseIcon fontSize="large"/>
                     </IconButton>
                 </Box>
 
                 {categories.map((category) =>
-                    <>
                         <Accordion key={category._id} id={category._id} sx={{
                             boxShadow: 'none',
                             '&:before': {
                                 display: 'none',
+                            },
+                            '&.Mui-expanded': {
+                                margin: 0,
                             }
                         }}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon/>} onClick={() => handleMenu(category)}>
@@ -64,11 +65,14 @@ const DrawerMenu = ({open, onClose}) => {
                             <AccordionDetails sx={{color: "grey", margin: "0 0 0 30px"}}>
                                 {
                                     types.filter(type => type._category === category._id).map(type =>
-                                        (<h3 key={type._id} style={{margin: "0 0 15px 0"}}>{type.name}</h3>))
+                                        (<h3 key={type._id} style={{
+                                            margin: "0 0 15px 0",
+                                            fontSize: "20px",
+                                            textTransform: 'lowercase',
+                                        }}>{type.name}</h3>))
                                 }
                             </AccordionDetails>
                         </Accordion>
-                    </>
                 )}
 
                 <Divider variant="middle"/>
@@ -97,19 +101,30 @@ const DrawerMenu = ({open, onClose}) => {
                     <h3>ВПОДОБАНІ</h3>
                 </Stack>
                 <Divider variant="middle"/>
-                <Stack direction="column" spacing={2} sx={{margin: "15px 15px 15vh 15px"}}>
-                    <h3>ОБМІН ТА ПОВЕРНЕННЯ</h3>
-                    <h3>ДОСТАВКА ТА ОПЛАТА</h3>
+                <Stack direction="column" spacing={2} sx={{margin: "15px"}}>
+                    <h3>
+                        <Link href="/obmin-ta-povernennya" underline="none" sx={{
+                            color: "black",
+                            '&:hover': {
+                                color: "#9e9e9e",
+                            },
+                        }}>
+                            ОБМІН ТА ПОВЕРНЕННЯ
+                        </Link>
+                    </h3>
+                    <h3>
+                        <Link href="/oplata-ta-dostavka" underline="none" sx={{
+                            color: "black",
+                            '&:hover': {
+                                color: "#9e9e9e",
+                            },
+                        }}>
+                            ОПЛАТА ТА ДОСТАВКА
+                        </Link>
+                    </h3>
                 </Stack>
-
-                <Stack direction="row" spacing={17} alignItems="center"
-                       sx={{
-                           padding: "15px",
-                           bottom: "5vh",
-                           position: "fixed",
-                           backgroundColor: "white",
-                           boxSizing: "border-box"
-                       }}>
+                <Stack direction="row" spacing={12} alignItems="center"
+                       sx={{padding: "15px"}}>
                     <Stack direction="row" spacing={1} alignItems="center">
                         <img src={instlogo} alt="inst logo" height={20}/>
                         <Typography sx={{

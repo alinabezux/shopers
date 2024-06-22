@@ -30,12 +30,15 @@ const DrawerBasket = ({open, onClose}) => {
                         color="inherit"
                         aria-label="open drawer"
                         sx={{mr: 2}}
-                    ><CloseIcon fontSize="large"
-                                onClick={onClose}
-                    />
+                        onClick={onClose}
+                    ><CloseIcon fontSize="large"/>
                     </IconButton>
                 </Box>
-                <Typography>КОШИК</Typography>
+                <Typography variant="h3" sx={{
+                    fontFamily: "Geologica, sans-serif",
+                    fontSize: "30px",
+                    fontWeight: 500,
+                }}>КОШИК</Typography>
             </Box>
         </Drawer>
     );

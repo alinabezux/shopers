@@ -4,52 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e69d0105-3c4b-4bda-8798-64187f1072a2" name="Changes" comment="routing">
-      <change afterPath="$PROJECT_DIR$/client/src/assets/accessories.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/assets/bags.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/assets/inst logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/assets/inst.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/assets/test imge.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/DrawerBasket.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/DrawerMenu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/Product/ProductCard.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/Product/Products.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/configs/urls.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/redux/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/redux/slices/category.slice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/redux/slices/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/redux/slices/product.slice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/redux/slices/type.slice.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/redux/store.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/services/axios.service.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/services/category.service.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/services/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/services/products.service.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/services/type.service.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/services/S3.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="e69d0105-3c4b-4bda-8798-64187f1072a2" name="Changes" comment="products">
+      <change afterPath="$PROJECT_DIR$/client/src/assets/fon 2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/assets/fon.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/BackButton.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Catalogue.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/CategoriesMenu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/components/Types.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/pages/CategoryPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/pages/For clients/DogovirOfertuPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/pages/For clients/ObminPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/pages/For clients/OplataDostvkaPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/pages/For clients/PrivacyPolicyPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/pages/For clients/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/client/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/assets/inst.png" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/assets/inst.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/DrawerBasket.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/DrawerBasket.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/DrawerMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/DrawerMenu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Footer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Product/ProductCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Product/ProductCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Product/Products.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Product/Products.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/pages/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/HomePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/.env" beforeDir="false" afterPath="$PROJECT_DIR$/server/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/configs/configs.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/configs/configs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/category.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/category.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/product.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/product.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/db/models/Product.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/db/models/Product.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ProductPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ProductPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ShopPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ShopPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/redux/slices/product.slice.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/redux/slices/product.slice.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/category.router.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/category.router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/product.router.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/product.router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,11 +54,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/client/node_modules/@mui/base/Popper/Popper.types.d.ts" root0="SKIP_INSPECTION" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -98,6 +89,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
     &quot;ts.external.directory.path&quot;: &quot;D:\\IntelliJ IDEA 2023.2.5\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -129,7 +121,21 @@
       <workItem from="1716213813909" duration="27309000" />
       <workItem from="1716306489473" duration="1385000" />
       <workItem from="1716308123211" duration="10253000" />
-      <workItem from="1716393211089" duration="12077000" />
+      <workItem from="1716393211089" duration="12166000" />
+      <workItem from="1716830013247" duration="10837000" />
+      <workItem from="1716886292235" duration="4478000" />
+      <workItem from="1716895111832" duration="83000" />
+      <workItem from="1716899434306" duration="16982000" />
+      <workItem from="1717011151755" duration="5402000" />
+      <workItem from="1717095920160" duration="120000" />
+      <workItem from="1717096049803" duration="48000" />
+      <workItem from="1717097600503" duration="6000000" />
+      <workItem from="1717106643541" duration="4314000" />
+      <workItem from="1717323709720" duration="22182000" />
+      <workItem from="1717610757825" duration="18836000" />
+      <workItem from="1717789870571" duration="3949000" />
+      <workItem from="1718360124822" duration="918000" />
+      <workItem from="1719087184285" duration="64000" />
     </task>
     <task id="LOCAL-00001" summary="routing">
       <option name="closed" value="true" />
@@ -155,7 +161,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715289142694</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="products">
+      <option name="closed" value="true" />
+      <created>1716419807427</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1716419807427</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -164,6 +178,7 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="routing" />
-    <option name="LAST_COMMIT_MESSAGE" value="routing" />
+    <MESSAGE value="products" />
+    <option name="LAST_COMMIT_MESSAGE" value="products" />
   </component>
 </project>

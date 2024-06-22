@@ -10,7 +10,7 @@ import {
     IconButton,
     Toolbar,
     Typography,
-    Badge,
+    Badge, Link,
 } from "@mui/material";
 import {Menu, MenuItem} from "@mui/joy";
 
@@ -19,16 +19,17 @@ import {useDispatch, useSelector} from "react-redux";
 import {categoryActions, typeActions} from "../redux";
 import {DrawerMenu} from "./DrawerMenu";
 import {DrawerBasket} from "./DrawerBasket";
+import transliterate from "transliterate";
 
 
 const Header = () => {
     const [openDrawerMenu, setOpenDrawerMenu] = useState(false);
-    const [anchorMenu, setAnchorMenu] = useState(null);
+    const [anchorEl, setAnchorMenu] = useState(null);
     const [openBasket, setOpenBasket] = useState(false);
 
     const dispatch = useDispatch();
     const {categories, selectedCategory} = useSelector(state => state.categoryReducer);
-    const {typesByCategory} = useSelector(state => state.typeReducer);
+    const {types} = useSelector(state => state.typeReducer);
 
     const toggleMenu = (newOpenDrawerMenu) => () => {
         setOpenDrawerMenu(newOpenDrawerMenu);
@@ -36,12 +37,12 @@ const Header = () => {
 
     const handleHoverMenu = useCallback((event, category) => {
         setAnchorMenu(event.currentTarget);
-        dispatch(categoryActions.setSelectedCategory(category._id));
+        // dispatch(categoryActions.setSelectedCategory(category));
     }, [dispatch]);
 
     const handleCloseMenu = useCallback(() => {
         setAnchorMenu(null);
-        dispatch(categoryActions.setSelectedCategory(null))
+        // dispatch(categoryActions.setSelectedCategory(null))
     }, [dispatch]);
 
     useEffect(() => {
@@ -50,8 +51,12 @@ const Header = () => {
 
     useEffect(() => {
         if (selectedCategory) {
-            dispatch(typeActions.getTypesByCategoryId({categoryId: selectedCategory}))
+            dispatch(typeActions.getTypesByCategoryId({categoryId: selectedCategory._id}))
         }
+    }, [dispatch, selectedCategory])
+
+    useEffect(() => {
+        dispatch(typeActions.getAll())
     }, [dispatch, selectedCategory])
 
 
@@ -59,9 +64,35 @@ const Header = () => {
         setOpenBasket(newOpenBasket);
     };
 
+//
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    const handleScroll = () => {
+        const position = window.pageYOffset;
+        setScrollPosition(position);
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const handleCategoryClick = useCallback((category) => {
+        dispatch(categoryActions.setSelectedCategory(category));
+        console.log(selectedCategory);
+    }, [dispatch]);
+
 
     return (
-        <AppBar position="static" color="transparent">
+        <AppBar position="sticky"
+                color="default"
+                sx={{
+                    backgroundColor: `rgba(255, 255, 255,${scrollPosition > 50 ? 0.5 : 1})`,
+                    transition: 'background-color 0.3s',
+                }}
+        >
             <Toolbar>
                 <IconButton
                     size="large"
@@ -79,50 +110,59 @@ const Header = () => {
                 <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                     {categories.map((category) => (
                         <Box key={category._id}>
-                            <Typography
-                                id="basic-button"
-                                sx={{
-                                    mr: 2,
-                                    color: 'black',
-                                    display: 'block',
-                                    textTransform: 'uppercase',
-                                    fontFamily: "Geologica",
-                                    fontSize: 20,
-                                    fontWeight: 500,
+                            <Link href={`/${(transliterate(category.name).toLowerCase())}`} underline="none"
+                                  onClick={() => handleCategoryClick(category)}>
+                                <Typography
+                                    id="basic-button"
+                                    sx={{
+                                        mr: 2,
+                                        color: 'black',
+                                        display: 'block',
+                                        textTransform: 'uppercase',
+                                        fontFamily: "Geologica",
+                                        fontSize: 20,
+                                        fontWeight: 600,
+                                        transition: 'color 0.3s ease',
+                                        '&:hover': {
+                                            color: "#700b03"
+                                        }
+                                    }}
+                                    aria-controls={anchorEl && selectedCategory._id === category._id ? `basic-menu-${category._id}` : undefined}
+                                    aria-haspopup="true"
+                                    onMouseEnter={(event) => handleHoverMenu(event, category)}
 
-                                }}
-                                aria-controls={anchorMenu ? `basic-menu-${category._id}` : undefined}
-                                aria-haspopup="true"
-                                onMouseEnter={(event) => handleHoverMenu(event, category)}
-                            >
-                                {category.name}
-                            </Typography>
+                                >
+                                    {category.name}
+                                </Typography>
+                            </Link>
 
                             <Menu
                                 id={`basic-menu-${category._id}`}
-                                variant="solid"
-                                anchorEl={anchorMenu}
-                                open={Boolean(anchorMenu)}
+                                variant="outlined"
+                                anchorEl={anchorEl && selectedCategory._id === category._id ? anchorEl : null}
+                                open={Boolean(anchorEl) && selectedCategory._id === category._id}
                                 onMouseLeave={handleCloseMenu}
-                                MenuListProps={{
+                                menulistprops={{
                                     'aria-labelledby': `basic-button-${category._id}`,
                                 }}
                                 sx={{
                                     width: "150px",
                                     fontFamily: "Geologica, sans-serif",
                                     fontSize: "20px",
-                                    fontWeight: 200,
-                                    opacity: 0.9,
 
+                                    opacity: 0.9,
+                                    zIndex: "9999"
                                 }}
                             >
-                                {typesByCategory.map(type =>
+                                {types.filter(type => type._category === category._id).map(type =>
                                     (<MenuItem key={type._id} onClick={handleCloseMenu}
                                                sx={{
-
                                                    display: "flex",
                                                    flexDirection: "column",
-                                                   alignItems: "center"
+                                                   alignItems: "center",
+                                                   textTransform: 'lowercase',
+                                                   fontWeight: 400,
+                                                   margin: "0"
                                                }}
                                     >{type.name}</MenuItem>)
                                 )}
@@ -132,10 +172,13 @@ const Header = () => {
 
                 </Box>
 
-
-                <Typography variant="h4"
+                <Typography variant="h5"
                             sx={{flexGrow: 1, fontWeight: "800", fontFamily: "Geologica, sans-serif"}}>
-                    SHOPERS_VI
+                    <Link href="/" underline="none" sx={{
+                        color: "black",
+                    }}>
+                        SHOPERS_VI
+                    </Link>
                 </Typography>
 
                 <Stack direction="row" spacing={1} alignItems="center">
@@ -173,11 +216,12 @@ const Header = () => {
                     }}>
                         <LocalMallOutlinedIcon sx={{fontSize: 35}}
                                                aria-label="open basket"
-                                               onClick={()=> setOpenBasket(true)}
+                                               onClick={() => setOpenBasket(true)}
                         />
                     </Badge>
                     <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)}/>
                 </Stack>
+
             </Toolbar>
         </AppBar>
     );

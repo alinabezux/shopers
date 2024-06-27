@@ -1,0 +1,114 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Geologica:wght@100..900&display=swap'); */
+
+/* mobile */
+@media (max-width: 480px) {}
+
+/* tablet */
+@media (max-width: 900px) {
+    .homepage__section1 {
+        width: 100vw;
+        height: 80vh;
+
+    }
+
+    .homepage__image--mb {
+        height: 100%;
+        opacity: 0.8;
+    }
+
+    .homepage__image--pc {
+        display: none;
+    }
+
+    .homepage__dark-box {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        color: white;
+    }
+
+    p.homepage__quote {
+        font-size: 25px;
+    }
+    .homepage__gradient-white {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 20vh;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #F6F6F6 100%)
+    }
+}
+
+/* pc */
+@media (min-width: 900px) {
+    .homepage__section1 {
+        width: 100vw;
+        height: 75vh;
+
+    }
+
+    .homepage__image--pc {
+        width: 100%;
+        /* position: absolute; */
+        /* opacity: 0.8; */
+    }
+
+    .homepage__image--mb {
+        display: none;
+    }
+
+    .homepage__dark-box {
+        background-color: none;
+        justify-content: flex-start;
+        color: black;
+        margin: 20px;
+      
+    }
+
+    .homepage__gradient-white {
+        display: none;
+    }
+
+    p.homepage__quote {
+        font-size: 35px;
+    }
+
+    .homepage__category-title {
+        display: none;
+    }
+}
+
+.homepage__section1 {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.homepage__dark-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+p.homepage__quote {
+    font-family: 'Bad Script', sans-serif;
+    width: 95%;
+    text-align: center;
+}
+
+
+
+p.homepage__category-title {
+    position: relative;
+    font-family: "Geologica", sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: -50px;
+    z-index: 999;
+}

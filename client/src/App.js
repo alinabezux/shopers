@@ -1,4 +1,4 @@
-import './App.css';
+import './styles';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {Bonus, Footer, Header, Wishlist} from "./components";
 import {

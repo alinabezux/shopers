@@ -1,12 +1,13 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
     Accordion, AccordionDetails, AccordionSummary,
     Box,
     Divider,
-    IconButton, Link,
+    IconButton,
     Stack,
     Typography
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -14,77 +15,94 @@ import Drawer from "@mui/material/Drawer";
 import instlogo from "../assets/inst logo.png";
 import inst from "../assets/inst.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {useDispatch, useSelector} from "react-redux";
-import {categoryActions, typeActions} from "../redux";
+import { useDispatch, useSelector } from "react-redux";
+import { categoryActions, typeActions } from "../redux";
+import transliterate from "transliterate";
 
-const DrawerMenu = ({open, onClose}) => {
+
+const DrawerMenu = ({ open, onClose }) => {
     const dispatch = useDispatch();
-    const {categories, selectedCategory} = useSelector(state => state.categoryReducer);
-    const {types} = useSelector(state => state.typeReducer);
+    const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
+    const { types } = useSelector(state => state.typeReducer);
 
     const handleMenu = useCallback((category) => {
-        dispatch(categoryActions.setSelectedCategory(category._id));
+        dispatch(categoryActions.setSelectedCategory(category));
     }, [dispatch]);
 
     useEffect(() => {
         dispatch(typeActions.getAll())
     }, [dispatch, selectedCategory])
 
+    const handleTypeClick = useCallback((category, type) => {
+        dispatch(categoryActions.setSelectedCategory(category));
+        dispatch(typeActions.setSelectedType(type));
+        onClose();
+    }, [dispatch]);
+
     return (
         <Drawer open={open}>
-            <Box sx={{width: "80vw"}}>
+            <Box sx={{ width: "80vw" }}>
                 <Box
-                    sx={{backgroundColor: "black", color: "white"}}>
+                    sx={{ backgroundColor: "black", color: "white" }}>
                     <IconButton
                         size="large"
                         color="inherit"
                         aria-label="open drawer"
-                        sx={{mr: 2}}
+                        sx={{ mr: 2 }}
                         onClick={onClose}
-                    ><CloseIcon fontSize="large"/>
+                    ><CloseIcon fontSize="large" />
                     </IconButton>
                 </Box>
 
                 {categories.map((category) =>
-                        <Accordion key={category._id} id={category._id} sx={{
-                            boxShadow: 'none',
-                            '&:before': {
-                                display: 'none',
-                            },
-                            '&.Mui-expanded': {
-                                margin: 0,
-                            }
-                        }}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon/>} onClick={() => handleMenu(category)}>
-                                <h3 style={{
-                                    margin: "0",
-                                    textTransform: 'uppercase'
-                                }}>{category.name}</h3>
-                            </AccordionSummary>
+                    <Accordion key={category._id} id={category._id} sx={{
+                        boxShadow: 'none',
+                        '&:before': {
+                            display: 'none',
+                        },
+                        '&.Mui-expanded': {
+                            margin: 0,
+                        }
+                    }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />} onClick={() => handleMenu(category)}>
+                            <h2 style={{
+                                margin: "0",
+                                textTransform: 'uppercase'
+                            }}>{category.name}</h2>
+                        </AccordionSummary>
 
-                            <AccordionDetails sx={{color: "grey", margin: "0 0 0 30px"}}>
-                                {
-                                    types.filter(type => type._category === category._id).map(type =>
-                                        (<h3 key={type._id} style={{
-                                            margin: "0 0 15px 0",
-                                            fontSize: "20px",
-                                            textTransform: 'lowercase',
-                                        }}>{type.name}</h3>))
-                                }
-                            </AccordionDetails>
-                        </Accordion>
+                        <AccordionDetails sx={{ color: "grey", margin: "0 0 0 30px" }}>
+                            {
+                                types.filter(type => type._category === category._id).map(type =>
+                                (<h3 key={type._id}
+                                    onClick={() => handleTypeClick(category, type)}
+                                    style={{
+                                        margin: "0 0 15px 0",
+                                        fontSize: "25px",
+                                        textTransform: 'lowercase'
+                                    }}>
+                                    <Link to={`/${(transliterate(category.name).toLowerCase())}/${(transliterate(type.name).toLowerCase())}`}
+                                        style={{
+                                            color: "inherit",
+                                            textDecoration: "none"
+                                        }}>{type.name}
+                                    </Link>
+                                </h3>))
+                            }
+                        </AccordionDetails>
+                    </Accordion>
                 )}
 
-                <Divider variant="middle"/>
+                <Divider variant="middle" />
 
                 <Stack direction="row" spacing={1} alignItems="center">
                     <IconButton
                         size="large"
                         color="inherit"
                         aria-label="open drawer"
-                        sx={{mr: 2}}
+                        sx={{ mr: 2 }}
                     >
-                        <PermIdentityIcon fontSize="inherit"/>
+                        <PermIdentityIcon fontSize="inherit" />
                     </IconButton>
                     <h3>ОСОБИСТИЙ КАБІНЕТ</h3>
                 </Stack>
@@ -94,50 +112,53 @@ const DrawerMenu = ({open, onClose}) => {
                         size="large"
                         color="inherit"
                         aria-label="open drawer"
-                        sx={{mr: 2}}
+                        sx={{ mr: 2 }}
                     >
-                        <FavoriteBorderIcon fontSize="inherit"/>
+                        <FavoriteBorderIcon fontSize="inherit" />
                     </IconButton>
                     <h3>ВПОДОБАНІ</h3>
                 </Stack>
-                <Divider variant="middle"/>
-                <Stack direction="column" spacing={2} sx={{margin: "15px"}}>
+                <Divider variant="middle" />
+                <Stack direction="column" spacing={2} sx={{ margin: "15px" }}>
                     <h3>
-                        <Link href="/obmin-ta-povernennya" underline="none" sx={{
-                            color: "black",
-                            '&:hover': {
-                                color: "#9e9e9e",
-                            },
-                        }}>
+                        <Link to="/obmin-ta-povernennya"
+                            style={{
+                                color: "black",
+                                textDecoration: "none",
+                                '&:hover': {
+                                    color: "#9e9e9e",
+                                }
+                            }}>
                             ОБМІН ТА ПОВЕРНЕННЯ
                         </Link>
                     </h3>
                     <h3>
-                        <Link href="/oplata-ta-dostavka" underline="none" sx={{
+                        <Link to="/oplata-ta-dostavka" underline="none" style={{
                             color: "black",
+                            textDecoration: "none",
                             '&:hover': {
                                 color: "#9e9e9e",
-                            },
+                            }
                         }}>
                             ОПЛАТА ТА ДОСТАВКА
                         </Link>
                     </h3>
                 </Stack>
                 <Stack direction="row" spacing={12} alignItems="center"
-                       sx={{padding: "15px"}}>
+                    sx={{ padding: "15px" }}>
                     <Stack direction="row" spacing={1} alignItems="center">
-                        <img src={instlogo} alt="inst logo" height={20}/>
+                        <img src={instlogo} alt="inst logo" height={20} />
                         <Typography sx={{
                             fontWeight: "800",
                             fontFamily: "Geologica, sans-serif",
                         }}>SHOPERS_VI
-                        < /Typography>
+                        </Typography>
                     </Stack>
-                    <img src={inst} alt="inst image" height={40}/>
+                    <img src={inst} alt="inst image" height={40} />
                 </Stack>
             </Box>
-        </Drawer>
+        </Drawer >
     );
 };
 
-export {DrawerMenu};
+export { DrawerMenu };

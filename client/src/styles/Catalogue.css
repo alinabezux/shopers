@@ -1,0 +1,22 @@
+h3.catalogue__title {
+    font-family: 'Geologica', sans-serif;
+    text-transform: uppercase;
+    font-weight: 500
+}
+
+/* pc */
+@media (min-width: 900px) {}
+
+/* tablet */
+@media (max-width: 900px) {
+    h3.catalogue__title {
+        font-size: 44px;
+    }
+
+
+}
+
+.catalogue {
+    margin-top: 20px;
+
+}

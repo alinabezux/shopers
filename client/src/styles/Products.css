@@ -1,0 +1,14 @@
+/* pc */
+@media (min-width: 1200px) {
+    .products {
+        width: 80%;
+    }
+}
+
+/* tablet */
+@media (max-width: 900px) {
+    .products {
+        width: 100%;
+    }
+
+}

@@ -1,13 +1,20 @@
-import React, {useEffect} from 'react';
-import {useSelector} from "react-redux";
-import {Box, Link, Typography} from "@mui/material";
-import {CardContent, CardCover} from "@mui/joy";
+import React, { useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { Box, Typography } from "@mui/material";
+import { CardContent, CardCover } from "@mui/joy";
 import Card from "@mui/joy/Card";
 import transliterate from "transliterate";
+import { categoryActions } from "../redux";
+import { Link } from "react-router-dom";
 
-const CategoriesMenu = ({width}) => {
+const CategoriesMenu = ({ width }) => {
+    const { categories } = useSelector(state => state.categoryReducer);
 
-    const {categories} = useSelector(state => state.categoryReducer);
+    const dispatch = useDispatch();
+
+    const handleCategoryClick = useCallback((category) => {
+        dispatch(categoryActions.setSelectedCategory(category));
+    }, [dispatch]);
 
     return (
         <Box sx={{
@@ -18,13 +25,15 @@ const CategoriesMenu = ({width}) => {
             justifyContent: "center",
         }}>
             {categories.map((category) => (
-                <Link key={category._id} href={`/${(transliterate(category.name).toLowerCase())}`} underline="none"
-                      sx={{
-                          color: "inherit",
-                      }}>
+                <Link key={category._id} to={`/${(transliterate(category.name).toLowerCase())}`}
+                    style={{
+                        color: "inherit",
+                        textDecoration: "none"
+                    }}
+                >
                     <Card sx={{
-                        width: {xs: "150px", md: width},
-                        height: {xs: "150px", md: width},
+                        width: { xs: "150px", md: width },
+                        height: { xs: "150px", md: width },
                         m: "10px",
                         p: "0",
                         boxSizing: "border-box",
@@ -37,7 +46,7 @@ const CategoriesMenu = ({width}) => {
                             />
                         </CardCover>
                         <CardContent>
-                            <Typography
+                            <Typography onClick={() => handleCategoryClick(category)}
                                 sx={{
                                     width: "100%",
                                     height: "100%",

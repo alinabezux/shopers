@@ -1,16 +1,22 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {productActions} from "../../redux";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { productActions } from "../../redux";
 import ProductCard from "./ProductCard";
-import {Box, Container} from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 const Products = () => {
     const dispatch = useDispatch();
 
-    const {products, error} = useSelector(state => state.productReducer);
-    // const {selectedCategory} = useSelector(state => state.categoriesReducer);
-    // const {selectedType} = useSelector(state => state.typesReducer);
+    const { products, error } = useSelector(state => state.productReducer);
+    const { selectedCategory } = useSelector(state => state.categoryReducer);
+    const { selectedType } = useSelector(state => state.typeReducer);
 
+    useEffect(() => {
+        dispatch(productActions.getAll({
+            _category: selectedCategory._id,
+            _type: selectedType._id,
+        }))
+    }, [dispatch, selectedCategory._id, selectedType._id]);
 
     // useEffect(() => {
     //     if (currentPageProducts > totalPagesProducts) {
@@ -18,17 +24,7 @@ const Products = () => {
     //     }
     // }, [dispatch, currentPageProducts, totalPagesProducts]);
 
-    useEffect(() => {
-        dispatch(productActions.getAll({
-            // category: selectedCategory.category,
-            // type: selectedType.type,
-            // page: currentPageProducts,
-            // isGettingAll: false
-        }))
-    }, [dispatch]);
-    // selectedCategory.category,
-    // selectedType.type,
-    // currentPageProducts
+
 
 
     // const handleSetCurrentPageProducts = async (pageNumber) => {
@@ -38,7 +34,7 @@ const Products = () => {
     // const paginationItemsProducts = generatePagination(totalPagesProducts, currentPageProducts, handleSetCurrentPageProducts);
 
     return (
-        <Container>
+        <Box className="products">
             <Box
                 display="flex"
                 flexDirection="row"
@@ -46,16 +42,16 @@ const Products = () => {
                 alignItems="center"
                 justifyContent="center"
                 gap={2}
-                sx={{mt: "20px"}}
+                sx={{ mt: "20px" }}
             >
                 {
                     products.map(product =>
-                        <ProductCard key={product._id} product={product}/>)
+                        <ProductCard key={product._id} product={product} />)
                 }
             </Box>
             {error && <h1>Error:(</h1>}
             {/*<Pagination style={{display: "flex", justifyContent: "center"}}>{paginationItemsProducts}</Pagination>*/}
-        </Container>
+        </Box >
     );
 };
 

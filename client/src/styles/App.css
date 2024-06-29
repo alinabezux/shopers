@@ -5,3 +5,8 @@ body {
     background-color: #F6F6F6;
     font-family: "Geologica", sans-serif;
 }
+
+.link {
+    color: inherit;
+    text-decoration: none;
+}

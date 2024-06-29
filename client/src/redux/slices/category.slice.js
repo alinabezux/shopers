@@ -1,5 +1,5 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {categoryService} from "../../services";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { categoryService } from "../../services";
 
 const initialState = {
     categories: [],
@@ -11,9 +11,9 @@ const initialState = {
 
 const getAll = createAsyncThunk(
     'categoriesSlice/getAll',
-    async (_, {rejectWithValue}) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const {data} = await categoryService.getAll();
+            const { data } = await categoryService.getAll();
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -46,7 +46,7 @@ const categorySlice = createSlice(
     }
 );
 
-const {reducer: categoryReducer, actions: {setSelectedCategory}} = categorySlice;
+const { reducer: categoryReducer, actions: { setSelectedCategory } } = categorySlice;
 
 const categoryActions = {
     getAll, setSelectedCategory

@@ -1,0 +1,83 @@
+div.footer__main {
+    display: flex;
+}
+
+p.footer__link {
+    color: #9e9e9e;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: "Geologica", sans-serif;
+
+
+    &:hover {
+        color: white
+    }
+}
+
+p.footer__link.inst {
+    font-size: 18px;
+}
+
+p.footer__link.pol {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+span.footer__link {
+    color: #9e9e9e;
+    font-family: "Geologica", sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.footer {
+    background-color: black;
+    width: 100vw;
+    box-sizing: border-box;
+    margin-top: 50px;
+}
+
+p.footer__accordion-title {
+    font-family: 'Geologica', sans-serif;
+    color: grey;
+    font-size: 20px;
+    margin: 0;
+
+}
+
+p.footer__accordion-text {
+    font-family: 'Geologica', sans-serif;
+    color: grey;
+}
+
+div.footer__accordion {
+    background-color: transparent;
+    width: 100%;
+    box-shadow: none;
+
+    &:before {
+        display: none,
+    }
+
+    &.Mui-expanded {
+        margin: 0;
+    }
+}
+
+
+
+/* mobile */
+@media (max-width: 900px) {
+    .footer__main {
+        flex-direction: column;
+    }
+
+
+}
+
+/* pc */
+@media (min-width: 900px) {
+    div.footer__main {
+        flex-direction: row;
+    }
+}

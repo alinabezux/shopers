@@ -6,147 +6,79 @@ import {
     Box,
     Container,
     Divider,
-    Link,
     Stack,
     Typography, useMediaQuery, useTheme
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import instlogo from "../assets/inst logo.png";
 import inst from "../assets/inst.png";
-import {AccordionGroup} from "@mui/joy";
+import { Link } from "react-router-dom";
+
 
 const Footer = () => {
-    const theme = useTheme();
-    const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'));
-
     return (
-        <Box sx={{backgroundColor: "black", width: "100vw", boxSizing: "border-box", marginTop: "50px"}}>
-            <Container sx={{display: "flex", flexDirection: {xs: 'column', md: 'row'}}}>
-                <Accordion key={"1"} id={"1"} sx={{
-                    boxShadow: 'none',
-                    '&:before': {
-                        display: 'none',
-                    },
-                    backgroundColor: "transparent",
-                    width: "100%",
-                    '&.Mui-expanded': {
-                        margin: 0,
-                    }
-                }}>
+        <Box className="footer" >
+            <Container className="footer__main">
+                <Accordion className='footer__accordion' key={"1"} id={"1"} >
 
-                    <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "#9e9e9e"}}/>}>
-                        <Typography sx={{fontFamily: "Geologica, sans-serif", color: "grey", fontSize: '20px'}}>
-                            КЛІЄНТАМ
-                        </Typography>
+                    <AccordionSummary className="footer__accordion-summary" expandIcon={<ExpandMoreIcon sx={{ color: "#9e9e9e" }} />}>
+                        <Typography className='footer__accordion-title'>КЛІЄНТАМ</Typography>
                     </AccordionSummary>
 
-                    <AccordionDetails sx={{color: "grey",}}>
+                    <AccordionDetails className="footer__accordion-details">
                         <Stack direction="column" spacing={2}>
-                            <Link href="/oplata-ta-dostavka" underline="none" sx={{
-                                color: "#9e9e9e",
-                                fontWeight: '400',
-                                fontSize: '15px',
-                                '&:hover': {
-                                    color: "white",
-                                },
-
-                            }}>
-                                ОПЛАТА ТА ДОСТАВКА
+                            <Link className="link" to="/oplata-ta-dostavka" >
+                                <Typography className="footer__link">ОПЛАТА ТА ДОСТАВКА</Typography>
                             </Link>
-                            <Link href="/obmin-ta-povernennya" underline="none" sx={{
-                                color: "#9e9e9e",
-                                fontWeight: '400',
-                                fontSize: '15px',
-                                '&:hover': {
-                                    color: "white",
-                                },
-
-                            }}>
-                                ОБМІН ТА ПОВЕРНЕННЯ
+                            <Link className="link" to="/obmin-ta-povernennya" >
+                                <Typography className="footer__link">ОБМІН ТА ПОВЕРНЕННЯ</Typography>
                             </Link>
-                            <Link href="/dogovir-oferty" underline="none" sx={{
-                                color: "#9e9e9e",
-                                fontWeight: '400',
-                                fontSize: '15px',
-                                '&:hover': {
-                                    color: "white",
-                                },
-
-                            }}>
-                                ДОГОВІР ОФЕРТИ
+                            <Link className="link" to="/dogovir-oferty" >
+                                <Typography className="footer__link">ДОГОВІР ОФЕРТИ</Typography>
                             </Link>
                         </Stack>
                     </AccordionDetails>
                 </Accordion>
 
 
-                <Accordion key={"2"} id={"2"} sx={{
-                    boxShadow: 'none',
-                    '&:before': {
-                        display: 'none',
-                    },
-                    backgroundColor: "transparent",
-                    width: "100%",
-                    '&.Mui-expanded': {
-                        margin: 0,
-                    },
-                }}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon sx={{color: "#9e9e9e"}}/>}>
-                        <Typography sx={{fontFamily: "Geologica, sans-serif", color: "grey", fontSize: '20px'}}>
-                            КОНТАКТИ
-                        </Typography>
+                <Accordion className="footer__accordion" key={"2"} id={"2"}>
+                    <AccordionSummary className="footer__accordion-summary" expandIcon={<ExpandMoreIcon sx={{ color: "#9e9e9e" }} />}>
+                        <Typography className='footer__accordion-title'>КОНТАКТИ</Typography>
                     </AccordionSummary>
 
-                    <AccordionDetails sx={{color: "grey",}}>
+                    <AccordionDetails className="footer__accordion-details">
                         <Stack direction="column" spacing={1}>
-                            <Typography
-                                sx={{fontFamily: "Geologica, sans-serif", color: "grey",}}>
+                            <Typography className='footer__accordion-text'>
                                 Зв'язатися з нами в Instagram:
                             </Typography>
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Stack direction="row" spacing={1} alignItems="center">
-                                    <img src={instlogo} alt="inst logo" height={20}/>
-                                    <Link href="https://www.instagram.com/shopers_vi/" underline="none" sx={{
-                                        color: "#9e9e9e",
-                                        fontWeight: '400',
-                                        fontSize: '18px',
-                                        '&:hover': {
-                                            color: "white",
-                                        },
-                                    }}>
-                                        @shopers_vi
+                                    <img src={instlogo} alt="inst logo" height={20} />
+                                    <Link className="link" to="https://www.instagram.com/shopers_vi/">
+                                        <Typography className='footer__link inst'>
+                                            @shopers_vi
+                                        </Typography>
                                     </Link>
                                 </Stack>
-                                <img src={inst} alt="inst image" height={40}/>
+                                <img src={inst} alt="inst image" height={40} />
                             </Stack>
                         </Stack>
                     </AccordionDetails>
                 </Accordion>
             </Container>
-            <hr style={{width: "80vw"}}/>
-            <Stack direction="column" spacing={1} alignItems="center" sx={{padding: "20px"}}>
-                <Link href="/politika-konfidencijnosti" underline="none" sx={{
-                    color: "#9e9e9e",
-                    fontWeight: '300', fontSize: '14px',
-                    '&:hover': {
-                        color: "white",
-                    },
-
-                }}>
-                    Політика конфіденційності
+            <hr style={{ width: "80vw" }} />
+            <Stack direction="column" spacing={1} alignItems="center" sx={{ padding: "20px" }}>
+                <Link className="link" to="/politika-konfidencijnosti" >
+                    <Typography className='footer__link pol'>
+                        Політика конфіденційності
+                    </Typography>
                 </Link>
-                <span
-                    style={{
-                        fontFamily: "Geologica, sans-serif",
-                        fontWeight: '300',
-                        fontSize: '14px',
-                        color: "#9e9e9e"
-                    }}>
-                        @ 2024 - SHOPERS_VI. Всі права захищені.
-                    </span>
+                <span className='footer__link'>
+                    @ 2024 - SHOPERS_VI. Всі права захищені.
+                </span>
             </Stack>
-        </Box>
+        </Box >
     );
 };
 
-export {Footer};
+export { Footer };

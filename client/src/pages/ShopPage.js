@@ -1,10 +1,10 @@
 import React from 'react';
-import {Catalogue} from "../components/Catalogue";
+import { Catalogue } from '../components';
 
 const ShopPage = () => {
     return (
-        <Catalogue name="Каталог"/>
+        <Catalogue name="Каталог" />
     );
 };
 
-export {ShopPage};
+export { ShopPage };

@@ -1,10 +1,10 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {typeService} from '../../services'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { typeService } from '../../services'
 
 const initialState = {
     types: [],
     typesByCategory: [],
-    // selectedType: {},
+    selectedType: {},
     // totalPagesTypes: null,
     // currentPageTypes: 1,
     loading: false,
@@ -13,9 +13,9 @@ const initialState = {
 
 const getAll = createAsyncThunk(
     'typeSlice/getTypes',
-    async (_, {rejectWithValue}) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const {data} = await typeService.getAll();
+            const { data } = await typeService.getAll();
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -25,9 +25,9 @@ const getAll = createAsyncThunk(
 
 const getTypesByCategoryId = createAsyncThunk(
     'typeSlice/getTypesByCategoryId',
-    async ({categoryId}, {rejectByValue}) => {
+    async ({ categoryId }, { rejectByValue }) => {
         try {
-            const {data} = await typeService.getTypesByCategoryId(categoryId);
+            const { data } = await typeService.getTypesByCategoryId(categoryId);
             return data;
         } catch (e) {
             return rejectByValue(e.response.data)
@@ -76,9 +76,9 @@ const typeSlice = createSlice({
     name: 'typeSlice',
     initialState,
     reducers: {
-        // setSelectedType: (state, action) => {
-        //     state.selectedType = action.payload
-        // },
+        setSelectedType: (state, action) => {
+            state.selectedType = action.payload
+        },
         // setCurrentPageTypes: (state, action) => {
         //     state.currentPageTypes = action.payload
         // },
@@ -153,10 +153,10 @@ const typeSlice = createSlice({
     // })
 });
 
-const {reducer: typeReducer} = typeSlice;
+const { reducer: typeReducer, actions: { setSelectedType } } = typeSlice;
 
 const typeActions = {
-    getAll, getTypesByCategoryId
+    getAll, getTypesByCategoryId, setSelectedType
 }
 
 export {

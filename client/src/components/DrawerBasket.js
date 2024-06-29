@@ -8,7 +8,7 @@ import Drawer from "@mui/material/Drawer";
 import Card from '@mui/joy/Card';
 
 
-const DrawerBasket = ({open, onClose}) => {
+const DrawerBasket = ({ open, onClose }) => {
     // const product = {
     //     photo,
     //     nme,
@@ -22,26 +22,22 @@ const DrawerBasket = ({open, onClose}) => {
 
     return (
         <Drawer open={open} anchor="right">
-            <Box sx={{width: {xs: '80vw', md: "25vw"}}}>
-                <Box
-                    sx={{backgroundColor: "black", color: "white"}}>
+            <Box className='basket' >
+                <Box className='basket__header' >
+                    <Typography className='basket__title' variant="h3" >КОШИК</Typography>
                     <IconButton
                         size="large"
                         color="inherit"
-                        aria-label="open drawer"
-                        sx={{mr: 2}}
+                        aria-label="close drawer"
                         onClick={onClose}
-                    ><CloseIcon fontSize="large"/>
+                        sx={{ px: "0" }}
+                    >
+                        <CloseIcon fontSize="large" />
                     </IconButton>
                 </Box>
-                <Typography variant="h3" sx={{
-                    fontFamily: "Geologica, sans-serif",
-                    fontSize: "30px",
-                    fontWeight: 500,
-                }}>КОШИК</Typography>
             </Box>
         </Drawer>
     );
 };
 
-export {DrawerBasket};
+export { DrawerBasket };

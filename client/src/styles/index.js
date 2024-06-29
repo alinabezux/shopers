@@ -4,6 +4,7 @@ export * from './ProductCard.css'
 export * from './Catalogue.css'
 export * from './Products.css'
 export * from './Footer.css'
+export * from './Basket.css'
 
 
 

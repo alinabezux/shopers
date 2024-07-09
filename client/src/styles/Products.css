@@ -12,3 +12,18 @@
     }
 
 }
+
+/* .products {
+    display: flex;
+    justify-content: center;
+ 
+} */
+
+.products__container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+}

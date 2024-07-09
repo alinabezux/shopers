@@ -15,3 +15,4 @@ export * from './AccountPage/Bonus'
 
 export * from './Product/Products'
 export * from './Product/ProductCard'
+export * from './ProductInBasket'

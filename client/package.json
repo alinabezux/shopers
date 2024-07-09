@@ -3,12 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
     "@mui/base": "^5.0.0-beta.40",
     "@mui/icons-material": "^5.15.17",
     "@mui/joy": "^5.0.0-beta.36",
-    "@mui/material": "^5.15.17",
     "@reduxjs/toolkit": "^2.2.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -18,7 +15,11 @@
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",
     "transliterate": "^1.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.17",
+    "swiper": "^11.1.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"

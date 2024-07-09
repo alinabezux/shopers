@@ -5,7 +5,8 @@ import { CardContent, CardCover } from "@mui/joy";
 import Card from "@mui/joy/Card";
 import transliterate from "transliterate";
 import { categoryActions } from "../redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { toUrlFriendly } from '../utils'
 
 const CategoriesMenu = ({ width }) => {
     const { categories } = useSelector(state => state.categoryReducer);
@@ -25,11 +26,8 @@ const CategoriesMenu = ({ width }) => {
             justifyContent: "center",
         }}>
             {categories.map((category) => (
-                <Link key={category._id} to={`/${(transliterate(category.name).toLowerCase())}`}
-                    style={{
-                        color: "inherit",
-                        textDecoration: "none"
-                    }}
+                <NavLink key={category._id} to={`/${(toUrlFriendly(category.name))}`} className="link"
+
                 >
                     <Card sx={{
                         width: { xs: "150px", md: width },
@@ -74,7 +72,7 @@ const CategoriesMenu = ({ width }) => {
                             </Typography>
                         </CardContent>
                     </Card>
-                </Link>
+                </NavLink>
             ))
             }
         </Box>

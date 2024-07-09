@@ -1,7 +1,6 @@
 export * from './AdminPage'
 export * from './HomePage'
 export * from './LoginPage'
-export * from './CartPage'
 export * from './ProductPage'
 export * from './CheckoutPage'
 export * from './AccountPage'

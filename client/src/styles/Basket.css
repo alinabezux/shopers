@@ -1,15 +1,17 @@
 /* mobile */
 @media (max-width: 900px) {
     .basket {
-        width: 80vw;
+        width: 100vw;
     }
 }
 
 /* pc */
 @media (min-width: 900px) {
     .basket {
-        width: 25vw;
+        width: 30vw;
     }
+
+
 }
 
 .basket__header {
@@ -24,8 +26,74 @@
     box-sizing: border-box;
 }
 
-h3.basket__title {
-    font-family: 'Geologica', sans-serif;
-    font-size: 30px;
+h4.basket__title {
+    font-size: 28px;
     font-weight: 500;
+}
+
+.basket__products {}
+
+.basket__order {}
+
+.product-in-basket {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+
+div.product-in-basket__card-image {
+    width: 100px;
+    margin: 5px;
+}
+
+.basket {
+    height: 100vh;
+}
+
+div.basket__content {
+    margin: 10px 0;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+div.basket__cashback {
+    align-self: flex-end;
+}
+
+
+button.basket__button {
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+p.product-in-basket__card-name {
+    font-weight: 600;
+}
+
+p.product-in-basket__card-color {
+    color: grey;
+    font-size: 14px;
+}
+
+p.product-in-basket__card-price {
+    font-weight: 600;
+}
+
+p.basket__price {
+    font-weight: 700;
+    text-transform: uppercase;
+    /* font-size: 24px; */
+}
+
+button.product-in-basket__card-quantity {
+    font-weight: 700;
+    width: 25px;
+}
+
+div.product-in-basket__card-counter {
+    --ButtonGroup-separatorColor: none
 }

@@ -35,15 +35,7 @@ const Products = () => {
 
     return (
         <Box className="products">
-            <Box
-                display="flex"
-                flexDirection="row"
-                flexWrap="wrap"
-                alignItems="center"
-                justifyContent="center"
-                gap={2}
-                sx={{ mt: "20px" }}
-            >
+            <Box className="products__container">
                 {
                     products.map(product =>
                         <ProductCard key={product._id} product={product} />)
@@ -55,4 +47,4 @@ const Products = () => {
     );
 };
 
-export default Products;
+export { Products };

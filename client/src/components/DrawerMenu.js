@@ -7,9 +7,9 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Drawer from "@mui/material/Drawer";
 import instlogo from "../assets/inst logo.png";
@@ -17,7 +17,7 @@ import inst from "../assets/inst.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, typeActions } from "../redux";
-import transliterate from "transliterate";
+import { toUrlFriendly } from '../utils'
 
 
 const DrawerMenu = ({ open, onClose }) => {
@@ -40,7 +40,7 @@ const DrawerMenu = ({ open, onClose }) => {
     }, [dispatch]);
 
     return (
-        <Drawer open={open}>
+        <Drawer open={open} >
             <Box sx={{ width: "80vw" }}>
                 <Box
                     sx={{ backgroundColor: "black", color: "white" }}>
@@ -81,12 +81,9 @@ const DrawerMenu = ({ open, onClose }) => {
                                         fontSize: "25px",
                                         textTransform: 'lowercase'
                                     }}>
-                                    <Link to={`/${(transliterate(category.name).toLowerCase())}/${(transliterate(type.name).toLowerCase())}`}
-                                        style={{
-                                            color: "inherit",
-                                            textDecoration: "none"
-                                        }}>{type.name}
-                                    </Link>
+                                    <NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`}
+                                        className={({ isActive }) => isActive ? "link active" : "link"}>{type.name}
+                                    </NavLink>
                                 </h3>))
                             }
                         </AccordionDetails>
@@ -102,7 +99,7 @@ const DrawerMenu = ({ open, onClose }) => {
                         aria-label="open drawer"
                         sx={{ mr: 2 }}
                     >
-                        <PermIdentityIcon fontSize="inherit" />
+                        <AccountCircleRoundedIcon fontSize="inherit" />
                     </IconButton>
                     <h3>ОСОБИСТИЙ КАБІНЕТ</h3>
                 </Stack>

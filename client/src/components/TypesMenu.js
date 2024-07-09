@@ -2,9 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { Box, Stack, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { typeActions } from "../redux";
-import { Link } from "react-router-dom";
-import transliterate from "transliterate";
-
+import { NavLink } from "react-router-dom";
+import { toUrlFriendly } from '../utils'
 
 const TypesMenu = () => {
     const { selectedCategory } = useSelector(state => state.categoryReducer);
@@ -17,6 +16,7 @@ const TypesMenu = () => {
 
     const handleTypeClick = useCallback((type) => {
         dispatch(typeActions.setSelectedType(type));
+
     }, [dispatch]);
 
     return (
@@ -33,7 +33,7 @@ const TypesMenu = () => {
                         onClick={() => handleTypeClick(type)}
                         sx={{
                             fontFamily: 'Geologica, sans-serif',
-                            fontSize: '28px',   
+                            fontSize: '28px',
                             textTransform: 'lowercase',
                             fontWeight: 300,
                             mx: "7px",
@@ -43,10 +43,9 @@ const TypesMenu = () => {
                             }
 
                         }}>
-                        <Link to={`/${(transliterate(selectedCategory.name).toLowerCase())}/${(transliterate(type.name).toLowerCase())}`}
-                            style={{ textDecoration: "none", color: "inherit" }}>
+                        <NavLink to={`/${(toUrlFriendly(selectedCategory.name))}/${(toUrlFriendly(type.name))}`} className={({ isActive }) => isActive ? "link active" : "link"}>
                             {type.name}
-                        </Link>
+                        </NavLink>
                     </Typography>
                 )
             }

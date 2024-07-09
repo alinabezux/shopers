@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Stack, Typography, Box } from "@mui/material";
 import { CategoriesMenu } from "./CategoriesMenu";
 import TypesMenu from "./TypesMenu";
-import Products from "./Product/Products";
+import {Products} from "./Product/Products";
 import { BackButton } from "./BackButton";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";

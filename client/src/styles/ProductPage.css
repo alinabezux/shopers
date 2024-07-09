@@ -1,0 +1,167 @@
+/* tablet */
+@media (max-width: 900px) {
+
+    .product-page {
+        width: 100vw;
+    }
+
+    .product-page__content {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .product-page__gallery {
+        width: 100%;
+    }
+
+    .product-page__button {
+        width: 100%;
+    }
+
+
+    .product-page__content button {
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    nav.product-page__breadrumbs,
+    .product-page__breadrumbs p {
+        font-size: 24px;
+
+    }
+
+    svg.product-page__heart-icon {
+        font-size: 45px;
+        padding-top: 10px;
+    }
+
+}
+
+/* pc */
+@media (min-width: 900px) {
+    .product-page {
+        width: 80vw;
+    }
+
+    .product-page__content {
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    .product-page__gallery {
+        width: 40%;
+    }
+
+    .product-page__button {
+        width: 300px;
+    }
+
+    .product-page__content button {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    nav.product-page__breadrumbs,
+    .product-page__breadrumbs p {
+        font-size: 20px;
+
+    }
+
+    svg.product-page__heart-icon {
+        font-size: 35px;
+    }
+
+}
+
+
+.product-page__content {
+    display: flex;
+}
+
+.product-page__breadrumb {
+    &:hover {
+        color: #700b03;
+    }
+}
+
+
+nav.product-page__breadrumbs {
+    margin: 20px 0;
+}
+
+
+
+
+.product-page__content h5,
+.product-page__content h3 {
+    font-weight: 500;
+}
+
+
+.product-page__content p {
+    color: grey;
+    font-size: 18px;
+}
+
+
+.swiper {
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+}
+
+
+
+.swiper {
+    width: 100%;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.swiper-slide {
+    background-size: cover;
+    background-position: center;
+}
+
+.mySwiper2 {
+    height: 80%;
+    width: 100%;
+}
+
+.mySwiper {
+    height: 20%;
+    box-sizing: border-box;
+    margin: 10px 0;
+}
+
+.mySwiper .swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.5;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+    opacity: 1;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+div.product-page__counter {
+    --ButtonGroup-separatorColor: none
+}

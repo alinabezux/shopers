@@ -6,7 +6,6 @@ p.footer__link {
     color: #9e9e9e;
     font-weight: 400;
     font-size: 15px;
-    font-family: "Geologica", sans-serif;
 
 
     &:hover {
@@ -25,7 +24,6 @@ p.footer__link.pol {
 
 span.footer__link {
     color: #9e9e9e;
-    font-family: "Geologica", sans-serif;
     font-size: 14px;
     font-weight: 300;
 }
@@ -38,7 +36,6 @@ span.footer__link {
 }
 
 p.footer__accordion-title {
-    font-family: 'Geologica', sans-serif;
     color: grey;
     font-size: 20px;
     margin: 0;
@@ -46,7 +43,6 @@ p.footer__accordion-title {
 }
 
 p.footer__accordion-text {
-    font-family: 'Geologica', sans-serif;
     color: grey;
 }
 

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {setupStore} from "./redux";
+import './styles';
 import {Provider} from "react-redux";
 
 const store = setupStore();

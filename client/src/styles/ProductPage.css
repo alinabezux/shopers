@@ -14,25 +14,21 @@
         width: 100%;
     }
 
-    .product-page__button {
-        width: 100%;
+    button.product-page__quantity {
+        font-size: 15px;
+        font-weight: 600;
     }
 
-
-    .product-page__content button {
-        font-size: 20px;
-        font-weight: 500;
+    button.product-page__button {
+        font-size: 12px;
+        font-weight: 700;
+        width: 60%;
     }
+
 
     nav.product-page__breadrumbs,
     .product-page__breadrumbs p {
         font-size: 24px;
-
-    }
-
-    svg.product-page__heart-icon {
-        font-size: 45px;
-        padding-top: 10px;
     }
 
 }
@@ -67,9 +63,6 @@
 
     }
 
-    svg.product-page__heart-icon {
-        font-size: 35px;
-    }
 
 }
 

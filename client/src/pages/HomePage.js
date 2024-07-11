@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Container, Typography, Button } from "@mui/material";
 import { Link } from 'react-router-dom';
-import fon2 from '../assets/fon 2.jpg'
-import fon_pc from '../assets/SHOPERS_VI.jpg'
+import fon2 from '../assets/fon2.jpg'
+import fon_pc from '../assets/SHOPERS_VI2.jpg'
 import { styled } from '@mui/material/styles';
 import { CategoriesMenu } from '../components';
 
@@ -22,7 +22,7 @@ const WhiteButton = styled(Button)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
         color: 'white',
         border: "2px solid white",
-        margin: '30px',
+        margin: '20px',
         '&:hover': {
             backgroundColor: 'rgba(255,255,255,0.7)',
             color: "black",

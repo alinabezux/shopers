@@ -121,9 +121,9 @@ const ProductPage = () => {
                 <Box>
                     <Stack direction="column" spacing={1} className="product-page__info">
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="h3" className="product-page__name">{selectedProduct.name}</Typography>
-                            <FavoriteBorderRoundedIcon className="product-page__heart-icon" />
-                            {/*<FavoriteBorderRoundedIcon sx={{fontSize: 45, color: "#730000"}}/>*/}
+                            <Typography variant="h4" className="product-page__name">{selectedProduct.name}</Typography>
+                            <FavoriteBorderRoundedIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" />
+                            {/*<FavoriteBorderRoundedIcon sx={{fontSize: 35, color: "#730000"}}/>*/}
 
                         </Stack>
 
@@ -133,13 +133,12 @@ const ProductPage = () => {
                                 {selectedProduct.cashback} грн. кешбек
                             </Chip>
                         </Stack>
-                        <Stack direction="row" spacing={1} alignItems="center">
+                        <Stack direction="row" spacing={2} alignItems="center" >
                             <ButtonGroup className="product-page__counter" variant='outlined' aria-label="outlined button group">
                                 <Button className="product-page__quantity"> - </Button>
                                 <Button className="product-page__quantity">{selectedProduct.quantity}</Button>
                                 <Button className="product-page__quantity">+</Button>
                             </ButtonGroup>
-
                             <Button variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />}>ДОДАТИ В КОШИК</Button>
                         </Stack>
                         <Chip className="product-page__cashback" size="md" variant="soft" color="danger">

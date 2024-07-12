@@ -6,19 +6,16 @@ module.exports = {
     getUsersBasket: async (req, res, next) => {
         try {
             const productsData = [];
-            const { userId } = req.params;
 
-            if (req.decoded.id === userId) {
-                const productsInBasket = await ProductInBasket.find({ _user: userId })
-                for (const productInBasket of productsInBasket) {
-                    const product = await Product.findById(productInBasket._product)
-                    productsData.push({
-                        ...product._doc,
-                        quantity: productInBasket.quantity,
-                    })
-                }
-                res.json(productsData);
-            } else throw new ApiError(401, 'Немає доступу.')
+            const productsInBasket = await ProductInBasket.find({ _user: req.params.userId })
+            for (const productInBasket of productsInBasket) {
+                const product = await Product.findById(productInBasket._product)
+                productsData.push({
+                    ...product._doc,
+                    quantity: productInBasket.quantity,
+                })
+            }
+            res.json(productsData).status(200);
 
         } catch (e) {
             next(e);
@@ -27,24 +24,22 @@ module.exports = {
 
     addToBasket: async (req, res, next) => {
         try {
-            const { productId } = req.params;
 
-            if (req.decoded.id === req.params.userId) {
-                let productInBasket = await ProductInBasket.findOne({ _product: productId, _user: req.params.userId })
-                if (productInBasket) {
-                    await ProductInBasket.updateOne(
-                        { _id: productInBasket._id },
-                        { quantity: productInBasket.quantity + 1 },
-                        { new: true }
-                    )
-                } else await ProductInBasket.create({
+            let productInBasket = await ProductInBasket.findOne({ _product: req.params.productId, _user: req.params.userId })
+
+            if (productInBasket) {
+                productInBasket = await ProductInBasket.findOneAndUpdate(
+                    { _id: productInBasket._id },
+                    { $inc: { quantity: 1 } },
+                    { new: true }
+                )
+            } else
+                productInBasket = await ProductInBasket.create({
                     _user: req.params.userId,
-                    _product: productId
+                    _product: req.params.productId
                 });
 
-                res.sendStatus(200)
-            } else throw new ApiError(401, 'Немає доступу.')
-
+            res.json(productInBasket).status(200)
         } catch (e) {
             next(e)
         }
@@ -52,10 +47,14 @@ module.exports = {
 
     deleteFromBasket: async (req, res, next) => {
         try {
-            if (req.decoded.id === req.params.userId) {
-                await ProductInBasket.deleteOne({ _product: req.params.productId });
-            } else throw new ApiError(401, 'Немає доступу.')
-            res.sendStatus(204);
+            let productInBasket = await ProductInBasket.findOne({ _product: req.params.productId, _user: req.params.userId })
+
+            if (productInBasket) {
+                await ProductInBasket.deleteOne({ _id: productInBasket._id });
+                res.sendStatus(204);
+            } else {
+                res.status(404).json({ message: "Такого продукту не існує в даній корзині" });
+            }
         } catch (e) {
             next(e)
         }
@@ -63,9 +62,20 @@ module.exports = {
 
     changeProductQuantity: async (req, res, next) => {
         try {
-            const updatedProductInBasket = await ProductInBasket.findOneAndUpdate({ _product: req.params.productId }, { quantity: req.body.quantity }, { new: true });
+            let updatedProductInBasket;
+            
+            let productInBasket = await ProductInBasket.findOne({ _product: req.params.productId, _user: req.params.userId })
+            if (productInBasket) {
+                updatedProductInBasket = await ProductInBasket.findOneAndUpdate(
+                    { _id: productInBasket._id },
+                    { quantity: req.body.quantity },
+                    { new: true }
+                )
+            } else {
+                res.status(404).json({ message: "Такого продукту не існує в даній корзині" });
+            }
+            res.json(updatedProductInBasket).status(200)
 
-            res.json(updatedProductInBasket)
         } catch (e) {
             next(e)
         }

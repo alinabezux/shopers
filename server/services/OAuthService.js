@@ -13,7 +13,7 @@ module.exports = {
         }
     },
     generateTokenPair: (dataToSign = {}) => {
-        const accessToken = jwt.sign(dataToSign, ACCESS_SECRET, { expiresIn: '1m' });
+        const accessToken = jwt.sign(dataToSign, ACCESS_SECRET, { expiresIn: '1d' });
         const refreshToken = jwt.sign(dataToSign, REFRESH_SECRET, { expiresIn: '30d' });
 
         return {
@@ -28,7 +28,6 @@ module.exports = {
 
             if (tokenType === 'accessToken') secret = ACCESS_SECRET
             else if (tokenType === 'refreshToken') secret = REFRESH_SECRET
-            console.log(`verify - ${JSON.stringify(jwt.verify(token, secret))}`)
 
             return jwt.verify(token, secret);
         } catch (e) {

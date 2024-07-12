@@ -6,7 +6,7 @@ const authValidator = require('../validators/auth.validator');
 module.exports = {
     checkLogInBody: async (req, res, next) => {
         try {
-            const validate = authValidator.logInValidator.validate(req.body.user);
+            const validate = authValidator.logInValidator.validate(req.body);
 
             if (validate.error) {
                 throw new ApiError(409, 'Неправильний email або пароль.')
@@ -34,9 +34,12 @@ module.exports = {
             if (!tokenInfo) {
                 throw new ApiError(401, 'Токен не дійсний.')
             }
-            req.decoded = decoded;
-            req.tokenInfo = tokenInfo;
 
+            if (decoded.id !== req.params.userId) {
+                throw new ApiError(401, 'Немає доступу.');
+            }
+
+            req.tokenInfo = tokenInfo;
             next();
         } catch (e) {
             next(e);

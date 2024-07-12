@@ -15,9 +15,14 @@ basketRouter.post('/:userId/:productId',
     authMiddleware.checkAccessToken,
     basketController.addToBasket);
 
-basketRouter.delete('/:userId/:productId',
-    authMiddleware.checkAccessToken,
+basketRouter.patch('/:userId/:productId',
     userMiddleware.checkIfUserExists,
+    authMiddleware.checkAccessToken,
+    basketController.changeProductQuantity);
+
+basketRouter.delete('/:userId/:productId',
+    userMiddleware.checkIfUserExists,
+    authMiddleware.checkAccessToken,
     basketController.deleteFromBasket);
 
 module.exports = basketRouter;

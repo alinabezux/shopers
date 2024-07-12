@@ -23,6 +23,8 @@ module.exports = {
     },
     isNewUserValid: async (req, res, next) => {
         try {
+
+            console.log(req.body)
             let validate = userValidator.newUserValidator.validate(req.body);
 
             if (validate.error) {
@@ -48,7 +50,7 @@ module.exports = {
         try {
             const { userId } = req.params;
             const user = await User.findById(userId);
-        
+
             if (!user) {
                 throw new ApiError(400, 'Користувача не існує')
             }

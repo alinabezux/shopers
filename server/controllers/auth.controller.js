@@ -21,7 +21,6 @@ module.exports = {
     refresh: async (req, res, next) => {
         try {
             const { refreshToken, _user } = req.tokenInfo;
-            console.log(`refreshToken, _user  refresh: ${refreshToken} ${_user}`);
 
             await OAuth.deleteOne({ refreshToken });
 

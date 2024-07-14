@@ -1,13 +1,11 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import {
     AppBar,
     Box,
     Stack,
-    IconButton,
     Toolbar,
     Typography,
     Badge,
@@ -20,7 +18,13 @@ import { categoryActions, typeActions } from "../redux";
 import { DrawerMenu } from "./DrawerMenu";
 import { DrawerBasket } from "./DrawerBasket";
 import { toUrlFriendly } from '../utils'
-
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import ListDivider from '@mui/joy/ListDivider';
+import Edit from '@mui/icons-material/Edit';
+import MenuButton from '@mui/joy/MenuButton';
+import Dropdown from '@mui/joy/Dropdown';
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 
 const Header = () => {
     const [openDrawerMenu, setOpenDrawerMenu] = useState(false);
@@ -143,7 +147,6 @@ const Header = () => {
                                 }}
                                 sx={{
                                     width: "150px",
-
                                     fontSize: "20px",
                                     opacity: 0.9,
                                     zIndex: "9999"
@@ -172,7 +175,47 @@ const Header = () => {
 
                 <Stack direction="row" alignItems="center" justifySelf="flex-end" sx={{ zIndex: "999" }}>
                     <FavoriteBorderIcon className='header__icon pc' />
-                    <AccountCircleRoundedIcon className='header__icon pc' />
+
+                    <Dropdown>
+                        <MenuButton sx={{ border: "none", m: 0, p: 0, }}>
+                            <AccountCircleRoundedIcon className='header__icon pc' />
+                        </MenuButton>
+                        <Menu placement="bottom-end"
+                            sx={{
+                                // width: "150px",
+                                fontSize: "18px",
+                                opacity: 0.9,
+                                zIndex: "9999"
+                            }}>
+
+                            <MenuItem>
+                                <ListItemDecorator>
+                                    <Edit />
+                                </ListItemDecorator>{' '}
+                                профіль
+                            </MenuItem>
+                            <MenuItem>
+                                <ListItemDecorator>
+                                    <FavoriteBorderIcon />
+                                </ListItemDecorator>{' '}
+                                список бажань
+                            </MenuItem>
+                            <MenuItem >
+                                <ListItemDecorator >
+                                    <LocalMallOutlinedIcon />
+                                </ListItemDecorator>{' '}
+                                замовлення
+                            </MenuItem>
+                            <ListDivider />
+                            <MenuItem variant="soft" color="danger">
+                                <ListItemDecorator sx={{ color: 'inherit' }}>
+                                    <LogoutRoundedIcon />
+                                </ListItemDecorator>{' '}
+                                вийти
+                            </MenuItem>
+                        </Menu>
+                    </Dropdown>
+
                     <Badge variant="dot" color="warning" sx={{
                         '& .MuiBadge-dot': {
                             transform: 'translateY(6px)',
@@ -192,7 +235,7 @@ const Header = () => {
                 </Link>
             </Typography>
             <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
-        </AppBar>
+        </AppBar >
     );
 };
 

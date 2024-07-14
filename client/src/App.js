@@ -35,13 +35,11 @@ function App() {
                     <Route path={'/dogovir-oferty'} element={<DogovirOfertuPage />} />
                     <Route path={'/politika-konfidencijnosti'} element={<PrivacyPolicyPage />} />
 
-                    <Route path={'/my-account'} element={<LoginPage />} />
-
-                    <Route path={'/account'} element={<AccountPage />}>
-                        <Route path={'wishlist'} element={<Wishlist />} />
-                        <Route path={'bonus'} element={<Bonus />} />
+                    <Route path={'/account'} element={<AccountPage />} >
+                        {/* <Route path={'/wishlist'} element={<WishlistPage />} /> */}
+                        {/* <Route path={'/orders'} element={<OrdersPage />} /> */}
                     </Route>
-
+                    <Route path={'auth'} element={<LoginPage />} />
 
                     <Route path={'/admin'} element={<HomePage />} />
                 </Route>

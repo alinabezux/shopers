@@ -11,7 +11,8 @@ export * from './Catalogue'
 
 
 export * from './AccountPage/Wishlist'
-export * from './AccountPage/Bonus'
+export * from './AccountPage/Orders'
+export * from './AccountPage/Profile'
 
 export * from './Product/Products'
 export * from './Product/ProductCard'

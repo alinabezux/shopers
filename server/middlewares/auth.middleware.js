@@ -19,7 +19,7 @@ module.exports = {
     },
     checkAccessToken: async (req, res, next) => {
         try {
-            const authorizationString = req.get('Authorization');
+            const authorizationString = req.headers.authorization;
 
             if (!authorizationString) {
                 throw new ApiError(401, 'Користувач не авторизований.');
@@ -48,19 +48,17 @@ module.exports = {
 
     checkRefreshToken: async (req, res, next) => {
         try {
-            const refreshString = req.body.refresh;
+            const { refreshToken } = req.cookies;
 
-            if (!refreshString) {
+            if (!refreshToken) {
                 throw new ApiError(401, 'Немає токену.');
             }
-            const refreshToken = refreshString
 
             OAuthService.checkToken(refreshToken, 'refreshToken');
             const tokenInfo = await OAuth.findOne({ refreshToken });
 
-
             if (!tokenInfo) {
-                throw new ApiError(401, 'Токен не дійсний.')
+                throw new ApiError(401, 'Користувач не авторизований.')
             }
 
             req.tokenInfo = tokenInfo;

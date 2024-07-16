@@ -13,7 +13,7 @@ authRouter.post('/refresh',
     authController.refresh);
     
 authRouter.post('/logOut',
-    authMiddleware.checkAccessToken,
+    // authMiddleware.checkAccessToken,
     authController.logOut);
 
 module.exports = authRouter;

@@ -24,8 +24,7 @@ import ListDivider from '@mui/joy/ListDivider';
 import Edit from '@mui/icons-material/Edit';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
-import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-
+import { Chip } from '@mui/joy';
 const Header = () => {
     const [openDrawerMenu, setOpenDrawerMenu] = useState(false);
     const [anchorEl, setAnchorMenu] = useState(null);
@@ -177,35 +176,48 @@ const Header = () => {
                     <FavoriteBorderIcon className='header__icon pc' />
 
                     <Dropdown>
-                        <MenuButton sx={{ border: "none", m: 0, p: 0, }}>
+                        <MenuButton sx={{
+                            border: "none", m: 0, p: 0, '&:hover': {
+                                backgroundColor: "transparent",
+                            }
+                        }}>
                             <AccountCircleRoundedIcon className='header__icon pc' />
                         </MenuButton>
                         <Menu placement="bottom-end"
                             sx={{
-                                // width: "150px",
                                 fontSize: "18px",
                                 opacity: 0.9,
                                 zIndex: "9999"
                             }}>
-
-                            <MenuItem>
-                                <ListItemDecorator>
-                                    <Edit />
-                                </ListItemDecorator>{' '}
-                                профіль
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemDecorator>
-                                    <FavoriteBorderIcon />
-                                </ListItemDecorator>{' '}
-                                список бажань
-                            </MenuItem>
-                            <MenuItem >
-                                <ListItemDecorator >
-                                    <LocalMallOutlinedIcon />
-                                </ListItemDecorator>{' '}
-                                замовлення
-                            </MenuItem>
+                            {/* <MenuItem> */}
+                            <Chip size="sm" variant="soft" color="success" alignItems="flex-start" sx={{ mx: "15px", my: "5px" }}>
+                                Бонусів : 20
+                            </Chip>
+                            {/* </MenuItem> */}
+                            <Link className='link' to="/account#profile">
+                                <MenuItem >
+                                    <ListItemDecorator>
+                                        <Edit />
+                                    </ListItemDecorator>{' '}
+                                    профіль
+                                </MenuItem>
+                            </Link>
+                            <Link to="/account#wishlist" className='link'>
+                                <MenuItem >
+                                    <ListItemDecorator>
+                                        <FavoriteBorderIcon />
+                                    </ListItemDecorator>{' '}
+                                    список бажань
+                                </MenuItem>
+                            </Link>
+                            <Link to="/account#orders" className='link'>
+                                <MenuItem >
+                                    <ListItemDecorator >
+                                        <LocalMallOutlinedIcon />
+                                    </ListItemDecorator>{' '}
+                                    замовлення
+                                </MenuItem>
+                            </Link>
                             <ListDivider />
                             <MenuItem variant="soft" color="danger">
                                 <ListItemDecorator sx={{ color: 'inherit' }}>

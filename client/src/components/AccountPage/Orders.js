@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Bonus = () => {
+const Orders = () => {
     return (
         <div>
 
@@ -8,4 +8,4 @@ const Bonus = () => {
     );
 };
 
-export {Bonus};
+export {Orders};

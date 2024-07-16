@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Bonus, Wishlist, MainLayout } from "./components";
+import { MainLayout } from "./components";
 import {
-    AccountPage,
     CategoryPage,
     DogovirOfertuPage,
     HomePage,
@@ -12,7 +11,8 @@ import {
     ProductPage,
     ShopPage,
     TypePage,
-    CheckoutPage
+    CheckoutPage,
+    AccountPage
 
 } from "./pages";
 import './styles';
@@ -35,12 +35,8 @@ function App() {
                     <Route path={'/dogovir-oferty'} element={<DogovirOfertuPage />} />
                     <Route path={'/politika-konfidencijnosti'} element={<PrivacyPolicyPage />} />
 
-                    <Route path={'/account'} element={<AccountPage />} >
-                        {/* <Route path={'/wishlist'} element={<WishlistPage />} /> */}
-                        {/* <Route path={'/orders'} element={<OrdersPage />} /> */}
-                    </Route>
-                    <Route path={'auth'} element={<LoginPage />} />
-
+                    <Route path={'/account'} element={<AccountPage />} />
+                    <Route path={'/auth'} element={<LoginPage />} />
                     <Route path={'/admin'} element={<HomePage />} />
                 </Route>
             </Routes>

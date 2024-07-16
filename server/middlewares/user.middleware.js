@@ -11,9 +11,10 @@ module.exports = {
             const user = await User.findOne({ email });
 
             if (!user) {
-                throw new ApiError(404, 'Неправильний email або пароль.')
+                throw new ApiError(404, 'Користувача з таким email не знайдено.')
             }
 
+            // console.log(user._id.toString())
             req.user = user;
 
             next();

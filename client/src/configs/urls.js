@@ -7,10 +7,10 @@ const urls = {
     types: '/types',
     // users: '/users',
     auth: {
-        registration: '/account/registration',
-        logIn: '/account/logIn',
-        refresh: '/account/refresh',
-        logOut: '/account/logOut'
+        registration: '/users/register',
+        logIn: '/auth/logIn',
+        refresh: '/auth/refresh',
+        logOut: '/auth/logOut'
     },
     basket: '/basket',
     order: '/order',

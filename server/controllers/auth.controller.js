@@ -5,14 +5,14 @@ module.exports = {
     logIn: async (req, res, next) => {
         try {
             const { user, body } = req;
-          
-            await OAuthService.comparePasswords(user.password, body.password);
-
+            await OAuthService.comparePasswords(body.password, user.password,);
             const tokenPair = OAuthService.generateTokenPair({ id: user._id });
 
-            await OAuth.create({ _user: user._id, ...tokenPair })
+            const info = await OAuthService.saveTokens(user._id, tokenPair)
 
-            res.json({ _user: user._id, ...tokenPair });
+            res.cookie('refreshToken', info.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+            return res.status(200).json(info);
+
         } catch (e) {
             next(e);
         }
@@ -20,15 +20,13 @@ module.exports = {
 
     refresh: async (req, res, next) => {
         try {
-            const { refreshToken, _user } = req.tokenInfo;
-
-            await OAuth.deleteOne({ refreshToken });
+            const { _user } = req.tokenInfo;
 
             const tokenPair = OAuthService.generateTokenPair({ id: _user });
+            const info = await OAuthService.saveTokens(_user, tokenPair)
 
-            await OAuth.create({ _user, ...tokenPair })
-
-            res.status(201).json({ ...tokenPair });
+            res.cookie('refreshToken', info.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+            return res.status(200).json(info);
         } catch (e) {
             next(e);
         }
@@ -36,12 +34,11 @@ module.exports = {
 
     logOut: async (req, res, next) => {
         try {
-            const { accessToken } = req.tokenInfo;
-            console.log(`accessToken logOut: ${accessToken}`);
+            const {refreshToken} = req.cookies;
 
-            await OAuth.deleteOne({ accessToken });
-
-            res.sendStatus(204);    
+            await OAuth.deleteOne({ refreshToken });
+            res.clearCookie('refreshToken');
+            return res.sendStatus(204);
         } catch (e) {
             next(e);
         }

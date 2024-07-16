@@ -2,10 +2,11 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const ApiError = require("../errors/ApiError")
 const { ACCESS_SECRET, REFRESH_SECRET } = require("../configs/configs")
+const OAuth = require("../db/models/OAuth");
 
 module.exports = {
     hashPassword: (password) => bcrypt.hash(password, 10),
-    comparePasswords: async (hashPassword, password) => {
+    comparePasswords: async (password, hashPassword) => {
         const isPasswordsSame = await bcrypt.compare(password, hashPassword);
 
         if (!isPasswordsSame) {
@@ -21,7 +22,20 @@ module.exports = {
             refreshToken
         }
     },
+    saveTokens: async (userId, tokenPair) => {
+        let info = await OAuth.findOne({ _user: userId })
 
+        if (info) {
+            info.accessToken = tokenPair.accessToken;
+            info.refreshToken = tokenPair.refreshToken;
+            await info.save();
+        } else {
+            info = await OAuth.create({ _user: userId, ...tokenPair });
+        }
+
+        return info;
+
+    },
     checkToken: (token, tokenType = 'accessToken') => {
         try {
             let secret = '';

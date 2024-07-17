@@ -4,7 +4,7 @@ import {
     CategoryPage,
     DogovirOfertuPage,
     HomePage,
-    LoginPage,
+    AuthPage,
     ObminPage,
     OplataDostvkaPage,
     PrivacyPolicyPage,
@@ -36,7 +36,7 @@ function App() {
                     <Route path={'/politika-konfidencijnosti'} element={<PrivacyPolicyPage />} />
 
                     <Route path={'/account'} element={<AccountPage />} />
-                    <Route path={'/auth'} element={<LoginPage />} />
+                    <Route path={'/auth'} element={<AuthPage />} />
                     <Route path={'/admin'} element={<HomePage />} />
                 </Route>
             </Routes>

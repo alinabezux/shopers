@@ -12,7 +12,7 @@ const userValidator = {
             'string.empty': 'Email є обов\'язковим полем!',
         }),
         password: Joi.string().regex(/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/).required().messages({
-            'string.pattern.base': 'Ваш пароль повинен містити не менше 6-ти символів,літери великого та малого регістру і цифри.',
+            'string.pattern.base': 'Ваш пароль повинен складатися з англійських літер, містити не менше 6-ти символів, літери великого та малого регістру, цифри.',
             'string.empty': 'Пароль є обов\'язковим полем!',
         }),
         confirmPassword: Joi.string().required().messages({

@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload');
 const cors = require('cors');
 mongoose.set('strictQuery', false);
 require('dotenv').config();
-
+const ApiError = require('./errors/ApiError');
 const configs = require('./configs/configs');
 const router = require('./routes')
 
@@ -25,6 +25,14 @@ app.use('/api', router)
 app.get('/', (req, res) => {
     res.json('WELCOME:)')
 })
+
+app.use((err, req, res, next) => {
+    if (err instanceof ApiError) {
+        res.status(err.status).json({ message: err.message });
+    } else {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 app.listen(configs.PORT, configs.HOST, async () => {
     await mongoose.connect(configs.MONGO_URL, {

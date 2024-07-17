@@ -14,10 +14,11 @@ const $host = axios.create({
 const $authHost = axios.create({
     withCredentials: true,
     baseURL
- })
+})
+
 export const history = createBrowserHistory();
 
-let isRefreshing = false;
+
 
 $authHost.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
@@ -32,24 +33,20 @@ $authHost.interceptors.response.use((config) => {
     return config;
 },
     async (error) => {
-        const refreshToken = authService.getRefreshToken();
-        if (error.response?.status === 401 && refreshToken && !isRefreshing) {
-            isRefreshing = true;
+        const originalRequest = error.config;
+        if (error.response?.status === 401 && error.config && !error.config._isRetry) {
+            originalRequest._isRetry = true;
             try {
-                const { data } = await authService.refresh(refreshToken);
-
+                const { data } = await authService.refresh();
                 localStorage.setItem('access', data.accessToken)
-                localStorage.setItem('refresh', data.refreshToken)
-
+                $authHost.request(originalRequest)
             } catch (e) {
                 authService.deleteInfo()
-                history.replace('/logIn?expSession=true')
+                history.replace('/auth#logIn?expSession=true')
             }
-            isRefreshing = false;
             return $authHost(error.config)
         }
         return Promise.reject(error)
-    }
-)
+    })
 
 export { $host, $authHost };

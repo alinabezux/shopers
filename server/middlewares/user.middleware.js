@@ -5,7 +5,6 @@ const userValidator = require('../validators/user.validator')
 module.exports = {
     getUserByEmail: async (req, res, next) => {
         try {
-
             const { email } = req.body;
 
             const user = await User.findOne({ email });
@@ -14,7 +13,6 @@ module.exports = {
                 throw new ApiError(404, 'Користувача з таким email не знайдено.')
             }
 
-            // console.log(user._id.toString())
             req.user = user;
 
             next();
@@ -25,9 +23,7 @@ module.exports = {
     isNewUserValid: async (req, res, next) => {
         try {
 
-            console.log(req.body)
-            let validate = userValidator.newUserValidator.validate(req.body);
-
+            let validate = userValidator.newUserValidator.validate(req.body.user);
             if (validate.error) {
                 const errorDetails = validate.error.details[0] || null;
 

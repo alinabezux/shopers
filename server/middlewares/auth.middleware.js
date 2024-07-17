@@ -6,11 +6,12 @@ const authValidator = require('../validators/auth.validator');
 module.exports = {
     checkLogInBody: async (req, res, next) => {
         try {
-            const validate = authValidator.logInValidator.validate(req.body);
+            const validate = authValidator.logInValidator.validate(req.body.user);
 
             if (validate.error) {
                 throw new ApiError(409, 'Неправильний email або пароль.')
             }
+            req.body = validate.value;
             next();
 
         } catch (e) {
@@ -49,7 +50,7 @@ module.exports = {
     checkRefreshToken: async (req, res, next) => {
         try {
             const { refreshToken } = req.cookies;
-
+            console.log(req.cookies)
             if (!refreshToken) {
                 throw new ApiError(401, 'Немає токену.');
             }

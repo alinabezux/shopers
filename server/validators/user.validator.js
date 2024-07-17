@@ -13,7 +13,7 @@ module.exports = {
             'any.required': 'Email є обов\'язковим полем',
         }),
         password: Joi.string().regex(regexp.PASSWORD).required().messages({
-            'string.pattern.base': 'Ваш пароль повинен містити не менше 6-ти символів,літери великого та малого регістру і цифри.',
+            'string.pattern.base': 'Ваш пароль повинен складатися з англійських літер, містити не менше 6-ти символів, літери великого та малого регістру, цифри.',
             'any.required': 'Пароль є обов\'язковим полем',
         }),
         isAdmin: Joi.boolean().optional()

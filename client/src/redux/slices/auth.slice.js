@@ -1,5 +1,5 @@
-import { authService } from "../../services/auth.service";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { authService } from "../../services";
 
 const initialState = {
     users: [],

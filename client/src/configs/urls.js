@@ -13,6 +13,7 @@ const urls = {
         logOut: '/auth/logOut'
     },
     basket: '/basket',
+    favourite: '/favourite',
     order: '/order',
 }
 

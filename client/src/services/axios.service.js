@@ -1,8 +1,8 @@
 import axios from "axios";
 import { createBrowserHistory } from "history";
 
-import { authService } from "./auth.service";
 import { baseURL } from "../configs/urls";
+import { authService } from "./auth.service";
 
 // const baseURL = process.env.NODE_ENV === "production" ? prodURL : devURL;
 

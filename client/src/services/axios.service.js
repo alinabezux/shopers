@@ -18,8 +18,6 @@ const $authHost = axios.create({
 
 export const history = createBrowserHistory();
 
-
-
 $authHost.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
     if (accessToken) {

@@ -14,7 +14,7 @@
     h5.header__logo {
         width: 100%;
         height: 64px;
-        
+
         justify-content: center;
     }
 
@@ -42,6 +42,9 @@ svg.header__icon {
     font-size: 35px;
 }
 
+a.header_account-icon {
+    height: 35px;
+}
 
 h5.header__logo {
     display: flex;
@@ -49,5 +52,5 @@ h5.header__logo {
     align-items: center;
     position: absolute;
     z-index: 998;
-    
+
 }

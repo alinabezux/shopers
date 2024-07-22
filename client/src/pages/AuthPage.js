@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Stack, Box } from "@mui/material";
 import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { tabClasses } from '@mui/joy/Tab'
 import image from '../assets/loginpage.jpg'
-
 import Snackbar from '@mui/joy/Snackbar';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 
@@ -12,7 +11,9 @@ import { LogIn, Register } from '../components';
 
 const AuthPage = () => {
 
+    const [activeTab, setActiveTab] = useState('logIn');
     const location = useLocation();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     useEffect(() => {
         const hash = location.hash.replace('#', '');
@@ -22,31 +23,21 @@ const AuthPage = () => {
     }, [location]);
 
 
-    const [activeTab, setActiveTab] = useState('logIn');
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-
-
     return (
-        <Box sx={{ my: "30px", width: "100vw", m: 0, p: 0 }}>
-            <Stack direction="row" spacing={5} justifyContent="space-between" sx={{ width: "100%" }} >
-                <Box sx={{ width: "50%" }}>
-                    <img style={{ width: "100%" }}
+        <Box className='authpage'>
+            <Stack className='authpage__content' >
+                <Box className='authpage__image' >
+                    <img
                         src={image}
                         alt="fon"
                     />
                 </Box>
-                <Box sx={{
-                    width: "50%", display: "flex", justifyContent: "flex-start", alignItems: "center", flexDirection: "column", pt: "30px"
-                }}>
-                    <Typography variant="h4" className='title' sx={{ textAlign: "center", width: "100%" }} >МІЙ КАБІНЕТ</Typography>
-
-                    <Tabs aria-label="tabs" defaultValue="logIn" value={activeTab} onChange={(e, value) => setActiveTab(value)} sx={{
-                        bgcolor: 'transparent', width: "50%", display: "flex", alignItems: "center"
-                    }}>
-                        <TabList
+                <Box className='authpage__main' >
+                    <Typography variant="h4" className='title' >МІЙ КАБІНЕТ</Typography>
+                    <Tabs className='tabs' aria-label="tabs" defaultValue="logIn" value={activeTab} onChange={(e, value) => setActiveTab(value)} >
+                        <TabList className='authpage__tablist'
                             disableUnderline
                             sx={{
-                                // variant:"neutral",
                                 width: "fit-content",
                                 p: 0.5,
                                 gap: 1,
@@ -58,34 +49,36 @@ const AuthPage = () => {
                                 },
                             }}
                         >
-                            <Tab disableIndicator value="logIn" id="logIn">Увійти</Tab>
-                            <Tab disableIndicator value="signUp" id="signUp">Зареєструватись</Tab>
+                            <Link to='/auth#logIn' className='link'>
+                                <Tab disableIndicator sx={{ fontWeight: "500" }} value="logIn" id="logIn">УВІЙТИ</Tab>
+                            </Link>
+                            <Link to='/auth#signUp' className='link'>
+                                <Tab disableIndicator sx={{ fontWeight: "500" }} value="signUp" id="signUp">ЗАРЕЄСТРУВАТИСЬ</Tab>
+                            </Link>
                         </TabList>
                         <TabPanel value="logIn">
                             <LogIn />
                         </TabPanel>
                         <TabPanel value="signUp">
-                            <Register />
+                            <Register setOpenSnackbar={setOpenSnackbar} />
                         </TabPanel>
                     </Tabs>
-
-                    <Snackbar
-                        startDecorator={<DoneRoundedIcon />}
-                        color="success" size="lg" variant="soft"
-                        autoHideDuration={5000}
-                        open={openSnackbar}
-                        onClose={(event, reason) => {
-                            if (reason === 'clickaway') {
-                                return;
-                            }
-                            setOpenSnackbar(false);
-                        }}
-                    >
-                        Успішно зареєстровано!
-                    </Snackbar>
                 </Box>
-
             </Stack >
+            <Snackbar
+                startDecorator={<DoneRoundedIcon />}
+                color="success" size="lg" variant="soft"
+                autoHideDuration={3000}
+                open={openSnackbar}
+                onClose={(event, reason) => {
+                    if (reason === 'clickaway') {
+                        return;
+                    }
+                    setOpenSnackbar(false);
+                }}
+            >
+                Успішно зареєстровано!
+            </Snackbar>
         </Box >
     );
 };

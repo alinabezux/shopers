@@ -13,6 +13,15 @@ module.exports = {
             next(e);
         }
     },
+    getUserById: async (req, res, next) => {
+        try {
+            const user = req.user
+
+            res.status(200).json(user);
+        } catch (e) {
+            next(e);
+        }
+    },
     getAllUsers: async (req, res, next) => {
         try {
             let { page } = req.query;

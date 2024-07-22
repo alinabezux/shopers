@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../../redux";
 import ProductCard from "./ProductCard";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 
 const Products = () => {
     const dispatch = useDispatch();
@@ -23,8 +23,6 @@ const Products = () => {
     //         dispatch(productsActions.setCurrentPageProducts(1));
     //     }
     // }, [dispatch, currentPageProducts, totalPagesProducts]);
-
-
 
 
     // const handleSetCurrentPageProducts = async (pageNumber) => {

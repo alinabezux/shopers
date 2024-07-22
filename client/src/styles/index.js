@@ -8,6 +8,8 @@ export * from './Basket.css'
 export * from './ProductPage.css'
 export * from './CheckoutPage.css'
 export * from './Header.css'
+export * from './AuthPage.css'
+export * from './AccountPage.css'
 
 
 

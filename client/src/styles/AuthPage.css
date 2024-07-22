@@ -1,0 +1,162 @@
+/* mobile */
+
+@media (max-width: 767px) {
+    div.authpage__content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .authpage__content {}
+
+    .authpage__image img {
+        display: none;
+
+    }
+
+    .authpage__tab {}
+
+    .authpage__main {
+        width: 100%;
+        padding-top: 30px;
+
+    }
+
+    .authpage h4 {
+        /* font-size: 35px; */
+    }
+
+    .authpage__card {
+        width: 80vw
+    }
+
+    div.authpage__input {
+        --Input-minHeight: 45px;
+    }
+
+    button.authpage__button {
+        font-size: 20px;
+
+    }
+    div.authpage__tablist {
+        font-size: 18px;
+    }
+}
+
+/* tablet */
+@media (min-width:768px) and (max-width: 1024px) {
+    .authpage__content {}
+
+    .authpage__image {
+        position: relative;
+        margin-top: -70%;
+        filter: blur(5px);
+        /* width: 100%; */
+
+    }
+
+    .authpage__image img {
+        width: 100vw;
+    }
+
+    .authpage__main {
+        position: absolute;
+        width: 100%;
+        height: 80vh;
+        padding-top: 350px;
+    }
+
+    .authpage__card {
+        width: 400px
+    }
+
+    .authpage h4 {
+        font-size: 48px;
+    }
+
+    .authpage h5 {
+        font-size: 35px;
+    }
+
+    div.authpage__tablist {
+        font-size: 26px;
+    }
+
+    .authpage label {
+        font-size: 21px;
+    }
+
+    div.authpage__input {
+        --Input-minHeight: 45px;
+    }
+
+    button.authpage__button {
+        font-size: 20px;
+    }
+}
+
+/* pc */
+@media (min-width: 1025px) {
+    div.authpage__content {
+        flex-direction: row;
+        gap: 5;
+        justify-content: space-between;
+    }
+
+    .authpage__image {
+        width: 50%;
+    }
+
+    .authpage__main {
+        width: 50%;
+        /* justify-content: flex-start; */
+        padding-top: 30px;
+    }
+
+    .authpage__image img {
+        width: 50vw;
+    }
+
+    .authpage__tabpanel {}
+
+    .authpage__card {
+        width: 300px;
+        gap: 2;
+
+    }
+
+    button.authpage__button {
+        font-size: 16px;
+        
+    }
+
+}
+
+
+
+
+.authpage {
+    width: 100vw;
+
+}
+
+.authpage__content {}
+
+
+
+.authpage__main {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+
+}
+
+div.tabs {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+}
+
+button.authpage__button {
+    font-weight: 700;
+}

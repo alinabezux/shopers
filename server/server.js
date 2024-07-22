@@ -13,8 +13,10 @@ let app = express();
 
 app.use(cookieParser());
 app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
-    origin: configs.CLIENT_URL
+    origin: configs.CLIENT_URL,
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

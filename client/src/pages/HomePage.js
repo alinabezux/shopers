@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Container, Typography, Button } from "@mui/material";
 import { Link } from 'react-router-dom';
 import fon2 from '../assets/fon2.jpg'
@@ -32,6 +32,7 @@ const WhiteButton = styled(Button)(({ theme }) => ({
 }));
 
 const HomePage = () => {
+
     return (
         <Box className="homepage">
             <Box className="homepage__section1">
@@ -63,6 +64,7 @@ const HomePage = () => {
                 <Typography className="homepage__category-title">Категорії</Typography>
                 <CategoriesMenu width={"250px"} />
             </Container>
+            
         </Box>
     );
 

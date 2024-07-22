@@ -28,18 +28,17 @@ module.exports = {
 
             const accessToken = authorizationString.split(" ")[1]
 
-            const decoded = OAuthService.checkToken(accessToken);
-
             const tokenInfo = await OAuth.findOne({ accessToken });
 
             if (!tokenInfo) {
                 throw new ApiError(401, 'Токен не дійсний.')
             }
+            const decoded = OAuthService.checkToken(accessToken);
 
             if (decoded.id !== req.params.userId) {
                 throw new ApiError(401, 'Немає доступу.');
             }
-
+            console.log('Підтверджено')
             req.tokenInfo = tokenInfo;
             next();
         } catch (e) {

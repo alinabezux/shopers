@@ -12,11 +12,10 @@ const TypesMenu = () => {
 
     useEffect(() => {
         dispatch(typeActions.getTypesByCategoryId({ categoryId: selectedCategory._id }));
-    }, [dispatch]);
+    }, [dispatch, selectedCategory._id]);
 
     const handleTypeClick = useCallback((type) => {
         dispatch(typeActions.setSelectedType(type));
-
     }, [dispatch]);
 
     return (

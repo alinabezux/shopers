@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Accordion, AccordionDetails, AccordionSummary,
     Box,
@@ -18,10 +18,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, typeActions } from "../redux";
 import { toUrlFriendly } from '../utils'
+import useUser from '../hooks/useUser';
+import Snackbar from '@mui/joy/Snackbar';
 
-
-const DrawerMenu = ({ open, onClose }) => {
+const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
     const dispatch = useDispatch();
+    const userId = useUser();
+
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
 
@@ -38,6 +41,11 @@ const DrawerMenu = ({ open, onClose }) => {
         dispatch(typeActions.setSelectedType(type));
         onClose();
     }, [dispatch]);
+
+    const handleClickWislist = () => {
+        onClose();
+        setOpenSnackbar(true);
+    };
 
     return (
         <Drawer open={open} >
@@ -91,30 +99,63 @@ const DrawerMenu = ({ open, onClose }) => {
                 )}
 
                 <Divider variant="middle" />
+                {userId !== null ?
+                    <Link to="/account#profile" className='link' onClick={onClose}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <IconButton
+                                size="large"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2 }}
+                            >
+                                <AccountCircleRoundedIcon fontSize="inherit" />
+                            </IconButton>
+                            <h3>МІЙ КАБІНЕТ</h3>
+                        </Stack>
+                    </Link> :
+                    <Link to="/auth#logIn" className='link' onClick={onClose}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <IconButton
+                                size="large"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2 }}
+                            >
+                                <AccountCircleRoundedIcon fontSize="inherit" />
+                            </IconButton>
+                            <h3>ОСОБИСТИЙ КАБІНЕТ</h3>
+                        </Stack>
+                    </Link>
 
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <IconButton
-                        size="large"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                    >
-                        <AccountCircleRoundedIcon fontSize="inherit" />
-                    </IconButton>
-                    <h3>ОСОБИСТИЙ КАБІНЕТ</h3>
-                </Stack>
+                }
+                {userId !== null ?
+                    <Link to="/account#wishlist" className='link' onClick={onClose}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <IconButton
+                                size="large"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2 }}
+                            >
+                                <FavoriteBorderIcon fontSize="inherit" />
+                            </IconButton>
+                            <h3>ВПОДОБАНІ</h3>
+                        </Stack>
+                    </Link>
+                    :
+                    <Stack direction="row" spacing={1} alignItems="center" onClick={handleClickWislist}>
+                        <IconButton
+                            size="large"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                        >
+                            <FavoriteBorderIcon fontSize="inherit" />
+                        </IconButton>
+                        <h3>ВПОДОБАНІ</h3>
+                    </Stack>
+                }
 
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <IconButton
-                        size="large"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                    >
-                        <FavoriteBorderIcon fontSize="inherit" />
-                    </IconButton>
-                    <h3>ВПОДОБАНІ</h3>
-                </Stack>
                 <Divider variant="middle" />
                 <Stack direction="column" spacing={2} sx={{ margin: "15px" }}>
                     <h3>

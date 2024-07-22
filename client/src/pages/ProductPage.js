@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { toUrlFriendly } from '../utils'
-import { categoryActions, typeActions } from "../redux";
 
 import { Typography, Box, Stack } from '@mui/material';
 import { Button, Chip, ButtonGroup } from "@mui/joy";
 import { Container } from '@mui/joy';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-
-import bag from '../assets/bags.png'
-import accessories from '../assets/accessories.png'
-import test from '../assets/test imge.png'
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -24,40 +19,16 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 
 const ProductPage = () => {
-    // const { selectedProduct } = useSelector(state => state.productReducer);
-    const { selectedCategory, categories } = useSelector(state => state.categoryReducer);
-    const { selectedType, types } = useSelector(state => state.typeReducer);
-
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //     dispatch(categoryActions.getAll())
-    // }, [dispatch])
-
-    const selectedProduct = {
-        "info": {
-            "color": "Чорний",
-            "size": "25см /18см/11см",
-            "material": "еко шкіра + оксамит",
-            "description": "2 кишені всередині. Є додатковий ланцюжок"
-        },
-        "images": [bag, accessories, test],
-        "_id": "664c7323da796b4a4b46d2b5",
-        "article": "1000-BL",
-        "name": "Александра",
-        "_category": "664377a98ad17f97b3f8ec70",
-        "_type": "664c6ea78927276eede67848",
-        "quantity": 1,
-        "price": 840,
-        "cashback": 16,
-        "__v": 0
-    }
-
+    const { selectedProduct } = useSelector(state => state.productReducer);
+    const { categories } = useSelector(state => state.categoryReducer);
+    const { types } = useSelector(state => state.typeReducer);
 
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
     const category = categories.find(category => category._id === selectedProduct._category);
     const type = types.find(type => type._id === selectedProduct._type);
+
     return (
         <Container className="product-page">
             {category && type ?
@@ -83,7 +54,6 @@ const ProductPage = () => {
                 <Box className="product-page__gallery">
                     <Swiper
                         spaceBetween={10}
-                        // navigation={true}
                         thumbs={{ swiper: thumbsSwiper }}
                         modules={[FreeMode, Navigation, Thumbs]}
                         className="mySwiper2"
@@ -93,7 +63,6 @@ const ProductPage = () => {
                                 <img
                                     src={image}
                                     alt={`Slide ${index}`}
-                                // style={{ width: "100%", height: "100%", objectFit: 'cover' }}
                                 />
                             </SwiperSlide>
                         ))}
@@ -150,8 +119,6 @@ const ProductPage = () => {
                         <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{selectedProduct.info.size}</Typography>
                         <Typography className="product-page__material"><b style={{ color: "black" }}>Матеріал: </b>{selectedProduct.info.material}</Typography>
                         <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{selectedProduct.info.description}</Typography>
-
-
                     </Stack>
                 </Box>
             </Box>

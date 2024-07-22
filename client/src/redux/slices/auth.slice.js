@@ -6,7 +6,8 @@ const initialState = {
 
     loading: false,
     logInError: null,
-    registerError: null
+    registerError: null,
+    error: null
 }
 
 const register = createAsyncThunk(
@@ -29,6 +30,18 @@ const logIn = createAsyncThunk(
             localStorage.setItem('access', data.accessToken)
 
             return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const logOut = createAsyncThunk(
+    'authSlice/logOut',
+    async (_, { rejectWithValue }) => {
+        try {
+            await authService.logOut();
+            authService.deleteInfo()
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -66,13 +79,26 @@ const authSlice = createSlice({
                 state.loading = false
                 state.logInError = action.payload
             })
+
+            .addCase(logOut.fulfilled, (state) => {
+                state.loading = false
+                state.error = null;
+            })
+            .addCase(logOut.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(logOut.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
 });
 
 
 const { reducer: authReducer } = authSlice;
 
 const authActions = {
-    register, logIn
+    register, logIn, logOut
 }
 
 export {

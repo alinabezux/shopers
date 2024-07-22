@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { FormControl, FormLabel, Input, Button, Card, CardContent } from '@mui/joy';
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
@@ -10,15 +10,12 @@ import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import { authActions } from '../../redux';
+import Snackbar from '@mui/joy/Snackbar';
 
-const LogIn = () => {
+const LogIn = ({ setOpenLoginSnackbar }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
-
-
     const { control, handleSubmit, register } = useForm();
-
 
     const { loading, logInError } = useSelector(state => state.authReducer);
 
@@ -31,8 +28,10 @@ const LogIn = () => {
                     password: data.password
                 }
             }))
-            console.log("LogIn response: ", res);
-            if (res.meta.requestStatus === 'fulfilled') navigate('/')
+            if (res.meta.requestStatus === 'fulfilled') {
+                navigate('/')
+                window.location.reload()
+            }
             // else if (res.meta.requestStatus === 'fulfilled' && isAdmin) window.location.reload();
         } catch (e) {
             console.log("catch e: ", e);
@@ -41,14 +40,9 @@ const LogIn = () => {
 
 
     return (
-
-        <Form onSubmit={handleSubmit(submit)} control={control}>
-            <Card variant="plain"
-                sx={{
-                    width: 300,
-                    gap: 2,
-                    boxShadow: 'md',
-                }}
+        <Form onSubmit={handleSubmit(submit)} control={control} className='authpage__tabpanel'>
+            <Card variant="plain" className='authpage__card'
+                sx={{ boxShadow: 'md' }}
             >
                 <CardContent sx={{ gap: 1 }}>
                     <Typography variant='h5' >
@@ -61,7 +55,7 @@ const LogIn = () => {
                         </Alert> : null}
                     <FormControl>
                         <FormLabel>Логін чи e-mail адреса</FormLabel>
-                        <Input
+                        <Input className='authpage__input' 
                             startDecorator={<EmailRoundedIcon />}
                             name="email"
                             type="email"
@@ -71,7 +65,7 @@ const LogIn = () => {
                     </FormControl>
                     <FormControl>
                         <FormLabel>Пароль</FormLabel>
-                        <Input
+                        <Input className='authpage__input'
                             startDecorator={<KeyRoundedIcon />}
                             name="password"
                             type="password"
@@ -80,9 +74,10 @@ const LogIn = () => {
                         />
                     </FormControl>
                 </CardContent>
-                <Button variant="solid" color="neutral" sx={{ mt: 1 }} type='submit'>УВІЙТИ</Button>
+                <Button variant="soft" color="primary" sx={{ mt: 1 }} type='submit' className='authpage__button'>УВІЙТИ</Button>
             </Card>
         </Form>
+
 
     );
 };

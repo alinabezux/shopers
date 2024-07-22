@@ -1,0 +1,154 @@
+.accountpage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountpage__profile-cards {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountpage__profile {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountpage__greeting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+div.accountpage__menu {
+    flex-direction: column;
+}
+
+div.info {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(80px, 1fr));
+    gap: 1.5;
+}
+
+button.accountpage__button {
+    margin-top: 25px;
+}
+
+
+
+/* mobile */
+@media (max-width: 767px) {
+    div.accountpage__tablist {
+        width: 90vw;
+        font-size: 18px;
+
+    }
+
+    .accountpage__profile-cards {
+        flex-direction: column;
+    }
+
+    .accountpage__card {
+        width: 80vw;
+    }
+
+    .accountpage__greeting {
+        flex-direction: column;
+    }
+
+    div.accountpage__input {
+        --Input-minHeight: 45px;
+    }
+
+    .accountpage label {
+        font-size: 20px;
+    }
+
+    h5.accountpage__profile_title {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    button.accountpage__button {
+        font-size: 20px;
+        width: 70%;
+    }
+
+    
+
+}
+
+/* tablet */
+@media (min-width:768px) and (max-width: 1024px) {
+    .accountpage__profile-cards {
+        flex-direction: column;
+    }
+
+    .accountpage__card {
+        width: 60vw;
+    }
+
+    div.accountpage__tablist {
+        font-size: 24px;
+    }
+
+    div.accountpage__input {
+        --Input-minHeight: 45px;
+    }
+
+    .accountpage label {
+        font-size: 21px;
+    }
+
+    h5.accountpage__profile_title {
+        font-size: 24px;
+        font-weight: 500;
+    }
+
+    button.accountpage__button {
+        width: 50%;
+        font-size: 20px;
+    }
+    div.accountpage__chip {
+        font-size: 18px;
+    }
+}
+
+/* pc */
+@media (min-width: 1025px) {
+    .accountpage__profile {
+        flex-direction: column;
+    }
+
+    .accountpage__card {
+        width: 50%;
+    }
+
+    .accountpage__profile-cards {
+        flex-direction: row;
+    }
+
+    .accountpage__greeting {
+        flex-direction: row;
+    }
+
+
+    h5.accountpage__profile_title {
+        /* font-size: 21px; */
+        font-weight: 500;
+    }
+
+    button.accountpage__button {
+        width: 30%;
+        font-size: 16px;
+
+    }
+
+}

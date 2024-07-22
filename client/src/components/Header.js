@@ -14,7 +14,7 @@ import { Menu, MenuItem } from "@mui/joy";
 import { Link, NavLink } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { categoryActions, typeActions } from "../redux";
+import { authActions, categoryActions, typeActions, userActions } from "../redux";
 import { DrawerMenu } from "./DrawerMenu";
 import { DrawerBasket } from "./DrawerBasket";
 import { toUrlFriendly } from '../utils'
@@ -25,23 +25,35 @@ import Edit from '@mui/icons-material/Edit';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import { Chip } from '@mui/joy';
+import { authService } from '../services/auth.service';
+import Snackbar from '@mui/joy/Snackbar';
+import useUser from '../hooks/useUser';
+import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+
 const Header = () => {
     const [openDrawerMenu, setOpenDrawerMenu] = useState(false);
     const [anchorEl, setAnchorMenu] = useState(null);
     const [openBasket, setOpenBasket] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
     const [selCat, setSelCat] = useState({});
 
     const dispatch = useDispatch();
+
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
+    const { user } = useSelector(state => state.userReducer);
+    const userId = useUser();
 
-    const toggleMenu = (newOpenDrawerMenu) => () => {
-        setOpenDrawerMenu(newOpenDrawerMenu);
-    };
 
     useEffect(() => {
         dispatch(categoryActions.getAll())
     }, [dispatch])
+
+    useEffect(() => {
+        if (userId !== null) {
+            dispatch(userActions.getUserById(userId));
+        }
+    }, [dispatch, userId])
 
     const handleHoverMenu = useCallback((event, category) => {
         setAnchorMenu(event.currentTarget);
@@ -71,10 +83,7 @@ const Header = () => {
         dispatch(typeActions.setSelectedType(type));
         handleCloseMenu();
     }, [dispatch]);
-    //
-    const toggleBasket = (newOpenBasket) => () => {
-        setOpenBasket(newOpenBasket);
-    };
+
 
     const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -90,20 +99,26 @@ const Header = () => {
         };
     }, []);
 
-
+    const handleLogOut = async () => {
+        await dispatch(authActions.logOut())
+        // setUserId(null)
+        window.location.reload()
+        // await dispatch(userActions.getUserById(userId));
+    };
 
     return (
         <AppBar position="sticky"
             color="default"
             sx={{
-                backgroundColor: `rgba(255, 255, 255,${scrollPosition > 50 ? 0.5 : 1})`,
+                backgroundColor: `rgba(255, 255, 255,${scrollPosition > 50 ? 0.7 : 1})`,
+                backdropFilter: scrollPosition > 50 ? 'blur(10px)' : 'none',
                 transition: 'background-color 0.3s'
             }}
         >
             <Toolbar sx={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
                 <MenuIcon className='header__icon mb' onClick={() => setOpenDrawerMenu(true)} />
-                <DrawerMenu open={openDrawerMenu}
-                    onClose={() => setOpenDrawerMenu(false)} />
+                <DrawerMenu open={openDrawerMenu} setOpenSnackbar={setOpenSnackbar}
+                    onClose={() => setOpenDrawerMenu(false)} horisontal={'right'} />
                 <Stack direction="row" spacing={1} className='header__menu' sx={{ zIndex: "999" }}>
                     {categories.map((category) => (
                         <Box key={category._id}>
@@ -173,60 +188,65 @@ const Header = () => {
                 </Stack>
 
                 <Stack direction="row" alignItems="center" justifySelf="flex-end" sx={{ zIndex: "999" }}>
-                    <FavoriteBorderIcon className='header__icon pc' />
+                    {userId !== null ? <Link to="/account#wishlist" className='header_account-icon link'><FavoriteBorderIcon className='header__icon pc' /></Link> : <FavoriteBorderIcon className='header__icon pc' onClick={() => setOpenSnackbar(true)} />}
 
-                    <Dropdown>
-                        <MenuButton sx={{
-                            border: "none", m: 0, p: 0, '&:hover': {
-                                backgroundColor: "transparent",
-                            }
-                        }}>
-                            <AccountCircleRoundedIcon className='header__icon pc' />
-                        </MenuButton>
-                        <Menu placement="bottom-end"
-                            sx={{
-                                fontSize: "18px",
-                                opacity: 0.9,
-                                zIndex: "9999"
+                    {userId !== null ?
+                        <Dropdown>
+                            <MenuButton sx={{
+                                border: "none", m: 0, p: 0, '&:hover': {
+                                    backgroundColor: "transparent",
+                                }
                             }}>
-                            {/* <MenuItem> */}
-                            <Chip size="sm" variant="soft" color="success" alignItems="flex-start" sx={{ mx: "15px", my: "5px" }}>
-                                Бонусів : 20
-                            </Chip>
-                            {/* </MenuItem> */}
-                            <Link className='link' to="/account#profile">
-                                <MenuItem >
-                                    <ListItemDecorator>
-                                        <Edit />
+                                <AccountCircleRoundedIcon className='header__icon pc' />
+                            </MenuButton>
+                            <Menu placement="bottom-end"
+                                sx={{
+                                    fontSize: "18px",
+                                    opacity: 0.9,
+                                    zIndex: "9999"
+                                }}>
+                                <Chip size="sm" variant="soft" color="success" sx={{ mx: "15px", my: "5px" }}>
+                                    Бонусів : {user.bonus}
+                                </Chip>
+                                <Link className='link' to="/account#profile">
+                                    <MenuItem >
+                                        <ListItemDecorator>
+                                            <Edit />
+                                        </ListItemDecorator>{' '}
+                                        профіль
+                                    </MenuItem>
+                                </Link>
+                                <Link to="/account#wishlist" className='link'>
+                                    <MenuItem >
+                                        <ListItemDecorator>
+                                            <FavoriteBorderIcon />
+                                        </ListItemDecorator>{' '}
+                                        список бажань
+                                    </MenuItem>
+                                </Link>
+                                <Link to="/account#orders" className='link'>
+                                    <MenuItem >
+                                        <ListItemDecorator >
+                                            <LocalMallOutlinedIcon />
+                                        </ListItemDecorator>{' '}
+                                        замовлення
+                                    </MenuItem>
+                                </Link>
+                                <ListDivider />
+                                <MenuItem variant="soft" color="danger" onClick={handleLogOut}>
+                                    <ListItemDecorator sx={{ color: 'inherit' }}>
+                                        <LogoutRoundedIcon />
                                     </ListItemDecorator>{' '}
-                                    профіль
+                                    вийти
                                 </MenuItem>
-                            </Link>
-                            <Link to="/account#wishlist" className='link'>
-                                <MenuItem >
-                                    <ListItemDecorator>
-                                        <FavoriteBorderIcon />
-                                    </ListItemDecorator>{' '}
-                                    список бажань
-                                </MenuItem>
-                            </Link>
-                            <Link to="/account#orders" className='link'>
-                                <MenuItem >
-                                    <ListItemDecorator >
-                                        <LocalMallOutlinedIcon />
-                                    </ListItemDecorator>{' '}
-                                    замовлення
-                                </MenuItem>
-                            </Link>
-                            <ListDivider />
-                            <MenuItem variant="soft" color="danger">
-                                <ListItemDecorator sx={{ color: 'inherit' }}>
-                                    <LogoutRoundedIcon />
-                                </ListItemDecorator>{' '}
-                                вийти
-                            </MenuItem>
-                        </Menu>
-                    </Dropdown>
+                            </Menu>
+                        </Dropdown>
+                        :
+                        <Link className='header_account-icon link' to='/auth#logIn'>
+                            <AccountCircleRoundedIcon className='header__icon pc' />
+                        </Link>
+                    }
+
 
                     <Badge variant="dot" color="warning" sx={{
                         '& .MuiBadge-dot': {
@@ -247,6 +267,22 @@ const Header = () => {
                 </Link>
             </Typography>
             <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                startDecorator={<AccountCircleRoundedIcon />}
+                color="warning" size="lg" variant="soft"
+                autoHideDuration={3000}
+                open={openSnackbar}
+                onClose={(event, reason) => {
+                    if (reason === 'clickaway') {
+                        return;
+                    }
+                    setOpenSnackbar(false);
+                }}
+            >
+                <Link to='/auth#logIn' className='link' sx={{ margin: 0, p: 0, textAlign: "center" }}><b>Увійдіть</b></Link>щоб переглянути список бажань.
+            </Snackbar>
+
         </AppBar >
     );
 };

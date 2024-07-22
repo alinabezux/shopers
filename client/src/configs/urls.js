@@ -5,7 +5,7 @@ const urls = {
     products: '/products',
     categories: '/categories',
     types: '/types',
-    // users: '/users',
+    users: '/users',
     auth: {
         registration: '/users/register',
         logIn: '/auth/logIn',

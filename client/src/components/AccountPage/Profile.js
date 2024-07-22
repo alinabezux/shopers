@@ -4,43 +4,47 @@ import { Card, CardContent, FormControl, FormLabel, Input, Divider, Button, Chip
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
 import Edit from '@mui/icons-material/Edit';
-const Profile = () => {
-    return (
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", }}>
 
-            <Stack direction="row" spacing={2}>
-                <Card variant="plain" sx={{ width: "50%", boxShadow: 'md', }} >
-                    <Typography className='checkout__title' >ЗМІНА ДАНИХ</Typography>
+
+
+
+const Profile = ({ user }) => {
+    return (
+        <Box className='accountpage__profile' >
+            <Box className='accountpage__profile-cards'>
+                <Card variant="plain" sx={{ boxShadow: 'md' }} className='accountpage__card' >
+                    <Typography className='accountpage__profile_title' variant='h5'>ЗМІНА ДАНИХ</Typography>
                     <Divider inset="none" />
-                    <CardContent className="checkout__info">
-                        <FormControl className="checkout__form">
+                    <CardContent className='info'>
+                        <FormControl >
                             <FormLabel >Ім'я</FormLabel>
-                            <Input />
+                            <Input className='accountpage__input' placeholder={user.name} />
                         </FormControl>
-                        <FormControl className="checkout__form">
+                        <FormControl >
                             <FormLabel>Прізвище</FormLabel>
-                            <Input />
+                            <Input className='accountpage__input' placeholder={user.surname} />
                         </FormControl>
-                        <FormControl className="checkout__form">
+                        <FormControl >
                             <FormLabel >Номер телефону</FormLabel>
-                            <Input startDecorator={<Typography>+380</Typography>} />
+                            <Input className='accountpage__input' startDecorator={<Typography>+380</Typography>} placeholder={user.phone} />
                         </FormControl>
-                        <FormControl className="checkout__form">
+                        <FormControl >
                             <FormLabel>Ваш нік в Instagram</FormLabel>
-                            <Input startDecorator={<AlternateEmailRoundedIcon />} />
+                            <Input className='accountpage__input' startDecorator={<AlternateEmailRoundedIcon />} placeholder={user.instagram} />
                         </FormControl>
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>E-mail адреса</FormLabel>
-                            <Input startDecorator={<EmailRoundedIcon />} />
+                            <Input className='accountpage__input' startDecorator={<EmailRoundedIcon />} placeholder={user.email} />
                         </FormControl>
+                        <Typography sx={{ gridColumn: '1/-1', fontSize: "12px" }}>* ці дані використовуватимуться при оформленні замовлення</Typography>
                     </CardContent>
                 </Card>
-                <Card color="neutral" variant="outlined" sx={{ width: "50%", boxShadow: 'md', }}>
-                    <Typography className='checkout__title'>ЗМІНА ПАРОЛЮ</Typography>
+                <Card color="neutral" variant="outlined" className='accountpage__card' sx={{ boxShadow: 'md', }}>
+                    <Typography className='accountpage__profile_title' variant='h5'>ЗМІНА ПАРОЛЮ</Typography>
                     <Divider inset="none" />
                     <FormControl >
                         <FormLabel>Поточний пароль</FormLabel>
-                        <Input
+                        <Input className='accountpage__input'
                             name="password"
                             type="password"
                             placeholder="password"
@@ -48,7 +52,7 @@ const Profile = () => {
                     </FormControl>
                     <FormControl >
                         <FormLabel>Новий пароль</FormLabel>
-                        <Input
+                        <Input className='accountpage__input'
                             name="password"
                             type="password"
                             placeholder="password"
@@ -56,15 +60,15 @@ const Profile = () => {
                     </FormControl>
                     <FormControl >
                         <FormLabel>Повторіть новий пароль </FormLabel>
-                        <Input
+                        <Input className='accountpage__input'
                             name="password"
                             type="password"
                             placeholder="password"
                         />
                     </FormControl>
                 </Card>
-            </Stack>
-            <Button color="success" variant="solid" sx={{ width: "50%", mt: 3 }} endDecorator={<Edit />}>ЗБЕРЕГТИ ЗМІНИ</Button>
+            </Box>
+            <Button className='accountpage__button' color="success" variant="solid"  endDecorator={<Edit />}>ЗБЕРЕГТИ ЗМІНИ</Button>
         </Box >
     )
 };

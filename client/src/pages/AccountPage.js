@@ -13,8 +13,7 @@ import { useTheme, useMediaQuery } from '@mui/material';
 
 const AccountPage = () => {
     const location = useLocation();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+ 
 
     const [activeTab, setActiveTab] = useState('profile');
     const theme = useTheme();
@@ -28,11 +27,7 @@ const AccountPage = () => {
         }
     }, [location]);
 
-    const handleLogOut = async () => {
-        await dispatch(authActions.logOut())
-        navigate('/')
-        window.location.reload()
-    };
+   
 
     return (
         <Box className='accountpage'>
@@ -68,18 +63,17 @@ const AccountPage = () => {
 
                 </TabList>
 
-                <TabPanel value="profile">
+                <TabPanel className='accountpage__tabpanel' value="profile" >
                     <Profile user={user} />
                 </TabPanel>
-                <TabPanel value="wishlist">
+                <TabPanel className='accountpage__tabpanel' value="wishlist">
                     <Wishlist />
                 </TabPanel>
-                <TabPanel value="orders">
+                <TabPanel className='accountpage__tabpanel' value="orders">
                     <Orders />
                 </TabPanel>
             </Tabs>
 
-            <Button variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
 
         </Box >
     );

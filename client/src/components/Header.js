@@ -11,7 +11,7 @@ import {
     Badge,
 } from "@mui/material";
 import { Menu, MenuItem } from "@mui/joy";
-import { Link, NavLink } from "react-router-dom";
+import { Link,  NavLink, useNavigate } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions, categoryActions, typeActions, userActions } from "../redux";
@@ -38,6 +38,7 @@ const Header = () => {
     const [selCat, setSelCat] = useState({});
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
@@ -103,6 +104,7 @@ const Header = () => {
         await dispatch(authActions.logOut())
         // setUserId(null)
         window.location.reload()
+        navigate('/')
         // await dispatch(userActions.getUserById(userId));
     };
 
@@ -280,7 +282,7 @@ const Header = () => {
                     setOpenSnackbar(false);
                 }}
             >
-                <Link to='/auth#logIn' className='link' sx={{ margin: 0, p: 0, textAlign: "center" }}><b>Увійдіть</b></Link>щоб переглянути список бажань.
+                <Link to='/auth#logIn' className='link' sx={{ margin: 0, p: 0, textAlign: "center" }} ><b>Увійдіть</b></Link>щоб переглянути список бажань.
             </Snackbar>
 
         </AppBar >

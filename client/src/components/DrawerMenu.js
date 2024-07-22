@@ -47,6 +47,7 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
         setOpenSnackbar(true);
     };
 
+
     return (
         <Drawer open={open} >
             <Box sx={{ width: "80vw" }}>
@@ -139,7 +140,7 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                             >
                                 <FavoriteBorderIcon fontSize="inherit" />
                             </IconButton>
-                            <h3>ВПОДОБАНІ</h3>
+                            <h3>СПИСОК БАЖАНЬ</h3>
                         </Stack>
                     </Link>
                     :
@@ -152,7 +153,7 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                         >
                             <FavoriteBorderIcon fontSize="inherit" />
                         </IconButton>
-                        <h3>ВПОДОБАНІ</h3>
+                        <h3>СПИСОК БАЖАНЬ</h3>
                     </Stack>
                 }
 

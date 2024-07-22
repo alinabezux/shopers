@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
 }
 
 .accountpage__profile-cards {
@@ -16,6 +17,23 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountpage__wishlist {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountpage__wishlist-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 15px;
     align-items: center;
     justify-content: center;
 }
@@ -41,6 +59,28 @@ button.accountpage__button {
     margin-top: 25px;
 }
 
+div.accountpage__tabpanel {
+    width: 100vw;
+    box-sizing: border-box;
+}
+
+h5.accountpage__wishlist-title {
+    font-weight: 600;
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+p.accountpage__wishlist-price {
+    font-weight: 500;
+    font-size: 18px;
+
+}
+
+p.accountpage__wishlist-color {
+    color: grey;
+}
 
 
 /* mobile */
@@ -80,8 +120,16 @@ button.accountpage__button {
         font-size: 20px;
         width: 70%;
     }
+    .accountpage__wishlist-container {
+        /* width: 90%; */
+       
+    }
+    .accountpage__wishlist-card {
+        width: 37%;
+    }
 
-    
+
+
 
 }
 
@@ -116,8 +164,12 @@ button.accountpage__button {
         width: 50%;
         font-size: 20px;
     }
+
     div.accountpage__chip {
         font-size: 18px;
+    }
+    .accountpage__wishlist-card {
+        width: 25%;
     }
 }
 
@@ -150,5 +202,15 @@ button.accountpage__button {
         font-size: 16px;
 
     }
+    .accountpage__wishlist-container {
+        width: 80%;
+       
+    }
+
+    .accountpage__wishlist-card {
+        width: 20%;
+    }
+
+
 
 }

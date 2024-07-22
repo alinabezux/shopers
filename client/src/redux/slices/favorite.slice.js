@@ -1,18 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { favouriteService } from "../../services";
+import { favoriteService } from "../../services";
 
 const initialState = {
-    favourite: [],
+    favorite: [],
 
     loading: false,
     error: null
 }
 
-const getFavourite = createAsyncThunk(
-    'favouriteSlice/getFavourite',
+const getFavorite = createAsyncThunk(
+    'favoriteSlice/getFavorite',
     async (userId, { rejectWithValue }) => {
         try {
-            const { data } = await favouriteService.getFavourite(userId);
+            const { data } = await favoriteService.getFavorite(userId);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -20,11 +20,11 @@ const getFavourite = createAsyncThunk(
     }
 );
 
-const addToFavourite = createAsyncThunk(
-    'favouriteSlice/addToFavourite',
+const addToFavorite = createAsyncThunk(
+    'favoriteSlice/addToFavorite',
     async ({ userId, productId }, { rejectWithValue }) => {
         try {
-            const { data } = await favouriteService.addToFavourite(userId, productId);
+            const { data } = await favoriteService.addToFavorite(userId, productId);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -32,11 +32,11 @@ const addToFavourite = createAsyncThunk(
     }
 );
 
-const deleteFromFavourite = createAsyncThunk(
-    'favouriteSlice/deleteFromFavourite',
+const deleteFromFavorite = createAsyncThunk(
+    'favoriteSlice/deleteFromFavorite',
     async ({ userId, productId }, { rejectWithValue }) => {
         try {
-            await favouriteService.deleteFromFavourite(userId, productId);
+            await favoriteService.deleteFromFavorite(userId, productId);
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -46,57 +46,57 @@ const deleteFromFavourite = createAsyncThunk(
 
 
 
-const favouriteSlice = createSlice({
-    name: 'favouriteSlice',
+const favoriteSlice = createSlice({
+    name: 'favoriteSlice',
     initialState,
     reducers: {},
     extraReducers: builder =>
         builder
-            .addCase(getFavourite.fulfilled, (state, action) => {
-                state.favourite = action.payload
+            .addCase(getFavorite.fulfilled, (state, action) => {
+                state.favorite = action.payload
                 state.loading = false
                 state.error = null
             })
-            .addCase(getFavourite.pending, (state) => {
+            .addCase(getFavorite.pending, (state) => {
                 state.loading = true
             })
-            .addCase(getFavourite.rejected, (state, action) => {
+            .addCase(getFavorite.rejected, (state, action) => {
                 state.error = action.payload
             })
 
 
-            .addCase(addToFavourite.fulfilled, (state, action) => {
-                state.favourite.push(action.payload)
+            .addCase(addToFavorite.fulfilled, (state, action) => {
+                state.favorite.push(action.payload)
                 state.loading = false
                 state.error = null;
             })
-            .addCase(addToFavourite.pending, (state) => {
+            .addCase(addToFavorite.pending, (state) => {
                 state.loading = true
             })
-            .addCase(addToFavourite.rejected, (state, action) => {
+            .addCase(addToFavorite.rejected, (state, action) => {
                 state.error = action.payload
             })
 
 
-            .addCase(deleteFromFavourite.fulfilled, (state) => {
+            .addCase(deleteFromFavorite.fulfilled, (state) => {
                 state.loading = false
                 state.error = null;
             })
-            .addCase(deleteFromFavourite.pending, (state) => {
+            .addCase(deleteFromFavorite.pending, (state) => {
                 state.loading = true
             })
-            .addCase(deleteFromFavourite.rejected, (state, action) => {
+            .addCase(deleteFromFavorite.rejected, (state, action) => {
                 state.error = action.payload
             })
 });
 
 
-const { reducer: favouriteReducer } = favouriteSlice;
+const { reducer: favoriteReducer } = favoriteSlice;
 
-const favouriteActions = {
-    getFavourite, addToFavourite, deleteFromFavourite
+const favoriteActions = {
+    getFavorite, addToFavorite, deleteFromFavorite
 }
 
 export {
-    favouriteReducer, favouriteActions
+    favoriteReducer, favoriteActions
 }

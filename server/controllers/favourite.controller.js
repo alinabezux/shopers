@@ -1,13 +1,19 @@
+const Product = require("../db/models/Product");
 const ProductInFavourite = require("../db/models/ProductInFavourite");
 const ApiError = require("../errors/ApiError");
 
 module.exports = {
     getUsersFavourite: async (req, res, next) => {
         try {
-
+            const productsData = [];
             const productsInFavourite = await ProductInFavourite.find({ _user: req.params.userId })
-
-            res.json(productsInFavourite).status(200);
+            for (const productInFavourite of productsInFavourite) {
+                const product = await Product.findById(productInFavourite._product)
+                productsData.push({
+                    ...product._doc
+                })
+            }
+            res.json(productsData).status(200);
 
         } catch (e) {
             next(e);

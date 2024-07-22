@@ -4,11 +4,22 @@ import { Card, CardContent, FormControl, FormLabel, Input, Divider, Button, Chip
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
 import Edit from '@mui/icons-material/Edit';
+import { authActions } from '../../redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 
 
 
 const Profile = ({ user }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
+    const handleLogOut = async () => {
+        await dispatch(authActions.logOut())
+        navigate('/')
+        window.location.reload()
+    };
     return (
         <Box className='accountpage__profile' >
             <Box className='accountpage__profile-cards'>
@@ -68,6 +79,8 @@ const Profile = ({ user }) => {
                     </FormControl>
                 </Card>
             </Box>
+           
+            <Button variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
             <Button className='accountpage__button' color="success" variant="solid"  endDecorator={<Edit />}>ЗБЕРЕГТИ ЗМІНИ</Button>
         </Box >
     )

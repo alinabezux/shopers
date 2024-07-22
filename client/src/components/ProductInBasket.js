@@ -7,19 +7,14 @@ import { ChipDelete } from '@mui/joy';
 import { authService } from '../services/auth.service';
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
 import { basketActions } from '../redux';
+import { useSubmit } from 'react-router-dom';
+import useUser from '../hooks/useUser';
 
 const ProductInBasket = ({ product }) => {
     const dispatch = useDispatch();
     const [quantity, setQuantity] = useState(product.quantity);
-    
-    const [userId, setUserId] = useState(null);
-
-    useEffect(() => {
-        const userId = authService.getUser();
-        if (userId) {
-            setUserId(userId);
-        }
-    }, [])
+    const userId = useUser();
+   
 
     const handleDeleteProductInBasket = useCallback(async (product) => {
         await dispatch(basketActions.deleteFromBasket({ userId, productId: product._id }))

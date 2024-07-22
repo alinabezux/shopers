@@ -44,17 +44,6 @@ const DrawerBasket = ({ open, onClose }) => {
     const { basket, loading, error } = useSelector(state => state.basketReducer);
     const userId = useUser();
 
-    // const [userId, setUserId] = useState(null);
-
-    // useEffect(() => {
-    //     const userId = authService.getUser();
-    //     console.log(userId)
-    //     if (userId) {
-    //         setUserId(userId);
-    //     }
-    // }, [])
-
-
     useEffect(() => {
         if (userId) {
             dispatch(basketActions.getBasket(userId));

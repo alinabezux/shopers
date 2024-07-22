@@ -12,7 +12,7 @@ router.use('/categories', categoryRouter);
 router.use('/types', typeRouter);
 router.use('/users', userRouter);
 router.use('/auth', authRouter);
-router.use('/favourite', favouriteRouter);
+router.use('/favorite', favouriteRouter);
 router.use('/basket', basketRouter);
 
 module.exports = router;

@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/joy/Card";
 import { AspectRatio, CardContent, CardOverflow, Chip } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
 import { ChipDelete } from '@mui/joy';
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
-
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 
 import { Link } from "react-router-dom";
@@ -18,6 +19,8 @@ const ProductInFavorite = ({ product }) => {
     const dispatch = useDispatch();
 
     const [openBasket, setOpenBasket] = useState(false);
+    const [favourite, setFavourite] = useState(false);
+
     const userId = useUser();
 
     const handleShowDetails = useCallback((product) => {
@@ -32,18 +35,16 @@ const ProductInFavorite = ({ product }) => {
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
         await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
-        dispatch(favoriteActions.getFavorite(userId))
-
+        await dispatch(favoriteActions.getFavorite(userId))
     }, [userId, dispatch])
 
     return (
         <>
             <Card className="accountpage__wishlist-card" sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
                 onClick={() => handleShowDetails(product)}>
-                <Link className='link' to={`/product/${(toUrlFriendly(product.name))}`} key={product._id}>
+                <Link className='link' to={`/product/${(toUrlFriendly(product.name))}`} key={product._id} sx={{ zIndex: "1", }}>
                     <AspectRatio ratio="1">
                         <CardOverflow>
-                            <ChipDelete onClick={() => handleDeleteProductFromFavorite(product)} sx={{ zIndex: "99", position: "absolute", top: 0, right: 0 }} />
                             {
                                 product.images ?
                                     <img src={product.images[0]} alt={product.name} /> :
@@ -58,13 +59,19 @@ const ProductInFavorite = ({ product }) => {
                         <Typography className="accountpage__wishlist-color">Колір: {product.info.color}</Typography>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography className="accountpage__wishlist-price">{product.price} ₴</Typography>
-                            <LocalMallOutlinedIcon  onClick={() => handleAddProductToBasket(product)} />
+                            <Stack direction="row" spacing={1}>
+                                <FavoriteIcon sx={{ color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} />
+                                <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
+                                {/*<DoneIcon sx={{fontSize: 20}}/>*/}
+                            </Stack>
+
                             {/*<DoneIcon sx={{fontSize: 20}}/>*/}
                         </Stack>
                     </Stack>
                 </CardContent>
             </Card>
             <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
+
         </>
 
     );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { toUrlFriendly } from '../utils'
@@ -16,18 +16,65 @@ import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import { basketActions, favoriteActions } from '../redux';
+import useUser from '../hooks/useUser';
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import Snackbar from '@mui/joy/Snackbar';
+import { DrawerBasket } from '../components';
 
 const ProductPage = () => {
+    const [openBasket, setOpenBasket] = useState(false);
+    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [favourite, setFavourite] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+
+    const userId = useUser();
+    const dispatch = useDispatch();
+
     const { selectedProduct } = useSelector(state => state.productReducer);
     const { categories } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
-
-
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const { favorite, loading, error } = useSelector(state => state.favoriteReducer);
 
     const category = categories.find(category => category._id === selectedProduct._category);
     const type = types.find(type => type._id === selectedProduct._type);
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(favoriteActions.getFavorite(userId))
+        }
+    }, [dispatch, userId])
+
+    useEffect(() => {
+        if (favorite) {
+            const isFavourite = favorite.some(item => item._id === selectedProduct._id);
+            setFavourite(isFavourite);
+        }
+    }, [favorite, selectedProduct._id]);
+
+    const handleAddProductToFavourite = useCallback(async (product) => {
+        await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
+        setFavourite(true)
+        setSnackbarMessage(`${product.name} додано у список бажань.`);
+        setOpenSnackbar(true)
+    }, [userId, dispatch]);
+
+
+    const handleDeleteProductFromFavorite = useCallback(async (product) => {
+        await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
+        setFavourite(false)
+        setSnackbarMessage(`${product.name} видалено зі списку бажань.`);
+        setOpenSnackbar(true)
+    }, [userId, dispatch])
+
+    const handleAddProductToBasket = useCallback(async (product) => {
+        await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
+        await dispatch(basketActions.getBasket(userId));
+        setOpenBasket(true);
+    }, [userId, dispatch]);
 
     return (
         <Container className="product-page">
@@ -91,8 +138,10 @@ const ProductPage = () => {
                     <Stack direction="column" spacing={1} className="product-page__info">
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography variant="h4" className="product-page__name">{selectedProduct.name}</Typography>
-                            <FavoriteBorderRoundedIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" />
-                            {/*<FavoriteBorderRoundedIcon sx={{fontSize: 35, color: "#730000"}}/>*/}
+                            {
+                                favourite ? <FavoriteIcon className="product-page__heart-icon" sx={{ color: '#730000', fontSize: "35px" }} onClick={() => handleDeleteProductFromFavorite(selectedProduct)} /> :
+                                    <FavoriteBorderIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" onClick={() => handleAddProductToFavourite(selectedProduct)} />
+                            }
 
                         </Stack>
 
@@ -108,7 +157,7 @@ const ProductPage = () => {
                                 <Button className="product-page__quantity">{selectedProduct.quantity}</Button>
                                 <Button className="product-page__quantity">+</Button>
                             </ButtonGroup>
-                            <Button variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />}>ДОДАТИ В КОШИК</Button>
+                            <Button variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(selectedProduct)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
                         <Chip className="product-page__cashback" size="md" variant="soft" color="danger">
                             {selectedProduct.quantity} в наявності
@@ -122,6 +171,28 @@ const ProductPage = () => {
                     </Stack>
                 </Box>
             </Box>
+            <Snackbar
+                startDecorator={<FavoriteIcon sx={{ fontSize: 20 }} />}
+                autoHideDuration={3000}
+                open={openSnackbar}
+                color="neutral"
+                variant="plain"
+                sx={{ top: "70px" }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                size="lg"
+                onClose={(event, reason) => {
+                    if (reason === 'clickaway') {
+                        return;
+                    }
+                    setOpenSnackbar(false);
+                }}
+            >
+                <Typography>
+                    {snackbarMessage}
+                </Typography>
+            </Snackbar>
+            <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
+
         </Container>
     );
 };

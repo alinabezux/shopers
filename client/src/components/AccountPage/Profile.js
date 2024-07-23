@@ -7,8 +7,7 @@ import Edit from '@mui/icons-material/Edit';
 import { authActions } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-
-
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 
 const Profile = ({ user }) => {
@@ -80,8 +79,8 @@ const Profile = ({ user }) => {
                 </Card>
             </Box>
            
-            <Button variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
             <Button className='accountpage__button' color="success" variant="solid"  endDecorator={<Edit />}>ЗБЕРЕГТИ ЗМІНИ</Button>
+            <Button variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
         </Box >
     )
 };

@@ -17,8 +17,10 @@ import Snackbar from '@mui/joy/Snackbar';
 
 const ProductCard = ({ product }) => {
     const [openBasket, setOpenBasket] = useState(false);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
     const [favourite, setFavourite] = useState(false);
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
     const userId = useUser();
 
@@ -31,26 +33,35 @@ const ProductCard = ({ product }) => {
         }
     }, [dispatch, userId])
 
+    useEffect(() => {
+        if (favorite) {
+            const isFavourite = favorite.some(item => item._id === product._id);
+            setFavourite(isFavourite);
+        }
+    }, [favorite, product._id]);
+
     const handleShowDetails = useCallback((product) => {
         dispatch(productActions.setSelectedProduct(product));
     }, [dispatch, product]);
 
     const handleAddProductToFavourite = useCallback(async (product) => {
-        console.log(product)
         await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
-        setFavourite(true)
+        await dispatch(favoriteActions.getFavorite(userId))
+        // setFavourite(true)
+        setSnackbarMessage(`${product.name} додано у список бажань.`);
         setOpenSnackbar(true)
     }, [userId, dispatch]);
 
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
         await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
-        setFavourite(false)
+        await dispatch(favoriteActions.getFavorite(userId))
+        // setFavourite(false)
+        setSnackbarMessage(`${product.name} видалено зі списку бажань.`);
         setOpenSnackbar(true)
     }, [userId, dispatch])
 
     const handleAddProductToBasket = useCallback(async (product) => {
-        console.log(product)
         await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
         await dispatch(basketActions.getBasket(userId));
         setOpenBasket(true);
@@ -78,10 +89,10 @@ const ProductCard = ({ product }) => {
                             <Typography className="product-card__card-price">{product.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
                                 {
-                                    favourite ? <FavoriteIcon sx={{ fontSize: 20, color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} /> :
-                                        <FavoriteBorderIcon sx={{ fontSize: 20 }} onClick={() => handleAddProductToFavourite(product)} />
+                                    favourite ? <FavoriteIcon sx={{ color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} /> :
+                                        <FavoriteBorderIcon onClick={() => handleAddProductToFavourite(product)} />
                                 }
-                                <LocalMallOutlinedIcon sx={{ fontSize: 20 }} onClick={() => handleAddProductToBasket(product)} />
+                                <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
                                 {/*<DoneIcon sx={{fontSize: 20}}/>*/}
                             </Stack>
                         </Stack>
@@ -109,15 +120,9 @@ const ProductCard = ({ product }) => {
                     setOpenSnackbar(false);
                 }}
             >
-                {favourite ?
-                    <Typography>
-                        {product.name} додано у список бажань.
-                    </Typography>
-                    :
-                    <Typography>
-                        {product.name} видалено зі списку бажань.
-                    </Typography>
-                }
+                <Typography>
+                    {snackbarMessage}
+                </Typography>
             </Snackbar>
         </>
     );

@@ -6,7 +6,6 @@ import { tabClasses } from '@mui/joy/Tab'
 import { Orders, Profile, Wishlist } from '../components';
 import { Chip } from '@mui/joy';
 import { useSelector, useDispatch } from "react-redux";
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { authActions } from '../redux';
 import RedeemRoundedIcon from '@mui/icons-material/RedeemRounded';
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -73,8 +72,6 @@ const AccountPage = () => {
                     <Orders />
                 </TabPanel>
             </Tabs>
-
-
         </Box >
     );
 };

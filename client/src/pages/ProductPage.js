@@ -57,7 +57,7 @@ const ProductPage = () => {
 
     const handleAddProductToFavourite = useCallback(async (product) => {
         await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
-        setFavourite(true)
+        await dispatch(favoriteActions.getFavorite(userId))
         setSnackbarMessage(`${product.name} додано у список бажань.`);
         setOpenSnackbar(true)
     }, [userId, dispatch]);
@@ -65,7 +65,7 @@ const ProductPage = () => {
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
         await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
-        setFavourite(false)
+        await dispatch(favoriteActions.getFavorite(userId))
         setSnackbarMessage(`${product.name} видалено зі списку бажань.`);
         setOpenSnackbar(true)
     }, [userId, dispatch])

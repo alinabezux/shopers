@@ -68,6 +68,7 @@ div.basket__cashback {
 button.basket__button {
     font-weight: 700;
     margin-top: 20px;
+    width: 100%;
 }
 
 p.product-in-basket__card-name {

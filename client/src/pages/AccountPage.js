@@ -19,6 +19,7 @@ const AccountPage = () => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const { user } = useSelector(state => state.userReducer);
+    
     useEffect(() => {
         const hash = location.hash.replace('#', '');
         if (hash) {

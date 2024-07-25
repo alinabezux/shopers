@@ -1,5 +1,6 @@
 const baseURL = 'http://localhost:5000/api'
 // const prodURL = 'http://mejerichankabar-env.eba-qzjjjrmf.us-east-1.elasticbeanstalk.com/api/api'
+const POST_URL = 'https://api.novaposhta.ua/v2.0/json/';
 
 const urls = {
     products: '/products',
@@ -18,5 +19,5 @@ const urls = {
 }
 
 export {
-    baseURL, urls
+    baseURL, urls, POST_URL
 }

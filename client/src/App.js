@@ -12,10 +12,16 @@ import {
     ShopPage,
     TypePage,
     CheckoutPage,
-    AccountPage
+    AccountPage,
+    AdminPage
 
 } from "./pages";
 import './styles';
+import OrderTable from "./components/Admin/OrderTable";
+import ProductsTable from "./components/Admin/ProductsTable";
+import UsersTable from "./components/Admin/UsersTable";
+import TypesTable from "./components/Admin/TypesTable";
+import CategoriesTable from "./components/Admin/CategoriesTable";
 
 
 function App() {
@@ -37,7 +43,13 @@ function App() {
 
                     <Route path={'/account'} element={<AccountPage />} />
                     <Route path={'/auth'} element={<AuthPage />} />
-                    <Route path={'/admin'} element={<HomePage />} />
+                    <Route path={'/admin/'} element={<AdminPage />} >
+                        <Route path="orders" element={<OrderTable />} />
+                        <Route path="products" element={<ProductsTable />} />
+                        <Route path="categories" element={<CategoriesTable />} />
+                        <Route path="types" element={<TypesTable />} />
+                        <Route path="users" element={<UsersTable />} />
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>

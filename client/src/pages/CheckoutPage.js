@@ -1,8 +1,7 @@
 import { Box, Typography, Stack, Container, TextField, MenuItem, } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Card, Chip, CardContent, Divider, Input, Button, Select, FormControl, FormLabel, Radio, RadioGroup, Option, Tooltip } from '@mui/joy';
-import bag from '../assets/bags.png'
-import ring from '../assets/accessories.png'
+
 import { selectClasses } from '@mui/joy/Select';
 import Checkbox from '@mui/joy/Checkbox';
 import ukrpost from '../assets/ukrpost.png'
@@ -17,46 +16,112 @@ import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import useUser from '../hooks/useUser';
+import { basketActions } from '../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { postService } from '../services';
+// import Select2 from '@mui/material/Select';
+import Select2 from 'react-select'
 
 const CheckoutPage = () => {
-    const basket = [
-        {
-            "info": {
-                "color": "Рожевий",
-                "size": "регулюється від 16 до 21",
-                "material": "сталь + кварц"
-            },
-            "_id": "664c7477da796b4a4b46d2b7",
-            "article": "2000",
-            "name": "Каблучка з рожевого кварцу",
-            "images": ring,
-            "_category": "6643779b8ad17f97b3f8ec6e",
-            "_type": "6647cbb48df667dfddc3a725",
-            "quantity": 1,
-            "price": 200,
-            "cashback": 4,
-            "__v": 0
-        },
-        {
-            "info": {
-                "color": "Чорний",
-                "size": "25см /18см/11см",
-                "material": "еко шкіра + оксамит",
-                "description": "2 кишені всередині. Є додатковий ланцюжок"
-            },
-            "_id": "664c7323da796b4a4b46d2b5",
-            "article": "1000-BL",
-            "name": "Александра",
-            "images": bag,
-            "_category": "664377a98ad17f97b3f8ec70",
-            "_type": "664c6ea78927276eede67848",
-            "quantity": 1,
-            "price": 840,
-            "cashback": 16,
-            "__v": 0
-        }
+    const dispatch = useDispatch();
 
-    ];
+    const [post, setPost] = useState('novapost');
+    const [payment, setPayment] = useState('card');
+    const [checked, setChecked] = useState(false);
+
+    // post
+    const [searchString, setSearchString] = useState('');
+    const [options, setOptions] = useState([]);
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [warehouses, setWarehouses] = useState([]);
+    const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+
+    const { basket, loading, error } = useSelector(state => state.basketReducer);
+    const { user } = useSelector(state => state.userReducer);
+
+    const userId = useUser();
+
+    const handleInputChange = async (value) => {
+        setSearchString(value);
+
+        if (value.length >= 3) {
+            try {
+                const response = await postService.getCities(value);
+                const cities = response.data.data.map(city => ({
+                    value: city.Ref,
+                    label: city.Description
+                }));
+                setOptions(cities);
+            } catch (error) {
+                console.error('Error searching cities:', error);
+            }
+        } else {
+            setOptions([]);
+        }
+    };
+
+    const handleCityChange = async (selectedOption) => {
+        setSelectedCity(selectedOption);
+
+        setSelectedWarehouse(null);
+        setWarehouses([]);
+
+        try {
+            const response = await postService.getWarehouses(selectedOption.value);
+            const warehouses = response.data.data.map(warehouse => ({
+                value: warehouse.Ref,
+                label: warehouse.Description
+            }));
+            setWarehouses(warehouses);
+        } catch (error) {
+            console.error('Error fetching warehouses:', error);
+        }
+    }
+
+    const handleWarehouseChange = (selectedOption) => {
+        setSelectedWarehouse(selectedOption);
+    };
+
+    const handleCheckboxChange = (event) => {
+        setChecked(event.target.checked);
+    };
+
+    const handleChangePost = (event) => {
+        setPost(event.target.value);
+    };
+
+    const handleChangePayment = (event) => {
+        setPayment(event.target.value);
+    };
+
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(basketActions.getBasket(userId));
+        }
+    }, [dispatch, userId]);
+
+
+    const totalPrice = useMemo(() => {
+        if (!checked) {
+            return basket.reduce((total, productInBasket) => {
+                return total + productInBasket.price * productInBasket.quantity;
+            }, 0);
+        } else {
+            return basket.reduce((total, productInBasket) => {
+                return total + productInBasket.price * productInBasket.quantity;
+            }, -user.bonus);
+        }
+    }, [basket, checked]);
+
+
+    const totalCashback = useMemo(() => {
+        return basket.reduce((total, productInBasket) => {
+            return total + productInBasket.cashback;
+        }, 0);
+    }, [basket]);
+
 
     return (
         <Container className='checkout'>
@@ -77,6 +142,7 @@ const CheckoutPage = () => {
                                 <FormLabel>Прізвище</FormLabel>
                                 <Input />
                             </FormControl>
+
                             <FormControl required className="checkout__form">
                                 <FormLabel >Номер телефону</FormLabel>
                                 <Input startDecorator={<Typography>+380</Typography>} />
@@ -96,101 +162,96 @@ const CheckoutPage = () => {
                         </Typography>
                         <Divider inset="none" />
                         <FormControl required>
-                            <RadioGroup defaultValue="medium" name="radio-buttons-group">
+                            <RadioGroup defaultValue="novapost" name="radio-buttons-group">
                                 <Stack direction="row" spacing={5} >
                                     <Stack direction="row" spacing={2} className='checkout__post'>
-                                        <Radio value="novapost" color="neutral" />
+                                        <Radio
+                                            checked={post === 'novapost'}
+                                            onChange={handleChangePost}
+                                            value="novapost"
+                                            color="neutral" />
                                         <img src={novapost} />
                                     </Stack>
                                     <Stack direction="row" spacing={2} className='checkout__post'>
-                                        <Radio value="ukrpost" color="neutral" />
+                                        <Radio
+                                            checked={post === 'ukrpost'}
+                                            onChange={handleChangePost}
+                                            value="ukrpost"
+                                            color="neutral" />
                                         <img src={ukrpost} />
                                     </Stack>
                                 </Stack>
                             </RadioGroup>
                         </FormControl>
+                        {
+                            post === 'novapost' &&
+                            <>
+                                <Select2
+                                    inputValue={searchString}
+                                    onInputChange={handleInputChange}
+                                    onChange={handleCityChange}
+                                    options={options}
+                                    placeholder="Введіть назву міста"
+                                    noOptionsMessage={() => "Нічого не знайдено"}
+                                />
 
-                        <Select defaultValue="post" indicator={<KeyboardArrowDown />} sx={{
-                            [`& .${selectClasses.indicator}`]: {
-                                transition: '0.2s',
-                                [`&.${selectClasses.expanded}`]: {
-                                    transform: 'rotate(-180deg)',
-                                },
-                            },
-                        }}>
-                            <Option value="post">у відділення</Option>
-                            <Option value="box">до поштомату</Option>
-                        </Select>
-                        <Select placeholder="Місто" startDecorator={<LocationOn />} indicator={<KeyboardArrowDown />} sx={{
-                            [`& .${selectClasses.indicator}`]: {
-                                transition: '0.2s',
-                                [`&.${selectClasses.expanded}`]: {
-                                    transform: 'rotate(-180deg)',
-                                },
-                            },
-                        }}>
-                            <Option value="1">Київ</Option>
-                            <Option value="2">Львів</Option>
-                            <Option value="3">Харків</Option>
-                            <Option value="4">Дніпро</Option>
-                        </Select>
-                        <Select placeholder="відділення №" indicator={<KeyboardArrowDown />} sx={{
-                            [`& .${selectClasses.indicator}`]: {
-                                transition: '0.2s',
-                                [`&.${selectClasses.expanded}`]: {
-                                    transform: 'rotate(-180deg)',
-                                },
-                            },
-                        }}>
-                            <Option value="1">1</Option>
-                            <Option value="2">2</Option>
-                            <Option value="3">3</Option>
-                            <Option value="4">4</Option>
-                        </Select>
-
-                        {/* <FormControl required className="checkout__form">
-                            <FormLabel>Місто / Село</FormLabel>
-                            <Input />
-                        </FormControl>
-                        <FormControl required className="checkout__form">
-                            <FormLabel>Область / Округ</FormLabel>
-                            <Input />
-                        </FormControl>
-                        <FormControl required className="checkout__form">
-                            <FormLabel>Поштовий індекс</FormLabel>
-                            <Input />
-                        </FormControl> */}
+                                <Select2
+                                    value={selectedWarehouse}
+                                    onChange={handleWarehouseChange}
+                                    options={warehouses}
+                                    placeholder="Виберіть відділення"
+                                    noOptionsMessage={() => "Нічого не знайдено"}
+                                />
+                            </>
+                        }
+                        {post === 'ukrpost' &&
+                            <>
+                                <FormControl required className="checkout__form">
+                                    <FormLabel>Місто / Село</FormLabel>
+                                    <Input />
+                                </FormControl>
+                                <FormControl required className="checkout__form">
+                                    <FormLabel>Область / Округ</FormLabel>
+                                    <Input />
+                                </FormControl>
+                                <FormControl required className="checkout__form">
+                                    <FormLabel>Поштовий індекс</FormLabel>
+                                    <Input />
+                                </FormControl>
+                            </>
+                        }
 
                         <Typography className='checkout__title'>
                             ОПЛАТА
                         </Typography>
                         <Divider inset="none" />
                         <FormControl>
-                            <RadioGroup defaultValue="medium" name="radio-buttons-group2">
+                            <RadioGroup defaultValue="card" name="radio-buttons-group2">
                                 <Stack direction="column" spacing={2} sx={{ width: "100%" }}>
-                                    <Stack direction="row" alignItems="center"  justifyContent="space-between" >
+                                    <Stack direction="row" alignItems="center" justifyContent="space-between" >
                                         <Stack direction="row" spacing={2}>
-                                            <Radio value="karta" color="neutral" />
+                                            <Radio value="card" color="neutral" onChange={handleChangePayment} />
                                             <Typography>Повна оплата на сайті</Typography>
                                         </Stack>
                                         <img src={liqpay} style={{ height: "14px" }} />
                                     </Stack>
-                                    <Stack direction="row" spacing={3}>
-                                        <Radio value="nalozhka" color="neutral" />
-                                        <Typography>Накладений платіж по передоплаті 100 грн. (тільки Нова пошта)</Typography>
-                                        <Tooltip arrow placement="right" variant="outlined" title={
-                                            <Typography sx={{
-                                                maxWidth: 320,
-                                                p: 1,
-                                            }}>                                                 <b> УВАГА! </b>Враховуйте, що замовляючи цим способом оплати, при отриманні
-                                                Вам потрібно буде сплатити комісію за послуги НП:
-                                                20 грн + 2% від суми замовлення.
-                                            </Typography>
 
-                                        }>
-                                            <InfoOutlinedIcon />
-                                        </Tooltip>
-                                    </Stack>
+                                    {post === 'novapost' &&
+                                        <Stack direction="row" spacing={3}>
+                                            <Radio value="cash" color="neutral" onChange={handleChangePayment} />
+                                            <Typography>Накладений платіж по передоплаті 100 грн. (тільки Нова пошта)</Typography>
+                                            <Tooltip arrow placement="right" variant="outlined" title={
+                                                <Typography sx={{ maxWidth: 320, p: 1, }}>
+                                                    <b> УВАГА! </b>Враховуйте, що замовляючи цим способом оплати, при отриманні
+                                                    Вам потрібно буде сплатити комісію за послуги НП:
+                                                    20 грн + 2% від суми замовлення.
+                                                </Typography>
+
+                                            }>
+                                                <InfoOutlinedIcon />
+                                            </Tooltip>
+                                        </Stack>
+                                    }
                                 </Stack>
                             </RadioGroup>
                         </FormControl >
@@ -219,19 +280,19 @@ const CheckoutPage = () => {
                                 <Stack direction="column" className='basket__order' >
                                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                                         <Typography className="basket__price">Разом :</Typography>
-                                        <Typography className="basket__price">1040 грн.</Typography>
+                                        <Typography className="basket__price">{totalPrice} грн.</Typography>
                                     </Stack>
                                     <Chip className="basket__cashback" size="sm" variant="soft" color="success" alignItems="flex-end">
-                                        Кешбек з покупки : 20 грн.
+                                        Кешбек з покупки : {totalCashback} грн.
                                     </Chip>
                                     <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: "20px" }}>
-                                        <Checkbox label="Оплатити за допомогою бонусів" color="success" variant="soft" />
+                                        <Checkbox label="Оплатити за допомогою бонусів" color="success" variant="soft" checked={checked} onChange={handleCheckboxChange} />
                                         <Tooltip arrow variant="outlined" placement="bottom-end" title={
                                             <Typography sx={{
                                                 maxWidth: 400,
                                                 p: 1,
                                             }}>
-                                                З вашого бонусого рахунку буде списано 7 грн.
+                                                З вашого бонусого рахунку буде списано {user.bonus} грн.
                                             </Typography>
 
                                         }>

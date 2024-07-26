@@ -17,10 +17,18 @@ const orderSchema = new Schema({
     lastName: { type: String, required: true },
     phoneNumber: { type: String, required: true },
 
-    city: { type: String },
-    cityUKR: { type: String },
-    warehouse: { type: Number },
+    city: {
+        ref: { type: String },
+        description: { type: String },
+    },
+    warehouse: {
+        ref: { type: String },
+        index: { type: String },
+        number: { type: String },
+        description: { type: String }
+    },
 
+    cityUKR: { type: String },
     index: { type: String },
     region: { type: String },
     //

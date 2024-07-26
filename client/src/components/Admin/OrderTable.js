@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from 'react';
 import {
     Avatar,
@@ -39,30 +40,11 @@ import {
 } from '@mui/icons-material';
 
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import useUser from '../../hooks/useUser';
+import { useEffect } from 'react';
+import { orderActions } from '../../redux';
 
-const rows = [
-    {
-        id: 'INV-1234',
-        date: 'Feb 3, 2023',
-        status: 'Refunded',
-        customer: {
-            initial: 'O',
-            name: 'Olivia Ryhe',
-            email: 'olivia@email.com',
-        },
-    },
-    {
-        id: 'INV-1233',
-        date: 'Feb 3, 2023',
-        status: 'Paid',
-        customer: {
-            initial: 'S',
-            name: 'Steve Hampton',
-            email: 'steve.hamp@email.com',
-        },
-    },
-    //... (залиште решту об'єктів з масиву rows без змін)
-];
+
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -112,10 +94,19 @@ function RowMenu() {
     );
 }
 
-export default function OrderTable() {
+const OrderTable = () => {
+
     const [order, setOrder] = useState('desc');
     const [selected, setSelected] = useState([]);
     const [open, setOpen] = useState(false);
+
+    const userId = useUser();
+    const dispatch = useDispatch();
+    const { orders, selectedOrder, currentPageOrders, totalPagesOrders } = useSelector(state => state.orderReducer);
+
+    useEffect(() => {
+        dispatch(orderActions.getAllOrders({ page: 1, isGettingAll: false }));
+    }, [dispatch]);
 
     const renderFilters = () => (
         <React.Fragment>
@@ -264,27 +255,27 @@ export default function OrderTable() {
                 >
                     <thead>
                         <tr>
-                            <th style={{ width: 48, textAlign: 'center', padding: '12px 6px' }}>
+                            <th style={{ width: 50, textAlign: 'center', padding: '12px 6px' }}>
                                 <Checkbox
                                     size="sm"
                                     indeterminate={
-                                        selected.length > 0 && selected.length !== rows.length
+                                        selected.length > 0 && selected.length !== orders.length
                                     }
-                                    checked={selected.length === rows.length}
+                                    checked={selected.length === orders.length}
                                     onChange={(event) => {
                                         setSelected(
-                                            event.target.checked ? rows.map((row) => row.id) : [],
+                                            event.target.checked ? orders.map((row) => row.id) : [],
                                         );
                                     }}
                                     color={
-                                        selected.length > 0 || selected.length === rows.length
+                                        selected.length > 0 || selected.length === orders.length
                                             ? 'primary'
                                             : undefined
                                     }
                                     sx={{ verticalAlign: 'text-bottom' }}
                                 />
                             </th>
-                            <th style={{ width: 120, padding: '12px 6px' }}>
+                            <th style={{ width: 80, padding: '12px 6px' }}>
                                 <Link
                                     underline="none"
                                     color="primary"
@@ -300,34 +291,33 @@ export default function OrderTable() {
                                         },
                                     }}
                                 >
-                                №
+                                    №
                                 </Link>
                             </th>
-                            <th style={{ width: 100, padding: '12px 6px' }}>Дата</th>
-                            <th style={{ width: 240, padding: '12px 6px' }}>Замовлення</th>
-                            <th style={{ width: 240, padding: '12px 6px' }}>Дані покупця</th>
-                            <th style={{ width: 100, padding: '12px 6px' }}>Спосіб оплати</th>
+                            <th style={{ width: 80, padding: '12px 6px' }}>Дата</th>
+                            <th style={{ width: 300, padding: '12px 6px' }}>Замовлення</th>
+                            <th style={{ width: 300, padding: '12px 6px' }}>Дані покупця</th>
+                            <th style={{ width: 120, padding: '12px 6px' }}>Спосіб оплати</th>
                             <th style={{ width: 100, padding: '12px 6px' }}>Статус оплати</th>
-                            <th style={{ width: 100, padding: '12px 6px' }}>Пошта</th>
-                            {/* <th style={{ width: 140, padding: '12px 6px' }}> </th> */}
+                            <th style={{ width: 30, padding: '12px 6px' }}> </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {stableSort(rows, getComparator(order, 'id')).map((row) => (
-                            <tr key={row.id}>
+                        {stableSort(orders, getComparator(order, 'orderID')).map((order) => (
+                            <tr key={order.orderID}>
                                 <td style={{ textAlign: 'center' }}>
                                     <Checkbox
                                         size="sm"
-                                        checked={selected.includes(row.id)}
+                                        checked={selected.includes(order.orderID)}
                                         onChange={(event) => {
                                             setSelected(
                                                 event.target.checked
-                                                    ? [...selected, row.id]
-                                                    : selected.filter((id) => id !== row.id),
+                                                    ? [...selected, order.orderID]
+                                                    : selected.filter((orderID) => orderID !== order.orderID),
                                             );
                                         }}
                                         sx={{ verticalAlign: 'text-bottom' }}
-                                        color={selected.includes(row.id) ? 'primary' : undefined}
+                                        color={selected.includes(order.orderID) ? 'primary' : undefined}
                                     />
                                 </td>
                                 <td>
@@ -339,42 +329,68 @@ export default function OrderTable() {
                                         href="#"
                                         sx={{ display: 'block' }}
                                     >
-                                        {row.id}
+                                        {order.orderID}
                                     </Typography>
-                                    <Typography level="body2" textColor="text.secondary">
-                                        Order ID: {row.id}
-                                    </Typography>
+
                                 </td>
-                                <td>{row.date}</td>
+                                <td>{order.createdAt.split('T')[0].split('-').reverse().join('.')}</td>
+                                <td>{order.orderItems.map((item, index) => (
+                                    <li key={index}>{item}</li>))}
+                                    <Divider sx={{ my: 2 }} />
+                                    <Typography level="body2">Сума: {order.totalSum} грн.</Typography>
+                                </td>
+                                <td>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                        <Typography fontWeight="lg" level="body3">
+                                            {order.firstName} {order.lastName}
+                                        </Typography>
+                                        <Typography level="body2">{order.phoneNumber}</Typography>
+
+                                        {order.city ?
+                                            <>
+                                                <Typography>{order.city.description}</Typography>
+                                                <Typography>{order.warehouse.description}</Typography>
+                                            </>
+                                            :
+                                            <>
+                                                <Typography>{order.cityUKR}</Typography>
+                                                <Typography>{order.index}</Typography>
+                                                <Typography>{order.region}</Typography>
+                                            </>
+                                        }
+
+                                        <Typography level="body2">{order.email}</Typography>
+                                        <Chip size="sm"
+                                            variant="soft"
+                                            color={
+                                                order.shipping === 'Нова пошта' ? 'danger'
+                                                    : order.shipping === 'Укр пошта'
+                                                        ? 'warning'
+                                                        : 'neutral'
+                                            }>{order.shipping}</Chip>
+                                    </Box>
+                                </td>
+
+                                <td>{order.paymentMethod}</td>
                                 <td>
                                     <Chip
                                         size="sm"
                                         variant="soft"
                                         color={
-                                            row.status === 'Paid'
+                                            order.status === 'Paid'
                                                 ? 'success'
-                                                : row.status === 'Refunded'
+                                                : order.status === 'Refunded'
                                                     ? 'danger'
                                                     : 'neutral'
                                         }
                                         startDecorator={
-                                            row.status === 'Paid' ? <CheckRoundedIcon /> : null
+                                            order.status === 'Paid' ? <CheckRoundedIcon /> : null
                                         }
                                     >
-                                        {row.status}
+                                        {order.status}
                                     </Chip>
                                 </td>
-                                <td>
-                                    <Box sx={{ display: 'flex', gap: 2 }}>
-                                        <Avatar size="sm">{row.customer.initial}</Avatar>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <Typography fontWeight="lg" level="body3">
-                                                {row.customer.name}
-                                            </Typography>
-                                            <Typography level="body2">{row.customer.email}</Typography>
-                                        </Box>
-                                    </Box>
-                                </td>
+
                                 <td style={{ textAlign: 'right' }}>
                                     <RowMenu />
                                 </td>
@@ -416,3 +432,5 @@ export default function OrderTable() {
         </React.Fragment>
     );
 }
+
+export { OrderTable }

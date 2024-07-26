@@ -136,7 +136,7 @@ export default function Sidebar() {
                         <ListItemButton>
                             <HomeRoundedIcon />
                             <ListItemContent>
-                                <Typography level="title-sm">Головна</Typography>
+                                <Typography component={Link} to="/" className='link' level="title-sm">Головна</Typography>
                             </ListItemContent>
                         </ListItemButton>
                     </ListItem>

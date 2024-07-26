@@ -17,7 +17,7 @@ module.exports = {
             }
 
             const order = await Order.create({
-                ...req.body, _user: userId,
+                ...req.body.order, _user: userId,
                 orderItems: products
             });
 

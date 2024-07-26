@@ -13,15 +13,16 @@ import {
     TypePage,
     CheckoutPage,
     AccountPage,
-    AdminPage
+    AdminPage,
+    CompleteOrderPage
 
 } from "./pages";
 import './styles';
-import OrderTable from "./components/Admin/OrderTable";
 import ProductsTable from "./components/Admin/ProductsTable";
 import UsersTable from "./components/Admin/UsersTable";
 import TypesTable from "./components/Admin/TypesTable";
 import CategoriesTable from "./components/Admin/CategoriesTable";
+import { OrderTable } from "./components/Admin/OrderTable";
 
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
                     </Route>
                     <Route path={'/product/:productName'} element={<ProductPage />} />
                     <Route path={'/checkout'} element={<CheckoutPage />} />
+                    <Route path={'/order/:orderId'} element={<CompleteOrderPage />} />
+
                     <Route path={'/oplata-ta-dostavka'} element={<OplataDostvkaPage />} />
                     <Route path={'/obmin-ta-povernennya'} element={<ObminPage />} />
                     <Route path={'/dogovir-oferty'} element={<DogovirOfertuPage />} />

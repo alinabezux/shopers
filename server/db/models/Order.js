@@ -30,7 +30,10 @@ const orderSchema = new Schema({
 
     cityUKR: { type: String },
     index: { type: String },
-    region: { type: String },
+    region: {
+        value: { type: Number },
+        label: { type: String }
+    },
     //
 
     email: { type: String, required: true },

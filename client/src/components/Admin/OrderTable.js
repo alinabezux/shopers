@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from 'react';
 import {
     Avatar,
     Box,
@@ -37,6 +36,7 @@ import {
     KeyboardArrowRight as KeyboardArrowRightIcon,
     KeyboardArrowLeft as KeyboardArrowLeftIcon,
     MoreHorizRounded as MoreHorizRoundedIcon,
+    CloseRounded,
 } from '@mui/icons-material';
 
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
@@ -97,8 +97,9 @@ function RowMenu() {
 const OrderTable = () => {
 
     const [order, setOrder] = useState('desc');
-    const [selected, setSelected] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedPayment, setSelectedPayment] = useState(null);
+    const action = useRef(null);
 
     const userId = useUser();
     const dispatch = useDispatch();
@@ -108,43 +109,79 @@ const OrderTable = () => {
         dispatch(orderActions.getAllOrders({ page: 1, isGettingAll: false }));
     }, [dispatch]);
 
+
+
     const renderFilters = () => (
         <React.Fragment>
             <FormControl size="sm">
-                <FormLabel>Status</FormLabel>
+                <FormLabel>Спосіб оплати</FormLabel>
                 <Select
-                    size="sm"
-                    placeholder="Filter by status"
-                    slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+                    placeholder="Спосіб оплати"
+                    action={action}
+                    value={selectedPayment}
+                    onChange={(e, newValue) => setSelectedPayment(newValue)}
+                    {...(selectedPayment && {
+                        endDecorator: (
+                            <IconButton
+                                variant="plain"
+                                color="neutral"
+                                onMouseDown={(event) => {
+                                    event.stopPropagation();
+                                }}
+                                onClick={() => {
+                                    setSelectedPayment(null);
+                                    action.current?.focusVisible();
+                                }}
+                                slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+                            ><CloseRounded />
+                            </IconButton>
+                        ),
+                        indicator: null,
+                    })}
                 >
-                    <Option value="paid">Paid</Option>
-                    <Option value="pending">Pending</Option>
-                    <Option value="refunded">Refunded</Option>
-                    <Option value="cancelled">Cancelled</Option>
+                    <Option value="Передоплата">Передоплата</Option>
+                    <Option value="Наложка">Наложка</Option>
+
                 </Select>
             </FormControl>
             <FormControl size="sm">
-                <FormLabel>Category</FormLabel>
-                <Select size="sm" placeholder="All">
-                    <Option value="all">All</Option>
-                    <Option value="refund">Refund</Option>
-                    <Option value="purchase">Purchase</Option>
-                    <Option value="debit">Debit</Option>
+                <FormLabel>Пошта</FormLabel>
+                <Select
+                    placeholder="Пошта"
+                    action={action}
+                    value={selectedPost}
+                    onChange={(e, newValue) => setSelectedPost(newValue)}
+                    {...(selectedPost && {
+                        endDecorator: (
+                            <IconButton
+                                variant="plain"
+                                color="neutral"
+                                onMouseDown={(event) => {
+                                    event.stopPropagation();
+                                }}
+                                onClick={() => {
+                                    setSelectedPost(null);
+                                    action.current?.focusVisible();
+                                }}
+                            >
+                                <CloseRounded />
+                            </IconButton>
+                        ),
+                        indicator: null,
+                    })}
+                >
+                    <Option color="warning" value="Укр пошта">Укр пошта</Option>
+                    <Option color="danger" value="Нова пошта">Нова пошта</Option>
                 </Select>
             </FormControl>
-            <FormControl size="sm">
-                <FormLabel>Customer</FormLabel>
-                <Select size="sm" placeholder="All">
-                    <Option value="all">All</Option>
-                    <Option value="olivia">Olivia Rhye</Option>
-                    <Option value="steve">Steve Hampton</Option>
-                    <Option value="ciaran">Ciaran Murray</Option>
-                    <Option value="marina">Marina Macdonald</Option>
-                    <Option value="charles">Charles Fulton</Option>
-                    <Option value="jay">Jay Hoper</Option>
-                </Select>
-            </FormControl>
-        </React.Fragment>
+        </React.Fragment >
+    );
+
+
+
+    const filteredOrders = orders.filter(order =>
+        (selectedPost ? order.shipping === selectedPost : true) &&
+        (selectedPayment ? order.paymentMethod === selectedPayment : true)
     );
 
     return (
@@ -172,7 +209,7 @@ const OrderTable = () => {
                 </Button>
             </Box>
 
-            <Sheet
+            {/* <Sheet
                 className="SearchAndFilters-mobile"
                 sx={{
                     display: { xs: 'flex', sm: 'none' },
@@ -209,7 +246,8 @@ const OrderTable = () => {
                         </Sheet>
                     </ModalDialog>
                 </Modal>
-            </Sheet>
+            </Sheet> */}
+
             <Box
                 className="SearchAndFilters-tabletUp"
                 sx={{
@@ -224,8 +262,8 @@ const OrderTable = () => {
                 }}
             >
                 <FormControl sx={{ flex: 1 }} size="sm">
-                    <FormLabel>Search for order</FormLabel>
-                    <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
+                    <FormLabel>Пошук за замовленням</FormLabel>
+                    <Input size="sm" placeholder="Пошук" startDecorator={<SearchIcon />} />
                 </FormControl>
                 {renderFilters()}
             </Box>
@@ -245,37 +283,11 @@ const OrderTable = () => {
                     aria-labelledby="tableTitle"
                     stickyHeader
                     hoverRow
-                    sx={{
-                        '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
-                        '--Table-headerUnderlineThickness': '1px',
-                        '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
-                        '--TableCell-paddingY': '4px',
-                        '--TableCell-paddingX': '8px',
-                    }}
+                    sx={{ '--Table-headerUnderlineThickness': '1px' }}
                 >
                     <thead>
                         <tr>
-                            <th style={{ width: 50, textAlign: 'center', padding: '12px 6px' }}>
-                                <Checkbox
-                                    size="sm"
-                                    indeterminate={
-                                        selected.length > 0 && selected.length !== orders.length
-                                    }
-                                    checked={selected.length === orders.length}
-                                    onChange={(event) => {
-                                        setSelected(
-                                            event.target.checked ? orders.map((row) => row.id) : [],
-                                        );
-                                    }}
-                                    color={
-                                        selected.length > 0 || selected.length === orders.length
-                                            ? 'primary'
-                                            : undefined
-                                    }
-                                    sx={{ verticalAlign: 'text-bottom' }}
-                                />
-                            </th>
-                            <th style={{ width: 80, padding: '12px 6px' }}>
+                            <th style={{ width: 80, padding: "12px " }}>
                                 <Link
                                     underline="none"
                                     color="primary"
@@ -288,14 +300,13 @@ const OrderTable = () => {
                                             transition: '0.2s',
                                             transform:
                                                 order === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)',
-                                        },
+                                        }
                                     }}
                                 >
-                                    №
+                                    № / Дата
                                 </Link>
                             </th>
-                            <th style={{ width: 80, padding: '12px 6px' }}>Дата</th>
-                            <th style={{ width: 300, padding: '12px 6px' }}>Замовлення</th>
+                            <th style={{ width: 250, padding: '12px 6px' }}>Замовлення</th>
                             <th style={{ width: 300, padding: '12px 6px' }}>Дані покупця</th>
                             <th style={{ width: 120, padding: '12px 6px' }}>Спосіб оплати</th>
                             <th style={{ width: 100, padding: '12px 6px' }}>Статус оплати</th>
@@ -303,23 +314,8 @@ const OrderTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {stableSort(orders, getComparator(order, 'orderID')).map((order) => (
+                        {stableSort(filteredOrders, getComparator(order, 'createdAt')).map((order) => (
                             <tr key={order.orderID}>
-                                <td style={{ textAlign: 'center' }}>
-                                    <Checkbox
-                                        size="sm"
-                                        checked={selected.includes(order.orderID)}
-                                        onChange={(event) => {
-                                            setSelected(
-                                                event.target.checked
-                                                    ? [...selected, order.orderID]
-                                                    : selected.filter((orderID) => orderID !== order.orderID),
-                                            );
-                                        }}
-                                        sx={{ verticalAlign: 'text-bottom' }}
-                                        color={selected.includes(order.orderID) ? 'primary' : undefined}
-                                    />
-                                </td>
                                 <td>
                                     <Typography
                                         fontWeight="lg"
@@ -327,13 +323,21 @@ const OrderTable = () => {
                                         textDecoration="none"
                                         component="a"
                                         href="#"
-                                        sx={{ display: 'block' }}
+                                        sx={{ display: 'block', padding: "12px" }}
                                     >
                                         {order.orderID}
                                     </Typography>
+                                    <Typography
+                                        fontWeight="lg"
+                                        textColor="text.primary"
+                                        textDecoration="none"
+                                        component="a"
+                                        sx={{ display: 'block', padding: "12px" }}
+                                    >
+                                        {order.createdAt.split('T')[0].split('-').reverse().join('.')}
+                                    </Typography>
 
                                 </td>
-                                <td>{order.createdAt.split('T')[0].split('-').reverse().join('.')}</td>
                                 <td>{order.orderItems.map((item, index) => (
                                     <li key={index}>{item}</li>))}
                                     <Divider sx={{ my: 2 }} />
@@ -342,9 +346,9 @@ const OrderTable = () => {
                                 <td>
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                         <Typography fontWeight="lg" level="body3">
-                                            {order.firstName} {order.lastName}
+                                            ПІБ :   {order.firstName} {order.lastName}
                                         </Typography>
-                                        <Typography level="body2">{order.phoneNumber}</Typography>
+                                        <Typography level="body2">тел.: {order.phoneNumber}</Typography>
 
                                         {order.city ?
                                             <>
@@ -355,13 +359,13 @@ const OrderTable = () => {
                                             <>
                                                 <Typography>{order.cityUKR}</Typography>
                                                 <Typography>{order.index}</Typography>
-                                                <Typography>{order.region}</Typography>
+                                                <Typography>{order.region.label}</Typography>
                                             </>
                                         }
 
                                         <Typography level="body2">{order.email}</Typography>
                                         <Chip size="sm"
-                                            variant="soft"
+                                            variant="solid"
                                             color={
                                                 order.shipping === 'Нова пошта' ? 'danger'
                                                     : order.shipping === 'Укр пошта'

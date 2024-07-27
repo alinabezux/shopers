@@ -122,7 +122,10 @@ const CheckoutPage = () => {
                 }
             }
             const res = await dispatch(orderActions.createOrder(orderData))
-            navigate(`/order/${res.payload.orderID}`);
+            if (res.meta.requestStatus === 'fulfilled') {
+                navigate(`/order/${res.payload.orderID}`);
+            }
+
         } catch (error) {
             console.error('Error creating order:', error);
         }

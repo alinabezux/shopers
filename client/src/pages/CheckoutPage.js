@@ -15,9 +15,14 @@ import { basketActions, orderActions } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { postService } from '../services';
 import Select2 from 'react-select'
-import { useForm, Form } from "react-hook-form";
+import { useForm, Form, Controller } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { InfoOutlined } from '@mui/icons-material';
+import platamono from '../assets/plata_light_bg@2x.png'
+import applepay from '../assets/footer_apple_pay_light_bg@2x.png'
+import googlepay from '../assets/footer_google_pay_light_bg@2x.png'
+import mc from '../assets/footer_mc_light_bg@2x.png'
+import visa from '../assets/footer_visa_light_bg@2x.png'
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -37,7 +42,8 @@ const CheckoutPage = () => {
     const { basket, loading, error } = useSelector(state => state.basketReducer);
     const { user } = useSelector(state => state.userReducer);
 
-    const { control, handleSubmit, register, reset, formState: { errors } } = useForm();
+
+    const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();
     // const { loadingOrder, errorOrder } = useSelector(state => state.orderSelector);
     const regions = [
         { value: 1, label: "Вінницька область" },
@@ -70,6 +76,16 @@ const CheckoutPage = () => {
     ]
 
 
+    useEffect(() => {
+        if (user) {
+            setValue('firstName', user?.name);
+            setValue('lastName', user?.surname);
+            setValue('phoneNumber', user?.phone);
+            setValue('email', user?.email);
+            setValue('instagram', user?.instagram);
+        }
+    }, [user, setValue]);
+
     const totalPrice = useMemo(() => {
         if (!checked) {
             return basket.reduce((total, productInBasket) => {
@@ -101,6 +117,7 @@ const CheckoutPage = () => {
                     phoneNumber: data.phoneNumber,
                     email: data.email,
                     shipping: post,
+                    instagram: data.instagram,
 
                     city: selectedCity ? {
                         ref: selectedCity.value,
@@ -212,19 +229,36 @@ const CheckoutPage = () => {
                             </Typography>
                             <Divider inset="none" />
                             <CardContent className="checkout__info">
-                                <FormControl required className="checkout__form">
+                                <FormControl required className="checkout__form" error={errors.firstName ? true : false}>
                                     <FormLabel >Ім'я</FormLabel>
-                                    <Input {...register('firstName', { required: true })} />
+                                    <Input {...register('firstName', { required: "Обов'язкове поле" })} />
+                                    {errors.firstName &&
+                                        <FormHelperText >
+                                            <InfoOutlined sx={{ mr: 1 }} />
+                                            {errors.firstName.message}
+                                        </FormHelperText>
+                                    }
                                 </FormControl>
-                                <FormControl required className="checkout__form">
+                                <FormControl required className="checkout__form" error={errors.lastName ? true : false}>
                                     <FormLabel>Прізвище</FormLabel>
-                                    <Input {...register('lastName', { required: true })} />
+                                    <Input {...register('lastName', { required: "Обов'язкове поле" })} />
+                                    {errors.lastName &&
+                                        <FormHelperText >
+                                            <InfoOutlined sx={{ mr: 1 }} />
+                                            {errors.lastName.message}
+                                        </FormHelperText>
+                                    }
                                 </FormControl>
 
                                 <FormControl required className="checkout__form" error={errors.phoneNumber ? true : false}>
                                     <FormLabel >Номер телефону</FormLabel>
                                     <Input startDecorator={<Typography>+38</Typography>}
-                                        {...register('phoneNumber', { required: true, validate: { length: value => value.length === 10 || 'Номер телефону має містити 10 символів' } })}
+                                        {...register('phoneNumber', {
+                                            required: "Обов'язкове поле",
+                                            validate: {
+                                                length: value => value.length === 10 || 'Номер телефону має містити 10 символів'
+                                            }
+                                        })}
                                     />
                                     {errors.phoneNumber &&
                                         <FormHelperText >
@@ -235,11 +269,17 @@ const CheckoutPage = () => {
                                 </FormControl>
                                 <FormControl className="checkout__form">
                                     <FormLabel>Ваш нік в Instagram</FormLabel>
-                                    <Input startDecorator={<AlternateEmailRoundedIcon />} />
+                                    <Input startDecorator={<AlternateEmailRoundedIcon />}  {...register('instagram')} />
                                 </FormControl>
-                                <FormControl required sx={{ gridColumn: '1/-1' }}>
+                                <FormControl required sx={{ gridColumn: '1/-1' }} error={errors.email ? true : false}>
                                     <FormLabel>E-mail адреса</FormLabel>
-                                    <Input startDecorator={<EmailRoundedIcon />} {...register('email', { required: true })} />
+                                    <Input startDecorator={<EmailRoundedIcon />} {...register('email', { required: "Обов'язкове поле" })} />
+                                    {errors.email &&
+                                        <FormHelperText >
+                                            <InfoOutlined sx={{ mr: 1 }} />
+                                            {errors.email.message}
+                                        </FormHelperText>
+                                    }
                                 </FormControl>
                             </CardContent>
 
@@ -272,44 +312,117 @@ const CheckoutPage = () => {
                             {
                                 post === 'Нова пошта' &&
                                 <>
-                                    <Select2
-                                        required
-                                        value={selectedCity}
-                                        onChange={handleCityChange}
-                                        inputValue={searchString}
-                                        onInputChange={handleInputChange}
-                                        options={options}
-                                        placeholder="Введіть назву міста"
-                                        noOptionsMessage={() => "Нічого не знайдено"}
-                                    />
+                                    <FormControl required error={errors.city ? true : false}>
+                                        <FormLabel>Місто / Село </FormLabel>
+                                        <Controller
+                                            name="city"
+                                            control={control}
+                                            rules={{ required: "Обов'язкове поле" }}
+                                            render={({ field: { onChange, onBlur, value, ref } }) => (
+                                                <Select2
+                                                    inputRef={ref}
+                                                    value={value}
+                                                    onChange={option => {
+                                                        onChange(option);
+                                                        handleCityChange(option);
+                                                    }}
+                                                    onBlur={onBlur}
+                                                    options={options}
+                                                    inputValue={searchString}
+                                                    onInputChange={handleInputChange}
+                                                    placeholder="Введіть назву міста"
+                                                    noOptionsMessage={() => "Нічого не знайдено"}
+                                                />
+                                            )}
+                                        />
+                                        {errors.city && (
+                                            <FormHelperText>
+                                                <InfoOutlined sx={{ mr: 1 }} />
+                                                {errors.city.message}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
 
-                                    <Select2
-                                        required
-                                        value={selectedWarehouse}
-                                        onChange={handleWarehouseChange}
-                                        options={warehouses}
-                                        placeholder="Виберіть відділення"
-                                        noOptionsMessage={() => "Нічого не знайдено"}
-                                    />
+                                    <FormControl required error={errors.warehouse ? true : false}>
+                                        <FormLabel>Відділення / Поштомат</FormLabel>
+                                        <Controller
+                                            name="warehouse"
+                                            control={control}
+                                            rules={{ required: "Обов'язкове поле" }}
+                                            render={({ field: { onChange, onBlur, value, ref } }) => (
+                                                <Select2
+                                                    inputRef={ref}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    onChange={option => {
+                                                        onChange(option);
+                                                        handleWarehouseChange(option);
+                                                    }}
+                                                    options={warehouses}
+                                                    placeholder="Виберіть відділення"
+                                                    noOptionsMessage={() => "Нічого не знайдено"}
+                                                />
+                                            )}
+                                        />
+                                        {errors.warehouse && (
+                                            <FormHelperText>
+                                                <InfoOutlined sx={{ mr: 1 }} />
+                                                {errors.warehouse.message}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
                                 </>
                             }
                             {post === 'Укр пошта' &&
                                 <>
-                                    <FormControl required className="checkout__form">
+                                    <FormControl required className="checkout__form" error={errors.cityUKR ? true : false}>
                                         <FormLabel>Місто / Село</FormLabel>
-                                        <Input {...register('cityUKR', { required: true })} />
+                                        <Input {...register('cityUKR', { required: "Обов'язкове поле" })} placeholder="Введіть назву населеного пункту" />
+                                        {errors.cityUKR && (
+                                            <FormHelperText>
+                                                <InfoOutlined sx={{ mr: 1 }} />
+                                                {errors.cityUKR.message}
+                                            </FormHelperText>
+                                        )}
                                     </FormControl>
-                                    <Select2
-                                        required
-                                        value={selectedRegion}
-                                        onChange={handleRegionChange}
-                                        options={regions}
-                                        placeholder="Виберіть область / округ"
-                                    />
-
-                                    <FormControl required className="checkout__form">
+                                    <FormControl required error={errors.region ? true : false}>
+                                        <FormLabel>Область / округ</FormLabel>
+                                        <Controller
+                                            name="region"
+                                            control={control}
+                                            rules={{ required: "Обов'язкове поле" }}
+                                            render={({ field: { onChange, onBlur, value, ref } }) => (
+                                                <Select2
+                                                    inputRef={ref}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    onChange={option => {
+                                                        onChange(option);
+                                                        handleRegionChange(option);
+                                                    }}
+                                                    options={regions}
+                                                    placeholder="Виберіть область / округ"
+                                                    noOptionsMessage={() => "Нічого не знайдено"}
+                                                />
+                                            )}
+                                        />
+                                        {errors.region && (
+                                            <FormHelperText>
+                                                <InfoOutlined sx={{ mr: 1 }} />
+                                                {errors.region.message}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                    <FormControl required className="checkout__form" error={errors.index ? true : false}>
                                         <FormLabel>Поштовий індекс</FormLabel>
-                                        <Input {...register('index', { required: true })} />
+                                        <Input {...register('index', { required: "Обов'язкове поле" })}
+                                            placeholder="Введіть індекс" />
+                                        {errors.index && (
+                                            <FormHelperText>
+                                                <InfoOutlined sx={{ mr: 1 }} />
+                                                {errors.index.message}
+                                            </FormHelperText>
+                                        )}
                                     </FormControl>
                                 </>
                             }
@@ -322,17 +435,21 @@ const CheckoutPage = () => {
                                 <RadioGroup defaultValue='Передоплата' name="radio-buttons-group2">
                                     <Stack direction="column" spacing={2} sx={{ width: "100%" }}>
                                         <Stack direction="row" alignItems="center" justifyContent="space-between" >
-                                            <Stack direction="row" spacing={2}>
+                                            <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
                                                 <Radio value='Передоплата' color="neutral" onChange={handleChangePayment} />
                                                 <Typography>Повна оплата на сайті</Typography>
+                                                {/* <img src={visa} style={{ height: "10px" }} />
+                                                <img src={mc} style={{ height: "10px" }} /> */}
                                             </Stack>
-                                            <img src={liqpay} style={{ height: "14px" }} />
+                                            <img src={platamono} style={{ height: "20px" }} />
                                         </Stack>
 
                                         {post === 'Нова пошта' &&
-                                            <Stack direction="row" spacing={3}>
-                                                <Radio value="Наложка" color="neutral" onChange={handleChangePayment} />
-                                                <Typography>Накладений платіж по передоплаті 100 грн. (тільки Нова пошта)</Typography>
+                                            <Stack direction="row" alignItems="center" justifyContent="space-between">
+                                                <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-start">
+                                                    <Radio value="Наложка" color="neutral" onChange={handleChangePayment} />
+                                                    <Typography sx={{ maxWidth: "70%" }}>Накладений платіж по передоплаті 100 грн. (тільки Нова пошта)</Typography>
+                                                </Stack>
                                                 <Tooltip arrow placement="right" variant="outlined" title={
                                                     <Typography sx={{ maxWidth: 320, p: 1, }}>
                                                         <b> УВАГА! </b>Враховуйте, що замовляючи цим способом оплати, при отриманні
@@ -375,10 +492,10 @@ const CheckoutPage = () => {
                                             <Typography className="basket__price">Разом :</Typography>
                                             <Typography className="basket__price">{totalPrice} грн.</Typography>
                                         </Stack>
-                                        <Chip className="basket__cashback" size="sm" variant="soft" color="success" alignItems="flex-end">
+                                        <Chip className="basket__cashback" size="sm" variant="soft" color="success" alignItems="flex-end" sx={{ mt: 1 }}>
                                             Кешбек з покупки : {totalCashback} грн.
                                         </Chip>
-                                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: "20px" }}>
+                                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: "20px" }} spacing={2}>
                                             <Checkbox label="Оплатити за допомогою бонусів" color="success" variant="soft" checked={checked} onChange={handleCheckboxChange} />
                                             <Tooltip arrow variant="outlined" placement="bottom-end" title={
                                                 <Typography sx={{
@@ -393,7 +510,9 @@ const CheckoutPage = () => {
                                             </Tooltip>
                                         </Stack>
 
-                                        <Button type='submit' variant="solid" color="neutral" className="basket__button" endDecorator={<DoneRoundedIcon />}>ПІДТВЕРДИТИ ЗАМОВЛЕННЯ</Button>
+                                        <Button type='submit' variant="solid" color="neutral" className="basket__button" endDecorator={<DoneRoundedIcon />}>
+                                            ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
+                                        </Button>
                                         <Typography sx={{
                                             p: 2,
                                             color: "grey",
@@ -408,7 +527,7 @@ const CheckoutPage = () => {
                         </Card>
                     </Box>
                 </Box >
-            </Form>
+            </Form >
         </Container >
     );
 };

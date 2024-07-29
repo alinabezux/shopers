@@ -23,7 +23,9 @@ div.checkout__info {
         align-items: flex-start;
     }
 
-    .checkout__first {}
+    .checkout__first {
+        width: 60%;
+    }
 
     .checkout__post {
         height: 40px;

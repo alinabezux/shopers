@@ -8,7 +8,7 @@ const userSchema = new Schema({
         type: Number,
         validate: {
             validator: function (v) {
-                return /^\d{9}$/.test(v);
+                return /^\d{10}$/.test(v);
             },
             message: props => `${props.value} не правильний номер телефону!`
         },

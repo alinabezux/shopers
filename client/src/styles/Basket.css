@@ -96,5 +96,6 @@ button.product-in-basket__card-quantity {
 }
 
 div.product-in-basket__card-counter {
-    --ButtonGroup-separatorColor: none
+    --ButtonGroup-separatorColor: none;
+    margin: 5px 0 0 0;
 }

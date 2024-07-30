@@ -135,7 +135,10 @@ const CheckoutPage = () => {
                     index: data.index || undefined,
 
                     paymentMethod: payment,
-                    totalSum: totalPrice
+                    totalSum: totalPrice,
+                    cashback: totalCashback,
+                    useBonus: checked
+
                 }
             }
             const res = await dispatch(orderActions.createOrder(orderData))

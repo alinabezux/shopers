@@ -98,7 +98,7 @@ const DrawerBasket = ({ open, onClose }) => {
                                         Кешбек з покупки : {totalCashback} грн.
                                     </Chip>
                                     <Link to='/checkout' className='link' >
-                                        <Button variant="solid" color="neutral" className="basket__button" endDecorator={<LocalMallOutlinedIcon />}>ОФОРМИТИ ЗАМОВЛЕННЯ</Button>
+                                        <Button onClick={onClose} variant="solid" color="neutral" className="basket__button" endDecorator={<LocalMallOutlinedIcon />}>ОФОРМИТИ ЗАМОВЛЕННЯ</Button>
                                     </Link>
                                 </Stack>
                             </Container>

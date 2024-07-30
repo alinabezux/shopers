@@ -39,6 +39,8 @@ const orderSchema = new Schema({
     email: { type: String, required: true },
     paymentMethod: { type: String, default: CARD, required: true },
     totalSum: { type: Number, required: true },
+    cashback: { type: Number, required: true },
+    useBonus: { type: Boolean, required: true },
     status: { type: String, required: true, default: "Нове" },
 },
     { timestamps: true }

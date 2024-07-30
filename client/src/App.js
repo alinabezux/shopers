@@ -18,11 +18,9 @@ import {
 
 } from "./pages";
 import './styles';
-import ProductsTable from "./components/Admin/ProductsTable";
 import UsersTable from "./components/Admin/UsersTable";
-import TypesTable from "./components/Admin/TypesTable";
-import CategoriesTable from "./components/Admin/CategoriesTable";
-import { OrderTable } from "./components/Admin/OrderTable";
+import { CategoriesTable, OrderTable, ProductsTable, TypesTable } from "./components/Admin";
+
 
 
 function App() {
@@ -48,8 +46,8 @@ function App() {
                     <Route path={'/auth'} element={<AuthPage />} />
                     <Route path={'/admin/'} element={<AdminPage />} >
                         <Route path="orders" element={<OrderTable />} />
-                        <Route path="products" element={<ProductsTable />} />
                         <Route path="categories" element={<CategoriesTable />} />
+                        <Route path="products" element={<ProductsTable />} />
                         <Route path="types" element={<TypesTable />} />
                         <Route path="users" element={<UsersTable />} />
                     </Route>

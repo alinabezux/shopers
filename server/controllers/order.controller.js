@@ -1,28 +1,43 @@
 const Order = require("../db/models/Order");
 const Product = require("../db/models/Product");
 const ProductInBasket = require("../db/models/ProductInBasket");
+const User = require("../db/models/User");
 
 
 module.exports = {
     createOrder: async (req, res, next) => {
         try {
-            const products = [];
             const { userId } = req.params;
 
-            const productsInBasket = await ProductInBasket.find({ _user: userId })
+            const productsInBasket = await ProductInBasket.find({ _user: userId }).populate('_product');
 
-            for (const productInBasket of productsInBasket) {
-                const product = await Product.findById(productInBasket._product)
-                products.push(`${product.name} - ${productInBasket.quantity} шт.`)
-            }
-
-            const order = await Order.create({
-                ...req.body.order, _user: userId,
-                orderItems: products
+            const products = productsInBasket.map(productInBasket => {
+                return `${productInBasket._product.name} - ${productInBasket.quantity} шт.`;
             });
 
-            await ProductInBasket.deleteMany({ _user: userId })
+            const orderData = {
+                ...req.body.order,
+                _user: userId,
+                orderItems: products,
+            };
+
+            const [order, user] = await Promise.all([
+                Order.create(orderData),
+                User.findById(userId),
+                ProductInBasket.deleteMany({ _user: userId })
+            ]);
+
+            // Обчислення нових бонусів
+
+            if (req.body.order.useBonus === true) {
+                await User.findByIdAndUpdate(userId, { bonus: req.body.order.cashback }, { new: true });
+            } else {
+                const newBonus = user.bonus + req.body.order.cashback;
+                await User.findByIdAndUpdate(userId, { bonus: newBonus }, { new: true });
+            }
+
             res.json(order);
+
         } catch (e) {
             next(e);
         }
@@ -32,7 +47,7 @@ module.exports = {
         try {
             let { page } = req.query;
             page = page || 1;
-            const limit = 5;
+            const limit = 10;
             let count;
 
             const orders = await Order.find({}).limit(limit).skip((page - 1) * limit);

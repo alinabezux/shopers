@@ -36,40 +36,40 @@ const getTypesByCategoryId = createAsyncThunk(
 )
 
 
-// const createType = createAsyncThunk(
-//     'typesSlice/createType',
-//     async ({type}, {rejectWithValue}) => {
-//         try {
-//             const {data} = await typesService.createType(type);
-//             return data;
-//         } catch (e) {
-//             return rejectWithValue(e.response.data)
-//         }
-//     }
-// );
-//
-// const updateType = createAsyncThunk(
-//     'typesSlice/updateType',
-//     async ({typeId, type}, {rejectWithValue}) => {
-//         try {
-//             const {data} = await typesService.updateType(typeId, type);
-//             return data
-//         } catch (e) {
-//             return rejectWithValue(e.response.data)
-//         }
-//     }
-// );
-//
-// const deleteById = createAsyncThunk(
-//     'typesSlice/deleteById',
-//     async ({typeId}, {rejectWithValue}) => {
-//         try {
-//             await typesService.deleteById(typeId)
-//         } catch (e) {
-//             return rejectWithValue(e.response.data)
-//         }
-//     }
-// );
+const createType = createAsyncThunk(
+    'typeSlice/createType',
+    async ({ type }, { rejectWithValue }) => {
+        try {
+            const { data } = await typeService.createType(type);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const updateType = createAsyncThunk(
+    'typeSlice/updateType',
+    async ({ typeId, type }, { rejectWithValue }) => {
+        try {
+            const { data } = await typeService.updateType(typeId, type);
+            return data
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const deleteById = createAsyncThunk(
+    'typeSlice/deleteById',
+    async ({ typeId }, { rejectWithValue }) => {
+        try {
+            await typeService.deleteById(typeId)
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
 
 
 const typeSlice = createSlice({
@@ -113,50 +113,52 @@ const typeSlice = createSlice({
                 state.error = action.payload
                 state.loading = false
             })
-    //
-    //
-    // .addCase(createType.fulfilled, (state, action) => {
-    //     state.types.push(action.payload)
-    //     state.loading = false
-    //     state.error = null
-    // })
-    // .addCase(createType.pending, (state) => {
-    //     state.loading = true
-    // })
-    // .addCase(createType.rejected, (state, action) => {
-    //     state.error = action.payload
-    // })
-    //
-    //
-    // .addCase(updateType.fulfilled, (state, action) => {
-    //     const findType = state.types.find(value => value._id === action.payload._id);
-    //     Object.assign(findType, action.payload)
-    //     state.selectedType = {}
-    // })
-    // .addCase(updateType.pending, (state) => {
-    //     state.loading = true
-    // })
-    // .addCase(updateType.rejected, (state, action) => {
-    //     state.error = action.payload
-    // })
-    //
-    //
-    // .addCase(deleteById.fulfilled, (state, action) => {
-    //     state.loading = false
-    //     state.error = null
-    // })
-    // .addCase(deleteById.pending, (state) => {
-    //     state.loading = true
-    // })
-    // .addCase(deleteById.rejected, (state, action) => {
-    //     state.error = action.payload
-    // })
+
+
+            .addCase(createType.fulfilled, (state, action) => {
+                state.types.push(action.payload)
+                state.loading = false
+                state.error = null
+            })
+            .addCase(createType.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(createType.rejected, (state, action) => {
+                state.error = action.payload
+            })
+
+
+            .addCase(updateType.fulfilled, (state, action) => {
+                const findType = state.types.find(value => value._id === action.payload._id);
+                Object.assign(findType, action.payload)
+                state.selectedType = {}
+            })
+            .addCase(updateType.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(updateType.rejected, (state, action) => {
+                state.error = action.payload
+            })
+
+
+            .addCase(deleteById.fulfilled, (state, action) => {
+                state.loading = false
+                state.error = null
+            })
+            .addCase(deleteById.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteById.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
 });
 
 const { reducer: typeReducer, actions: { setSelectedType } } = typeSlice;
 
 const typeActions = {
-    getAll, getTypesByCategoryId, setSelectedType
+    getAll, getTypesByCategoryId, setSelectedType, createType, updateType, deleteById
 }
 
 export {

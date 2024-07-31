@@ -50,6 +50,8 @@ const CategoriesTable = () => {
                     Додати категорію
                 </Button>
             </Box>
+
+            
             <Box sx={{ display: 'flex', flexDirection: "column", mt: 4, gap: 2, width: "100%", boxSizing: "border-box" }}>
                 {categories.map((category) =>
                     <Card

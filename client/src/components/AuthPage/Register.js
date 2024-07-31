@@ -52,7 +52,6 @@ const Register = ({ setOpenSnackbar }) => {
     }, [dispatch, navigate, setOpenSnackbar])
 
     return (
-
         <Form onSubmit={handleSubmit(submit)} control={control}>
             <Card variant="plain" className='authpage__card'
                 sx={{

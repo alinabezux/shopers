@@ -1,11 +1,10 @@
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import {
     Box,
     Button,
     Typography,
-
 } from '@mui/joy';
 import AddIcon from '@mui/icons-material/Add';
 import { typeActions } from '../../redux';
@@ -13,20 +12,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 
+import { CreateTypeModal, DeleteTypeModal, EditTypeModal } from './AdminModals/TypeModals';
 
 const TypesTable = () => {
     const dispatch = useDispatch();
     const { types } = useSelector(state => state.typeReducer);
 
+    const [openCreate, setOpenCreate] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+
     useEffect(() => {
         dispatch(typeActions.getAll())
     }, [dispatch])
+
+    const handleEditType = useCallback((type) => {
+        dispatch(typeActions.setSelectedType(type));
+        setOpenEdit(true);
+    }, [dispatch]);
+
+    const handleDeleteType = useCallback(async (type) => {
+        dispatch(typeActions.setSelectedType(type));
+        setOpenDelete(true)
+    }, [dispatch]);
+
     return (
         <Box>
-
             <Box
                 sx={{
                     display: 'flex',
@@ -45,13 +58,16 @@ const TypesTable = () => {
                     color="primary"
                     startDecorator={<AddIcon />}
                     size="sm"
+                    onClick={() => setOpenCreate(true)}
                 >
                     Додати тип
                 </Button>
             </Box>
+            <CreateTypeModal open={openCreate} setOpenCreate={setOpenCreate} />
             <Box sx={{ display: 'flex', flexDirection: "column", mt: 4, gap: 2, }}>
                 {types.map((type) =>
                     <Card
+                        key={type._id}
                         variant="outlined"
                         orientation="horizontal"
                         sx={{
@@ -63,12 +79,14 @@ const TypesTable = () => {
                                 {type.name}
                             </Typography>
                             <Box sx={{ display: 'flex', gap: 1.5, '& > button': { flex: 1 }, width: "30%", }}>
-                                <Button size="sm" variant="soft" color="neutral" startDecorator={<EditRoundedIcon />}>
+                                <Button onClick={() => handleEditType(type)} size="sm" variant="soft" color="neutral" startDecorator={<EditRoundedIcon />}>
                                     Редагувати
                                 </Button>
-                                <Button size="sm" variant="plain" color="danger" startDecorator={<DeleteOutlineRoundedIcon />}>
+                                <EditTypeModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
+                                <Button onClick={() => handleDeleteType(type)} size="sm" variant="plain" color="danger" startDecorator={<DeleteOutlineRoundedIcon />}>
                                     Видалити
                                 </Button>
+                                <DeleteTypeModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
                             </Box>
                         </CardContent>
                     </Card>
@@ -79,4 +97,4 @@ const TypesTable = () => {
     );
 }
 
-export {TypesTable}
+export { TypesTable }

@@ -4,7 +4,7 @@ const Category = require("../db/models/Category");
 module.exports = {
     createType: async (req, res, next) => {
         try {
-            const type = await Type.create(req.body);
+            const type = await Type.create(req.body.type);
 
             return res.status(200).json(type);
 
@@ -31,7 +31,7 @@ module.exports = {
     },
     updateType: async (req, res, next) => {
         try {
-            const newInfo = req.body;
+            const newInfo = req.body.type;
             const updatedType = await Type.findByIdAndUpdate(req.params.typeId, newInfo, {new: true});
             res.status(201).json(updatedType);
         } catch (e) {

@@ -1,5 +1,5 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {productsService} from "../../services";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { productsService } from "../../services";
 
 const initialState = {
     products: [],
@@ -12,9 +12,9 @@ const initialState = {
 
 const getAll = createAsyncThunk(
     'productSlice/getAll',
-    async ({_category, _type}, {rejectWithValue}) => {
+    async ({ _category, _type }, { rejectWithValue }) => {
         try {
-            const {data} = await productsService.getAll(_category, _type);
+            const { data } = await productsService.getAll(_category, _type);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -24,10 +24,45 @@ const getAll = createAsyncThunk(
 
 const getById = createAsyncThunk(
     'productSlice/getById',
-    async ({productId}, {rejectWithValue}) => {
+    async ({ productId }, { rejectWithValue }) => {
         try {
-            const {data} = await productsService.getById(productId);
+            const { data } = await productsService.getById(productId);
             return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const createProduct = createAsyncThunk(
+    'productSlice/createProduct',
+    async ({ product }, { rejectWithValue }) => {
+        try {
+            const { data } = await productsService.createProduct(product);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const updateProduct = createAsyncThunk(
+    'productSlice/updateProduct',
+    async ({ productId, product }, { rejectWithValue }) => {
+        try {
+            const { data } = await productsService.updateProduct(productId, product);
+            return data
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const deleteById = createAsyncThunk(
+    'productsSlice/deleteById',
+    async ({ productId }, { rejectWithValue }) => {
+        try {
+            await productsService.deleteById(productId);
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -59,7 +94,6 @@ const productSlice = createSlice({
                 state.loading = false
             })
 
-
             .addCase(getById.fulfilled, (state, action) => {
                 state.product = action.payload
                 state.loading = false
@@ -74,12 +108,53 @@ const productSlice = createSlice({
                 state.loading = false
             })
 
+            .addCase(createProduct.fulfilled, (state, action) => {
+                state.products.push(action.payload)
+                state.loading = false
+                state.error = null
+            })
+            .addCase(createProduct.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(createProduct.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
+            
+            .addCase(updateProduct.fulfilled, (state, action) => {
+                const findProduct = state.products.find(value => value._id === action.payload._id);
+                Object.assign(findProduct, action.payload)
+                state.selectedProduct = {}
+            })
+            .addCase(updateProduct.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(updateProduct.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
+
+            .addCase(deleteById.fulfilled, (state) => {
+                state.loading = false
+                state.error = null;
+            })
+            .addCase(deleteById.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteById.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
+
 })
 
-const {reducer: productReducer, actions: {setSelectedProduct}} = productSlice;
+const { reducer: productReducer, actions: { setSelectedProduct } } = productSlice;
 
 const productActions = {
-    getAll, getById, setSelectedProduct
+    getAll, getById, setSelectedProduct, createProduct, updateProduct, deleteById
 }
 
 export {

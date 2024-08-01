@@ -4,9 +4,9 @@ const S3service = require("../services/S3.service");
 module.exports = {
     createProduct: async (req, res, next) => {
         try {
-            const {price} = req.body;
+            const { price } = req.body.product;
             const cashback = Math.trunc(price * 0.02);
-            const product = await Product.create({...req.body, cashback});
+            const product = await Product.create({ ...req.body.product, cashback });
 
             return res.status(201).json(product);
 
@@ -16,7 +16,7 @@ module.exports = {
     },
     getAllProducts: async (req, res, next) => {
         try {
-            let {_category, _type} = req.query;
+            let { _category, _type } = req.query;
             let products;
             // if(const products = await Product.find({});
 
@@ -26,12 +26,12 @@ module.exports = {
                 // count = await Product.countDocuments();
             }
             if (_category && !_type) {
-                products = await Product.find({_category})
+                products = await Product.find({ _category })
                 // products = await Product.find({_category}).limit(limit).skip((page - 1) * limit);
                 // count = await Product.countDocuments({category});
             }
             if (_category && _type) {
-                products = await Product.find({_category, _type})
+                products = await Product.find({ _category, _type })
                 // products = await Product.find({category, type}).limit(limit).skip((page - 1) * limit);
                 // count = await Product.countDocuments({category, type});
             }
@@ -63,8 +63,8 @@ module.exports = {
             const sendData = await S3service.uploadPublicFile(req.files.images, 'products', req.params.productId);
             const newProduct = await Product.findByIdAndUpdate(
                 req.params.productId,
-                {$push: {images: sendData.Location}},
-                {new: true});
+                { $push: { images: sendData.Location } },
+                { new: true });
 
             res.json(newProduct);
         } catch (e) {
@@ -74,9 +74,17 @@ module.exports = {
 
     updateProduct: async (req, res, next) => {
         try {
-            const newInfo = req.body;
+            const newInfo = req.body.product;
+            let cashback;
 
-            const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, newInfo, {new: true});
+            if (typeof newInfo.price === 'number') {
+                cashback = Math.trunc(newInfo.price * 0.02);
+            }
+
+            // Створюємо об'єкт для оновлення, включаючи кешбек тільки за необхідності
+            const updateData = cashback !== undefined ? { ...newInfo, cashback } : newInfo;
+
+            const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, updateData, { new: true });
             res.status(200).json(updatedProduct);
 
         } catch (e) {
@@ -85,7 +93,7 @@ module.exports = {
     },
     deleteProduct: async (req, res, next) => {
         try {
-            await Product.deleteOne({_id: req.params.productId})
+            await Product.deleteOne({ _id: req.params.productId })
 
             res.sendStatus(204);
         } catch (e) {

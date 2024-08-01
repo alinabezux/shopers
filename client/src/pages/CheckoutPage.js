@@ -106,8 +106,6 @@ const CheckoutPage = () => {
     }, [basket]);
 
     const handleCreateOrder = useCallback(async (data) => {
-        console.log(data)
-        console.log(selectedCity)
         try {
             const orderData = {
                 userId: userId,
@@ -138,14 +136,12 @@ const CheckoutPage = () => {
                     totalSum: totalPrice,
                     cashback: totalCashback,
                     useBonus: checked
-
                 }
             }
             const res = await dispatch(orderActions.createOrder(orderData))
             if (res.meta.requestStatus === 'fulfilled') {
                 navigate(`/order/${res.payload.orderID}`);
             }
-
         } catch (error) {
             console.error('Error creating order:', error);
         }

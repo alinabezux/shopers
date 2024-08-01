@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Box,
     Button,
@@ -14,21 +14,35 @@ import {
 } from '@mui/joy';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from "react-redux";
-import { productActions } from '../../redux';
+import { categoryActions, productActions, typeActions } from '../../redux';
 import Table from '@mui/joy/Table';
 import { MoreHorizRounded } from '@mui/icons-material';
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import { CreateProductModal, DeleteProductModal, EditProductModal } from './AdminModals/ProductModals';
 
 const ProductsTable = () => {
 
     const dispatch = useDispatch();
 
+    const [openCreate, setOpenCreate] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openAddPhoto, setOpenAddPhoto] = useState(false);
+
     const { products, error } = useSelector(state => state.productReducer);
-    const { selectedCategory } = useSelector(state => state.categoryReducer);
-    const { selectedType } = useSelector(state => state.typeReducer);
+    const { selectedCategory, categories } = useSelector(state => state.categoryReducer);
+    const { selectedType, types } = useSelector(state => state.typeReducer);
+
+    useEffect(() => {
+        dispatch(categoryActions.getAll())
+    }, [dispatch])
+
+    useEffect(() => {
+        dispatch(typeActions.getAll())
+    }, [dispatch])
 
     useEffect(() => {
         dispatch(productActions.getAll({
@@ -37,7 +51,18 @@ const ProductsTable = () => {
         }))
     }, [dispatch, selectedCategory._id, selectedType._id]);
 
-    function RowMenu() {
+
+    const handleDeleteProduct = useCallback(async (product) => {
+        dispatch(productActions.setSelectedProduct(product));
+        setOpenDelete(true)
+    }, [dispatch]);
+
+    const handleEditProduct = useCallback(async (product) => {
+        dispatch(productActions.setSelectedProduct(product));
+        setOpenEdit(true)
+    }, [dispatch]);
+
+    function RowMenu({ product }) {
         return (
             <Dropdown>
                 <MenuButton
@@ -47,7 +72,7 @@ const ProductsTable = () => {
                     <MoreHorizRounded />
                 </MenuButton>
                 <Menu size="sm" sx={{ minWidth: 140 }}>
-                    <MenuItem >
+                    <MenuItem onClick={() => handleEditProduct(product)}>
                         <ListItemDecorator>
                             <EditRoundedIcon />
                         </ListItemDecorator>{' '}
@@ -60,7 +85,7 @@ const ProductsTable = () => {
                         Додати фото
                     </MenuItem>
                     <Divider />
-                    <MenuItem color="danger" >
+                    <MenuItem color="danger" onClick={() => handleDeleteProduct(product)}>
                         <ListItemDecorator>
                             <DeleteOutlineRoundedIcon />
                         </ListItemDecorator>{' '}
@@ -73,6 +98,10 @@ const ProductsTable = () => {
 
     return (
         <Box>
+            <CreateProductModal openCreate={openCreate} setOpenCreate={setOpenCreate} />
+            <EditProductModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
+            <DeleteProductModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
+
             <Box
                 sx={{
                     display: 'flex',
@@ -91,6 +120,7 @@ const ProductsTable = () => {
                     color="primary"
                     startDecorator={<AddIcon />}
                     size="sm"
+                    onClick={() => setOpenCreate(true)}
                 >
                     Додати товар
                 </Button>
@@ -118,18 +148,29 @@ const ProductsTable = () => {
                                 <td>{product.article}</td>
                                 <td>{product.article}</td>
                                 <td>{product.name}</td>
-                                <td>{product._category} {product._type}</td>
+                                <td>
+                                    <Typography>
+                                        {(categories.find(item => item._id === product._category)).name}
+                                    </Typography>
+                                    <Typography>
+                                        {(types.find(item => item._id === product._type))?.name}
+                                    </Typography>
+                                    <Typography>
+                                        {product._type}
+                                    </Typography>
+
+                                </td>
                                 <td>{product.price}</td>
                                 <td>{product.quantity}</td>
                                 <td>
                                     <Box>
-                                        <Typography>Колір:{product.info.color}</Typography>
-                                        <Typography>Розмір:{product.info.size}</Typography>
-                                        <Typography>Матеріал:{product.info.material}</Typography>
-                                        <Typography>Опис:{product.info.description}</Typography>
+                                        <Typography>Колір:{product.info?.color}</Typography>
+                                        <Typography>Розмір:{product.info?.size}</Typography>
+                                        <Typography>Матеріал:{product.info?.material}</Typography>
+                                        <Typography>Опис:{product.info?.description}</Typography>
                                     </Box>
                                 </td>
-                                <td><RowMenu /></td>
+                                <td><RowMenu product={product} /></td>
                             </tr>
                         )}
                     </tbody>

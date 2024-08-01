@@ -99,7 +99,7 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
     const { selectedType, error } = useSelector(state => state.typeReducer);
     const { categories } = useSelector(state => state.categoryReducer);
 
-    const { control, handleSubmit, register, formState: { errors }, reset, setValue } = useForm();
+    const { control, handleSubmit, register, reset, setValue } = useForm();
 
     const [category, setCategory] = useState(null)
 
@@ -169,8 +169,8 @@ const DeleteTypeModal = ({ openDelete, setOpenDelete }) => {
 
     const handleDeleteType = useCallback(async () => {
         await dispatch(typeActions.deleteById({ typeId: selectedType._id }));
+        await dispatch(typeActions.getAll())
         setOpenDelete(false)
-        dispatch(typeActions.getAll())
 
     }, [dispatch, selectedType]);
 

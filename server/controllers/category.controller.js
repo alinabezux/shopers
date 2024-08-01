@@ -5,7 +5,7 @@ const S3service = require("../services/S3.service");
 module.exports = {
     createCategory: async (req, res, next) => {
         try {
-            const category = await Category.create(req.body);
+            const category = await Category.create(req.body.category);
 
             return res.status(200).json(category);
 
@@ -34,7 +34,7 @@ module.exports = {
     updateCategory:
         async (req, res, next) => {
             try {
-                const newInfo = req.body;
+                const newInfo = req.body.category;
                 const updatedCategory = await Category.findByIdAndUpdate(req.params.categoryId, newInfo, {new: true});
 
                 res.status(200).json(updatedCategory);

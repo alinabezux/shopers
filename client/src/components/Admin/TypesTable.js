@@ -40,6 +40,9 @@ const TypesTable = () => {
 
     return (
         <Box>
+            <CreateTypeModal open={openCreate} setOpenCreate={setOpenCreate} />
+            <EditTypeModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
+            <DeleteTypeModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
             <Box
                 sx={{
                     display: 'flex',
@@ -63,7 +66,6 @@ const TypesTable = () => {
                     Додати тип
                 </Button>
             </Box>
-            <CreateTypeModal open={openCreate} setOpenCreate={setOpenCreate} />
             <Box sx={{ display: 'flex', flexDirection: "column", mt: 4, gap: 2, }}>
                 {types.map((type) =>
                     <Card
@@ -82,11 +84,9 @@ const TypesTable = () => {
                                 <Button onClick={() => handleEditType(type)} size="sm" variant="soft" color="neutral" startDecorator={<EditRoundedIcon />}>
                                     Редагувати
                                 </Button>
-                                <EditTypeModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
                                 <Button onClick={() => handleDeleteType(type)} size="sm" variant="plain" color="danger" startDecorator={<DeleteOutlineRoundedIcon />}>
                                     Видалити
                                 </Button>
-                                <DeleteTypeModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
                             </Box>
                         </CardContent>
                     </Card>

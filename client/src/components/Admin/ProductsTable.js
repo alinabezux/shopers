@@ -164,10 +164,10 @@ const ProductsTable = () => {
                                 <td>{product.quantity}</td>
                                 <td>
                                     <Box>
-                                        <Typography>Колір:{product.info?.color}</Typography>
-                                        <Typography>Розмір:{product.info?.size}</Typography>
-                                        <Typography>Матеріал:{product.info?.material}</Typography>
-                                        <Typography>Опис:{product.info?.description}</Typography>
+                                        <Typography>Колір:{product?.info?.color}</Typography>
+                                        <Typography>Розмір:{product?.info?.size}</Typography>
+                                        <Typography>Матеріал:{product?.info?.material}</Typography>
+                                        <Typography>Опис:{product?.info?.description}</Typography>
                                     </Box>
                                 </td>
                                 <td><RowMenu product={product} /></td>

@@ -6,7 +6,7 @@ const productsService = {
     getById: (productId) => $host.get(`${urls.products}/${productId}`),
     createProduct: (product) => $host.post(urls.products, { product }),
     // uploadPhoto: (productId, image) => $authHost.patch(`${urls.products}/${productId}`, image),
-    updateProduct: (productId, product) => $host.put(`${urls.products}/${productId}`, { product }),
+    updateProduct: (productId, product) => $host.put(`${urls.products}/${productId}`, {product}),
     deleteById: (productId) => $host.delete(`${urls.products}/${productId}`),
 }
 

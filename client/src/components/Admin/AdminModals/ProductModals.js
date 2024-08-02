@@ -229,10 +229,10 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
             productProperties.name = data.name;
         }
         if (data.quantity) {
-            productProperties.quantity = data.quantity;
+            productProperties.quantity = parseInt(data.quantity, 10);
         }
         if (data.price) {
-            productProperties.price = data.price;
+            productProperties.price = parseInt(data.price, 10);
         }
         if (data.color) {
             productProperties.info.color = data.color;
@@ -243,10 +243,10 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
         if (data.material) {
             productProperties.info.material = data.material;
         }
+
         if (data.description) {
             productProperties.info.description = data.description;
         }
-
 
         if (category) {
             productProperties._category = category;
@@ -255,20 +255,9 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
             productProperties._type = type;
         }
 
-        // let productProperties = {
-        //     article: data.article,
-        //     name: data.name,
-        //     quantity: data.quantity,
-        //     price: data.price,
-        //     color: data.color,
-        //     size: data.size,
-        //     material: data.material,
-        //     description: data.description,
-        //     _category: category,
-        //     _type: type
-        // };
 
         const res = await dispatch(productActions.updateProduct({ productId: selectedProduct._id, product: productProperties }));
+        console.log(res)
         if (res.meta.requestStatus === 'fulfilled') {
             setOpenEdit(false);
             reset();
@@ -276,7 +265,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
             setType('');
         }
 
-    }, [category, type, dispatch, selectedProduct, reset, setOpenEdit])
+    }, [category, type, dispatch, selectedProduct, reset])
 
     return (
         <Modal open={openEdit} onClose={() => setOpenEdit(false)} >

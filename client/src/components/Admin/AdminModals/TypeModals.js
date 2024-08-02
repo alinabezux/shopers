@@ -113,7 +113,7 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
             setValue('name', selectedType.name)
             setCategory(selectedType._category);
         }
-    }, [selectedType])
+    }, [selectedType, setValue])
 
 
     const handleEditType = useCallback(async (data) => {
@@ -127,6 +127,8 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
         console.log(typeProperties);
 
         const res = await dispatch(typeActions.updateType({ typeId: selectedType._id, type: typeProperties }));
+        console.log(res)
+
         if (res.meta.requestStatus === 'fulfilled') {
             setOpenEdit(false);
             reset();

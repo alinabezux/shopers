@@ -121,19 +121,18 @@ const productSlice = createSlice({
                 state.error = action.payload
                 state.loading = false
             })
-            
+
             .addCase(updateProduct.fulfilled, (state, action) => {
                 const findProduct = state.products.find(value => value._id === action.payload._id);
+                console.log(action.payload)
                 Object.assign(findProduct, action.payload)
                 state.selectedProduct = {}
             })
             .addCase(updateProduct.pending, (state) => {
                 state.loading = true
-                state.error = null
             })
             .addCase(updateProduct.rejected, (state, action) => {
                 state.error = action.payload
-                state.loading = false
             })
 
             .addCase(deleteById.fulfilled, (state) => {

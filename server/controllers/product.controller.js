@@ -75,22 +75,17 @@ module.exports = {
     updateProduct: async (req, res, next) => {
         try {
             const newInfo = req.body.product;
-            let cashback;
+            const { price } = req.body.product;
+            const cashback = Math.trunc(price * 0.02);
 
-            if (typeof newInfo.price === 'number') {
-                cashback = Math.trunc(newInfo.price * 0.02);
-            }
-
-            // Створюємо об'єкт для оновлення, включаючи кешбек тільки за необхідності
-            const updateData = cashback !== undefined ? { ...newInfo, cashback } : newInfo;
-
-            const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, updateData, { new: true });
+            const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, { ...newInfo, cashback }, { new: true });
             res.status(200).json(updatedProduct);
 
         } catch (e) {
             next(e)
         }
     },
+
     deleteProduct: async (req, res, next) => {
         try {
             await Product.deleteOne({ _id: req.params.productId })

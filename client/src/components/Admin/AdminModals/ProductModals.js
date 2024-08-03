@@ -1,9 +1,25 @@
-import { Box, Button, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, Input, Modal, ModalDialog, Option, Select, Stack } from "@mui/joy";
+import { AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Stack, Typography } from "@mui/joy";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, productActions, typeActions } from "../../../redux";
 import { useForm, Form, Controller } from "react-hook-form";
-import { InfoOutlined, WarningRounded } from "@mui/icons-material";
+import { FileUploadRounded, InfoOutlined, WarningRounded } from "@mui/icons-material";
+import { DropZone } from "./DropZone";
+import { FileUpload } from "./FileUpload";
+import { styled } from '@mui/joy';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+
+const VisuallyHiddenInput = styled('input')`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+  width: 1px;
+`;
 
 const CreateProductModal = ({ openCreate, setOpenCreate }) => {
     const dispatch = useDispatch();
@@ -339,7 +355,6 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
     )
 };
 
-
 const DeleteProductModal = ({ openDelete, setOpenDelete }) => {
     const dispatch = useDispatch();
 
@@ -373,8 +388,146 @@ const DeleteProductModal = ({ openDelete, setOpenDelete }) => {
             </ModalDialog>
         </Modal>
     )
+};
+
+const AddPhotoProductModal = ({ openAddPhoto, setOpenAddPhoto }) => {
+    const dispatch = useDispatch();
+    const { selectedProduct, error } = useSelector(state => state.productReducer);
+
+    const { control, handleSubmit } = useForm();
+
+    const [files, setFiles] = useState([])
+
+    const selectFiles = e => {
+        setFiles(prevFiles => [...prevFiles, ...Array.from(e.target.files)]);
+    };
+
+    const handleAddPhoto = useCallback(async () => {
+        if (files.length === 0) return;
+
+        try {
+            const formData = new FormData();
+            files.forEach(file => {
+                formData.append("images", file)
+            });
+            await dispatch(productActions.uploadPhoto({
+                productId: selectedProduct._id,
+                images: formData,
+            }));
+            setOpenAddPhoto(false);
+            setFiles([])
+        } catch (error) {
+            console.error("Помилка під час завантаження файлу ", error);
+        }
+    }, [dispatch, files, selectedProduct, setOpenAddPhoto])
+
+
+
+    return (
+        <Modal open={openAddPhoto} onClose={() => setOpenAddPhoto(false)} >
+            <ModalDialog>
+                <DialogTitle>Додати фото</DialogTitle>
+                <Form control={control} onSubmit={handleSubmit(handleAddPhoto)}>
+                    <FormControl>
+                        <Stack spacing={2} sx={{ my: 1 }}>
+                            <Card
+                                variant="soft"
+                                sx={{
+                                    borderRadius: 'sm',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 1,
+                                    alignItems: 'center',
+                                    px: 3,
+                                    flexGrow: 1,
+                                    boxShadow: 'none',
+                                }}
+                            >
+                                <AspectRatio
+                                    ratio="1"
+                                    variant="solid"
+                                    color="primary"
+                                    sx={{
+                                        minWidth: 32,
+                                        borderRadius: '50%',
+                                        '--Icon-fontSize': '16px',
+                                    }}
+                                >
+                                    <div><FileUploadRounded /></div>
+                                </AspectRatio>
+
+                                <Typography level="body-sm" textAlign="center">
+                                    <Button
+                                        component="label"
+                                        role={undefined}
+                                        tabIndex={-1}
+                                        variant="plain"
+                                        onChange={selectFiles}
+                                        sx={{ mx: 1 }}
+                                    >
+                                        Клікни
+                                        <VisuallyHiddenInput type="file" multiple />
+                                    </Button>
+                                    або перетягни для заватаження
+                                    <br /> PNG, JPG
+                                </Typography>
+                            </Card>
+                            {files.length !== 0 && (
+                                <Stack spacing={1}>
+                                    {files.map(file => <FileUpload key={file.name} file={file} />)}
+                                </Stack>
+                            )}
+                            <Button type="submit" disabled={files.length === 0}>Зберегти</Button>
+                        </Stack>
+                    </FormControl>
+                </Form>
+            </ModalDialog>
+        </Modal >
+    )
+};
+
+const ImagesModal = ({ openImages, setOpenImages }) => {
+    const dispatch = useDispatch();
+    const { selectedProduct, error } = useSelector(state => state.productReducer);
+
+    const handleDeleteImage = useCallback(async (img) => {
+        console.log(selectedProduct._id)
+        console.log(img)
+        await dispatch(productActions.deleteImage({ productId: selectedProduct._id, imageUrl: img }));
+    }, [dispatch, selectedProduct]);
+
+    return (
+        <Modal open={openImages} onClose={() => setOpenImages(false)} >
+            <ModalDialog>
+                <DialogTitle>Переглянути фото</DialogTitle>
+                <Box sx={{ display: "flex", flexDirection: "row", gap: 2, flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
+                    {selectedProduct?.images?.length > 0 && (selectedProduct?.images.map((img, index) => (
+                        <Card key={index} sx={{ width: "150px", height: "150px" }}>
+                            <CardCover >
+                                <img
+                                    src={img}
+                                    loading="lazy"
+                                    alt={`img-${index}`}
+                                />
+                            </CardCover>
+                            <CardContent>
+                                <IconButton
+                                    onClick={() => handleDeleteImage(img)}
+                                    variant="plain"
+                                    color="neutral"
+                                    size="sm"
+                                    sx={{ position: 'absolute', top: 0, right: 0 }}
+                                >
+                                    <ClearRoundedIcon />
+                                </IconButton>
+                            </CardContent>
+                        </Card>
+                    )
+                    ))}
+                </Box>
+            </ModalDialog>
+        </Modal>
+    )
 }
 
-
-
-export { CreateProductModal, EditProductModal, DeleteProductModal }
+export { CreateProductModal, EditProductModal, DeleteProductModal, AddPhotoProductModal, ImagesModal }

@@ -1,9 +1,11 @@
-import { Button, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, Input, Modal, ModalDialog, Option, Select, Stack } from "@mui/joy";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { categoryActions, typeActions } from "../../../redux";
-import { useForm, Form } from "react-hook-form";
 import { InfoOutlined, WarningRounded } from "@mui/icons-material";
+import { Box, Button, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, Input, Modal, ModalDialog, Stack, Typography } from "@mui/joy";
+import { useCallback, useEffect, useState, } from "react";
+import { Form, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { categoryActions, } from "../../../redux";
+import { FileUpload } from "./FileUpload";
+import { DropZone } from "./DropZone";
 
 const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
     const dispatch = useDispatch();
@@ -89,76 +91,53 @@ const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
         </Modal>
     )
 }
+const AddPhotoCategoryModal = ({ openAddPhoto, setOpenAddPhoto }) => {
+    const dispatch = useDispatch();
+
+    const {  selectedCategory } = useSelector(state => state.categoryReducer);
+
+    const { control, handleSubmit } = useForm();
+
+    const [file, setFile] = useState(null)
 
 
-// const AddPhotoCategoryModal = ({ openEdit, setOpenEdit }) => {
-//     const dispatch = useDispatch();
+    const handleAddPhoto = useCallback(async () => {
+        if (!file) return;
+        console.log(file)
 
-//     const { selectedType, error } = useSelector(state => state.typeReducer);
-//     const { categories } = useSelector(state => state.categoryReducer);
+        try {
+            const formData = new FormData();
+            formData.append("image", file);
+            await dispatch(categoryActions.uploadPhoto({
+                categoryId: selectedCategory._id,
+                image: formData,
+            }));
+            setOpenAddPhoto(false);
+            setFile(null)
+        } catch (error) {
+            console.error("Помилка під час завантаження файлу ", error);
+        }
+    }, [dispatch, file, selectedCategory, setOpenAddPhoto])
 
-//     const { control, handleSubmit, register, formState: { errors }, reset, setValue } = useForm();
+    return (
+        <Modal open={openAddPhoto} onClose={() => setOpenAddPhoto(false)} >
+            <ModalDialog>
+                <DialogTitle>Додати фото</DialogTitle>
+                <Form control={control} onSubmit={handleSubmit(handleAddPhoto)}>
+                 
+                    <FormControl>
+                        <Stack spacing={2} sx={{ my: 1 }}>
+                            <DropZone setFile={setFile} />
+                            {file && <Box>  <FileUpload file={file} /></Box>}
 
-//     const [category, setCategory] = useState(null)
-
-//     useEffect(() => {
-//         dispatch(categoryActions.getAll())
-//     }, [dispatch])
-
-
-//     useEffect(() => {
-//         if (selectedType) {
-//             setValue('name', selectedType.name)
-//             setCategory(selectedType._category);
-//         }
-//     }, [selectedType])
-
-
-//     const handleEditType = useCallback(async (data) => {
-//         let typeProperties = {};
-//         if (data.name) {
-//             typeProperties.name = data.name;
-//         }
-//         if (category) {
-//             typeProperties._category = category;
-//         }
-//         console.log(typeProperties);
-
-//         const res = await dispatch(typeActions.updateType({ typeId: selectedType._id, type: typeProperties }));
-//         if (res.meta.requestStatus === 'fulfilled') {
-//             setOpenEdit(false);
-//             reset();
-//             setCategory(null);
-//         }
-
-//     }, [category, dispatch, selectedType, reset])
-
-//     return (
-//         <Modal open={openEdit} onClose={() => setOpenEdit(false)} >
-//             <ModalDialog>
-//                 <DialogTitle>Редагувати тип</DialogTitle>
-//                 <Form control={control} onSubmit={handleSubmit(handleEditType)}>
-//                     <Stack spacing={2}>
-//                         <FormControl>
-//                             <FormLabel>Назва</FormLabel>
-//                             <Input {...register('name')} />
-//                         </FormControl>
-//                         <FormControl>
-//                             <FormLabel>Категорія, до якої відноситься даний тип</FormLabel>
-//                             <Select onChange={(event, newValue) => setCategory(newValue)} value={category || ''}>
-//                                 {categories.map((category) => (
-//                                     <Option value={category._id} key={category._id}>{category.name}</Option>
-//                                 ))}
-//                             </Select>
-//                         </FormControl>
-//                         <Button type="submit">Зберегти</Button>
-//                     </Stack>
-//                 </Form>
-//             </ModalDialog>
-//         </Modal>
-//     )
-// }
-
+                            <Button type="submit" disabled={!file}>Зберегти</Button>
+                        </Stack>
+                    </FormControl>
+                </Form>
+            </ModalDialog>
+        </Modal>
+    )
+}
 
 const DeleteCategoryModal = ({ openDelete, setOpenDelete }) => {
     const dispatch = useDispatch();
@@ -198,4 +177,5 @@ const DeleteCategoryModal = ({ openDelete, setOpenDelete }) => {
 
 
 
-export { CreateCategoryModal, EditCategoryModal, DeleteCategoryModal }
+export { AddPhotoCategoryModal, CreateCategoryModal, DeleteCategoryModal, EditCategoryModal };
+

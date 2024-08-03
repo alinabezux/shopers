@@ -17,10 +17,24 @@ import { categoryActions } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import { AddPhotoCategoryModal, CreateCategoryModal, DeleteCategoryModal, EditCategoryModal } from './AdminModals/CategoryModals';
+import { styled } from '@mui/joy';
+
+
+const VisuallyHiddenInput = styled('input')`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+  width: 1px;
+`;
 
 const CategoriesTable = () => {
     const dispatch = useDispatch();
-    const { categories } = useSelector(state => state.categoryReducer);
+    const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
 
     const [openCreate, setOpenCreate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -41,11 +55,17 @@ const CategoriesTable = () => {
         setOpenDelete(true);
     }, [dispatch]);
 
+    const handleDAddPhotoCategory = useCallback((category) => {
+        dispatch(categoryActions.setSelectedCategory(category));
+        setOpenAddPhoto(true);
+    }, [dispatch]);
+
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', boxSizing: "border-box" }}>
             <CreateCategoryModal openCreate={openCreate} setOpenCreate={setOpenCreate} />
             <EditCategoryModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
-            {/* <AddPhotoCategoryModal openAddPhoto={openAddPhoto} setOpenAddPhoto={setOpenAddPhoto} /> */}
+            <AddPhotoCategoryModal openAddPhoto={openAddPhoto} setOpenAddPhoto={setOpenAddPhoto} />
             <DeleteCategoryModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
             <Box
                 sx={{
@@ -101,7 +121,12 @@ const CategoriesTable = () => {
                                     startDecorator={<EditRoundedIcon />}>
                                     Редагувати
                                 </Button>
-                                <Button size="sm" variant="soft" color="success" startDecorator={<AddPhotoAlternateRoundedIcon />}>
+                                <Button
+                                    onClick={() => handleDAddPhotoCategory(category)}
+                                    size="sm"
+                                    variant="soft"
+                                    color="success"
+                                    startDecorator={<AddPhotoAlternateRoundedIcon />}>
                                     Додати фото
                                 </Button>
                                 <Button

@@ -41,7 +41,8 @@ const ProductPage = () => {
 
     const category = categories.find(category => category._id === selectedProduct._category);
     const type = types.find(type => type._id === selectedProduct._type);
-
+    
+    console.log(selectedProduct)
     useEffect(() => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
@@ -128,7 +129,6 @@ const ProductPage = () => {
                                 <img
                                     src={image}
                                     alt={`Slide ${index}`}
-                                // style={{ width: "100%", height: "100%", objectFit: 'cover' }}
                                 />
                             </SwiperSlide>
                         ))}
@@ -164,10 +164,10 @@ const ProductPage = () => {
                         </Chip>
                         <br />
                         {/* <br /> */}
-                        <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{selectedProduct.info.color}</Typography>
-                        <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{selectedProduct.info.size}</Typography>
-                        <Typography className="product-page__material"><b style={{ color: "black" }}>Матеріал: </b>{selectedProduct.info.material}</Typography>
-                        <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{selectedProduct.info.description}</Typography>
+                        <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{selectedProduct?.info?.color}</Typography>
+                        <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{selectedProduct?.info?.size}</Typography>
+                        <Typography className="product-page__material"><b style={{ color: "black" }}>Матеріал: </b>{selectedProduct?.info?.material}</Typography>
+                        <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{selectedProduct?.info?.description}</Typography>
                     </Stack>
                 </Box>
             </Box>

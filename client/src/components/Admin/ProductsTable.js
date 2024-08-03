@@ -21,7 +21,10 @@ import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateR
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
-import { CreateProductModal, DeleteProductModal, EditProductModal } from './AdminModals/ProductModals';
+import { AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
+import { Link } from 'react-router-dom'
+import { toUrlFriendly } from '../../utils';
+import { ButtonGroupButtonContext } from '@mui/material';
 
 const ProductsTable = () => {
 
@@ -31,6 +34,7 @@ const ProductsTable = () => {
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openAddPhoto, setOpenAddPhoto] = useState(false);
+    const [openImages, setOpenImages] = useState(false);
 
     const { products, error } = useSelector(state => state.productReducer);
     const { selectedCategory, categories } = useSelector(state => state.categoryReducer);
@@ -62,6 +66,16 @@ const ProductsTable = () => {
         setOpenEdit(true)
     }, [dispatch]);
 
+    const handleAddPhotoProduct = useCallback((product) => {
+        dispatch(productActions.setSelectedProduct(product));
+        setOpenAddPhoto(true);
+    }, [dispatch]);
+
+    const handleOpenImages = useCallback((product) => {
+        dispatch(productActions.setSelectedProduct(product));
+        setOpenImages(true);
+    }, [dispatch]);
+
     function RowMenu({ product }) {
         return (
             <Dropdown>
@@ -78,7 +92,7 @@ const ProductsTable = () => {
                         </ListItemDecorator>{' '}
                         Редагувати
                     </MenuItem>
-                    <MenuItem >
+                    <MenuItem onClick={() => handleAddPhotoProduct(product)}>
                         <ListItemDecorator>
                             <AddPhotoAlternateRoundedIcon />
                         </ListItemDecorator>{' '}
@@ -101,6 +115,8 @@ const ProductsTable = () => {
             <CreateProductModal openCreate={openCreate} setOpenCreate={setOpenCreate} />
             <EditProductModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
             <DeleteProductModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
+            <AddPhotoProductModal openAddPhoto={openAddPhoto} setOpenAddPhoto={setOpenAddPhoto} />
+            <ImagesModal openImages={openImages} setOpenImages={setOpenImages} />
 
             <Box
                 sx={{
@@ -132,8 +148,8 @@ const ProductsTable = () => {
                 <Table aria-label="basic table" stickyHeader sx={{ '--Table-headerUnderlineThickness': '1px' }}>
                     <thead>
                         <tr>
-                            <th style={{ width: '10%' }}>Артикул</th>
-                            <th>Фото</th>
+                            <th style={{ width: '5%' }}>Артикул</th>
+                            <th style={{ width: '20%' }}>Фото</th>
                             <th>Назва</th>
                             <th>Категорія/Тип</th>
                             <th style={{ width: '10%' }}>Ціна</th>
@@ -146,8 +162,21 @@ const ProductsTable = () => {
                         {products.map(product =>
                             <tr key={product._id}>
                                 <td>{product.article}</td>
-                                <td>{product.article}</td>
-                                <td>{product.name}</td>
+                                <td>
+                                    <Box className="gallery-container">
+                                        {product.images.slice(0, 2).map((image, index) => (
+                                            <Box key={index} className="image-wrapper" >
+                                                <img src={image} alt={`img-${index}`} className="image" />
+                                            </Box>
+                                        ))}
+                                        {product.images.length > 2 && (
+                                            <Button className="more-images" style={{ backgroundImage: `url(${product.images[2]})` }} onClick={() => handleOpenImages(product)}>
+                                                <Box className="overlay">+{product.images.length - 2}</Box>
+                                            </Button>
+                                        )}
+                                    </Box>
+                                </td>
+                                <td><Link to={`/product/${(toUrlFriendly(product.name))}`} key={product._id}>{product.name}</Link></td>
                                 <td>
                                     <Typography>
                                         {(categories.find(item => item._id === product._category)).name}

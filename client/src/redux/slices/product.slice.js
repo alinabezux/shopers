@@ -58,11 +58,34 @@ const updateProduct = createAsyncThunk(
     }
 );
 
+const uploadPhoto = createAsyncThunk(
+    'productSlice/uploadPhoto',
+    async ({ productId, images }, { rejectWithValue }) => {
+        try {
+            const { data } = await productsService.uploadPhoto(productId, images);
+            return data
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 const deleteById = createAsyncThunk(
     'productsSlice/deleteById',
     async ({ productId }, { rejectWithValue }) => {
         try {
             await productsService.deleteById(productId);
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const deleteImage = createAsyncThunk(
+    'productsSlice/deleteImage',
+    async ({ productId, imageUrl }, { rejectWithValue }) => {
+        try {
+            await productsService.deleteImage(productId, imageUrl);
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -135,6 +158,18 @@ const productSlice = createSlice({
                 state.error = action.payload
             })
 
+            .addCase(uploadPhoto.fulfilled, (state, action) => {
+                const findProduct = state.products.find(value => value._id === action.payload._id);
+                Object.assign(findProduct, action.payload)
+                state.selectedProduct = {}
+            })
+            .addCase(uploadPhoto.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(uploadPhoto.rejected, (state, action) => {
+                state.error = action.payload
+            })
+
             .addCase(deleteById.fulfilled, (state) => {
                 state.loading = false
                 state.error = null;
@@ -148,12 +183,25 @@ const productSlice = createSlice({
                 state.loading = false
             })
 
+            .addCase(deleteImage.fulfilled, (state) => {
+                state.loading = false
+                state.error = null;
+            })
+            .addCase(deleteImage.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteImage.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
+
 })
 
 const { reducer: productReducer, actions: { setSelectedProduct } } = productSlice;
 
 const productActions = {
-    getAll, getById, setSelectedProduct, createProduct, updateProduct, deleteById
+    getAll, getById, setSelectedProduct, createProduct, updateProduct, deleteById, uploadPhoto, deleteImage
 }
 
 export {

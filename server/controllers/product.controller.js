@@ -49,21 +49,21 @@ module.exports = {
             next(e);
         }
     },
-    /// не працює
-    // getProductByArticle: async (req, res, next) => {
-    //     try {
-    //         const item = await Product.findOne({article: req.params.article});
-    //         return res.status(200).json(item);
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // },
+
     uploadImage: async (req, res, next) => {
         try {
-            const sendData = await S3service.uploadPublicFile(req.files.images, 'products', req.params.productId);
+            const imageFiles = req.files.images;
+
+            const uploadPromises = imageFiles.map(file =>
+                S3service.uploadPublicFile(file, 'products', req.params.productId)
+            );
+            const uploadedImages = await Promise.all(uploadPromises);
+
+            const imageUrls = uploadedImages.map(data => data.Location);
+
             const newProduct = await Product.findByIdAndUpdate(
                 req.params.productId,
-                { $push: { images: sendData.Location } },
+                { $push: { images: { $each: imageUrls } } },
                 { new: true });
 
             res.json(newProduct);
@@ -71,7 +71,26 @@ module.exports = {
             next(e);
         }
     },
+    deleteImage: async (req, res, next) => {
+        const { productId } = req.params;
+        const { imageUrl } = req.body;
 
+        if (!productId || !imageUrl) {
+            return res.status(400).json({ message: 'Product ID and image URL are required' });
+        }
+        try {
+            const product = await Product.findById(productId);
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+            product.images = product.images.filter(img => img !== imageUrl);
+            await product.save()
+            
+            res.status(200).json({ message: 'Image deleted successfully' });
+        } catch (e) {
+            next(e)
+        }
+    },
     updateProduct: async (req, res, next) => {
         try {
             const newInfo = req.body.product;

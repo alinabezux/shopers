@@ -1,10 +1,9 @@
 import { AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Stack, Typography } from "@mui/joy";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { categoryActions, productActions, typeActions } from "../../../redux";
+import { productActions } from "../../../redux";
 import { useForm, Form, Controller } from "react-hook-form";
 import { FileUploadRounded, InfoOutlined, WarningRounded } from "@mui/icons-material";
-import { DropZone } from "./DropZone";
 import { FileUpload } from "./FileUpload";
 import { styled } from '@mui/joy';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
@@ -424,12 +423,12 @@ const AddPhotoProductModal = ({ openAddPhoto, setOpenAddPhoto }) => {
 
 
     return (
-        <Modal open={openAddPhoto} onClose={() => setOpenAddPhoto(false)} >
+        <Modal open={openAddPhoto} onClose={() => setOpenAddPhoto(false)}>
             <ModalDialog>
-                <DialogTitle>Додати фото</DialogTitle>
+                <DialogTitle >Додати фото</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleAddPhoto)}>
                     <FormControl>
-                        <Stack spacing={2} sx={{ my: 1 }}>
+                        <Stack spacing={2} sx={{ my: 1 }} >
                             <Card
                                 variant="soft"
                                 sx={{
@@ -468,15 +467,33 @@ const AddPhotoProductModal = ({ openAddPhoto, setOpenAddPhoto }) => {
                                         Клікни
                                         <VisuallyHiddenInput type="file" multiple />
                                     </Button>
-                                    або перетягни для заватаження
+                                    для заватаження
                                     <br /> PNG, JPG
                                 </Typography>
                             </Card>
-                            {files.length !== 0 && (
-                                <Stack spacing={1}>
-                                    {files.map(file => <FileUpload key={file.name} file={file} />)}
-                                </Stack>
-                            )}
+                            <Box sx={{
+                                maxHeight: '300px',
+                                overflowY: 'auto',
+                                '&::-webkit-scrollbar': {
+                                    width: '5px',
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                    backgroundColor: '#f1f1f1',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    backgroundColor: '#888',
+                                    borderRadius: '10px',
+                                },
+                                '&::-webkit-scrollbar-thumb:hover': {
+                                    backgroundColor: '#555',
+                                },
+                            }}>
+                                {files.length !== 0 && (
+                                    <Stack spacing={1}>
+                                        {files.map(file => <FileUpload key={file.name} file={file} />)}
+                                    </Stack>
+                                )}</Box>
+
                             <Button type="submit" disabled={files.length === 0}>Зберегти</Button>
                         </Stack>
                     </FormControl>
@@ -491,16 +508,37 @@ const ImagesModal = ({ openImages, setOpenImages }) => {
     const { selectedProduct, error } = useSelector(state => state.productReducer);
 
     const handleDeleteImage = useCallback(async (img) => {
-        console.log(selectedProduct._id)
-        console.log(img)
         await dispatch(productActions.deleteImage({ productId: selectedProduct._id, imageUrl: img }));
-    }, [dispatch, selectedProduct]);
+    }, [dispatch, selectedProduct._id]);
 
     return (
         <Modal open={openImages} onClose={() => setOpenImages(false)} >
             <ModalDialog>
                 <DialogTitle>Переглянути фото</DialogTitle>
-                <Box sx={{ display: "flex", flexDirection: "row", gap: 2, flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 2,
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    maxHeight: '80vh',
+                    overflowY: 'auto',
+                    '&::-webkit-scrollbar': {
+                        width: '5px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        backgroundColor: '#f1f1f1',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#888',
+                        borderRadius: '10px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                        backgroundColor: '#555',
+                    },
+
+                }}>
                     {selectedProduct?.images?.length > 0 && (selectedProduct?.images.map((img, index) => (
                         <Card key={index} sx={{ width: "150px", height: "150px" }}>
                             <CardCover >

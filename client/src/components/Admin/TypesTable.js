@@ -39,10 +39,11 @@ const TypesTable = () => {
     }, [dispatch]);
 
     return (
-        <Box>
+        <Box >
             <CreateTypeModal open={openCreate} setOpenCreate={setOpenCreate} />
             <EditTypeModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
             <DeleteTypeModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
+            
             <Box
                 sx={{
                     display: 'flex',

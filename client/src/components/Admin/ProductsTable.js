@@ -1,5 +1,5 @@
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     Box,
     Button,
@@ -11,12 +11,19 @@ import {
     Sheet,
     Typography,
     IconButton,
+    Chip,
+    Stack,
+    FormControl,
+    FormLabel,
+    Input,
+    Select,
+    Option,
 } from '@mui/joy';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, productActions, typeActions } from '../../redux';
 import Table from '@mui/joy/Table';
-import { MoreHorizRounded } from '@mui/icons-material';
+import { CloseRounded, MoreHorizRounded, Search } from '@mui/icons-material';
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
@@ -24,7 +31,10 @@ import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import { AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
 import { Link } from 'react-router-dom'
 import { toUrlFriendly } from '../../utils';
-import { ButtonGroupButtonContext } from '@mui/material';
+import { ButtonGroupButtonContext, Pagination } from '@mui/material';
+import Link2 from '@mui/joy/Link'
+import TablePagination from '@mui/material/TablePagination';
+
 
 const ProductsTable = () => {
 
@@ -35,10 +45,13 @@ const ProductsTable = () => {
     const [openDelete, setOpenDelete] = useState(false);
     const [openAddPhoto, setOpenAddPhoto] = useState(false);
     const [openImages, setOpenImages] = useState(false);
+    const [category, setCategory] = useState('')
+    const [type, setType] = useState('')
 
-    const { products, error } = useSelector(state => state.productReducer);
+    const { products, error, totalPagesProducts, currentPageProducts, count } = useSelector(state => state.productReducer);
     const { selectedCategory, categories } = useSelector(state => state.categoryReducer);
     const { selectedType, types } = useSelector(state => state.typeReducer);
+    const action = useRef(null);
 
     useEffect(() => {
         dispatch(categoryActions.getAll())
@@ -50,10 +63,12 @@ const ProductsTable = () => {
 
     useEffect(() => {
         dispatch(productActions.getAll({
-            _category: selectedCategory._id,
-            _type: selectedType._id,
+            _category: category,
+            _type: type,
+            page: currentPageProducts,
+            isGettingAll: false
         }))
-    }, [dispatch, selectedCategory._id, selectedType._id]);
+    }, [dispatch, currentPageProducts, category, type]);
 
 
     const handleDeleteProduct = useCallback(async (product) => {
@@ -75,6 +90,14 @@ const ProductsTable = () => {
         dispatch(productActions.setSelectedProduct(product));
         setOpenImages(true);
     }, [dispatch]);
+
+    const handleShowDetails = useCallback((product) => {
+        dispatch(productActions.setSelectedProduct(product));
+    }, [dispatch]);
+
+    const handleSetCurrentPageProducts = async (event, value) => {
+        dispatch(productActions.setCurrentPageProducts(value));
+    }
 
     function RowMenu({ product }) {
         return (
@@ -141,27 +164,99 @@ const ProductsTable = () => {
                     Додати товар
                 </Button>
             </Box>
+
+            <Stack direction="row" spacing={2}>
+                <FormControl sx={{ width: "50%" }} size="sm">
+                    {/* <FormLabel>Пошук</FormLabel> */}
+                    <Input placeholder="Пошук" startDecorator={<Search />} />
+                </FormControl>
+
+                <FormControl sx={{ width: "25%" }} size="sm">
+                    {/* <FormLabel>Категорія</FormLabel> */}
+                    <Select
+                        placeholder="Категорія"
+                        onChange={(event, newValue) => setCategory(newValue)}
+                        action={action}
+                        value={category}
+                        {...(category && {
+                            endDecorator: (
+                                <IconButton
+                                    variant="plain"
+                                    color="neutral"
+                                    onMouseDown={(event) => {
+                                        event.stopPropagation();
+                                    }}
+                                    onClick={() => {
+                                        setCategory(null);
+                                        action.current?.focusVisible();
+                                    }}
+                                >
+                                    <CloseRounded />
+                                </IconButton>
+                            ),
+                            indicator: null,
+                        })}
+                    >
+                        {categories.map((category) => (
+                            <Option value={category._id} key={category._id}>{category.name}</Option>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ width: "25%" }} size="sm">
+                    {/* <FormLabel>Тип</FormLabel> */}
+                    <Select onChange={(event, newValue) => setType(newValue)}
+                        placeholder="Тип"
+                        value={type}
+                        action={action}
+                        {...(type && {
+                            endDecorator: (
+                                <IconButton
+                                    variant="plain"
+                                    color="neutral"
+                                    onMouseDown={(event) => {
+                                        event.stopPropagation();
+                                    }}
+                                    onClick={() => {
+                                        setType(null);
+                                        action.current?.focusVisible();
+                                    }}
+                                >
+                                    <CloseRounded />
+                                </IconButton>
+                            ),
+                            indicator: null,
+                        })}>
+                        {types.map((type) => (
+                            <Option value={type._id} key={type._id}>{type.name}</Option>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Stack>
             <Sheet
                 variant="outlined"
-                sx={{ width: '100%', boxShadow: 'sm', borderRadius: 'sm' }}
+                sx={{ width: '100%', boxShadow: 'sm', borderRadius: 'sm', my: 3 }}
             >
-                <Table aria-label="basic table" stickyHeader sx={{ '--Table-headerUnderlineThickness': '1px' }}>
+                <Table
+                    aria-label="basic table"
+                    stickyHeader
+                    sx={{ '--Table-headerUnderlineThickness': '1px', }}>
                     <thead>
                         <tr>
-                            <th style={{ width: '5%' }}>Артикул</th>
-                            <th style={{ width: '20%' }}>Фото</th>
-                            <th>Назва</th>
-                            <th>Категорія/Тип</th>
+                            <th style={{ width: '10%' }}>Артикул</th>
+                            <th style={{ width: '25%' }}>Фото</th>
+                            <th style={{ width: '20%' }}>Назва</th>
+                            <th style={{ width: '15%' }}>Категорія/Тип</th>
                             <th style={{ width: '10%' }}>Ціна</th>
                             <th style={{ width: '5%' }}>К-сть</th>
-                            <th style={{ width: '30%' }}>Інфо</th>
+                            <th style={{ width: '30%' }}>Характеристики</th>
                             <th style={{ width: '5%' }}></th>
                         </tr>
                     </thead>
                     <tbody>
                         {products.map(product =>
                             <tr key={product._id}>
-                                <td>{product.article}</td>
+                                <td><h3>{product.article}</h3></td>
                                 <td>
                                     <Box className="gallery-container">
                                         {product.images.slice(0, 2).map((image, index) => (
@@ -176,33 +271,53 @@ const ProductsTable = () => {
                                         )}
                                     </Box>
                                 </td>
-                                <td><Link to={`/product/${(toUrlFriendly(product.name))}`} key={product._id}>{product.name}</Link></td>
                                 <td>
-                                    <Typography>
-                                        {(categories.find(item => item._id === product._category)).name}
-                                    </Typography>
-                                    <Typography>
-                                        {(types.find(item => item._id === product._type))?.name}
-                                    </Typography>
-                                    <Typography>
-                                        {product._type}
-                                    </Typography>
-
+                                    <Link2
+                                        underline="none"
+                                        color="primary"
+                                        component="button"
+                                        onClick={() => handleShowDetails(product)}
+                                        fontWeight="lg">
+                                        <Link className="link" to={`/product/${(toUrlFriendly(product.name))}`} key={product._id} >{product.name}</Link>
+                                    </Link2>
                                 </td>
-                                <td>{product.price}</td>
-                                <td>{product.quantity}</td>
+                                <td>
+                                    <Stack description="column" spacing={1}>
+                                        <Chip color='primary'>{(categories.find(item => item._id === product._category)).name}</Chip>
+                                        <Chip>{(types.find(item => item._id === product._type))?.name}</Chip>
+                                    </Stack>
+                                </td>
+                                <td><h3>{product.price} грн.</h3></td>
+                                <td>
+                                    <Chip color={product.quantity < 10 ? 'danger' : 'success'}>{product.quantity}</Chip>
+                                </td>
                                 <td>
                                     <Box>
-                                        <Typography>Колір:{product?.info?.color}</Typography>
-                                        <Typography>Розмір:{product?.info?.size}</Typography>
-                                        <Typography>Матеріал:{product?.info?.material}</Typography>
-                                        <Typography>Опис:{product?.info?.description}</Typography>
+                                        <Typography><b>Колір: </b>{product?.info?.color}</Typography>
+                                        <Typography><b>Розмір: </b>{product?.info?.size}</Typography>
+                                        <Typography><b>Матеріал: </b>{product?.info?.material}</Typography>
+                                        <Typography><b>Опис: </b>{product?.info?.description}</Typography>
                                     </Box>
                                 </td>
                                 <td><RowMenu product={product} /></td>
                             </tr>
                         )}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colSpan={8}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Pagination count={totalPagesProducts} color="primary" onChange={handleSetCurrentPageProducts} />
+                                </Box>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </Table >
             </Sheet >
         </Box >

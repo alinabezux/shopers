@@ -26,9 +26,7 @@ const CategoriesMenu = ({ width }) => {
             justifyContent: "center",
         }}>
             {categories.map((category) => (
-                <NavLink key={category._id} to={`/${(toUrlFriendly(category.name))}`} className="link"
-
-                >
+                <NavLink key={category._id} to={`/${(toUrlFriendly(category.name))}`} className="link">
                     <Card sx={{
                         width: { xs: "150px", md: width },
                         height: { xs: "150px", md: width },
@@ -73,9 +71,9 @@ const CategoriesMenu = ({ width }) => {
                         </CardContent>
                     </Card>
                 </NavLink>
-            ))
-            }
-        </Box>
+    ))
+}
+        </Box >
     );
 };
 

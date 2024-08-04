@@ -5,16 +5,18 @@ const initialState = {
     products: [],
     selectedProduct: {},
     product: {},
-
+    count: null,
+    currentPageProducts: 1,
+    totalPagesProducts: null,
     loading: false,
     error: null
 };
 
 const getAll = createAsyncThunk(
     'productSlice/getAll',
-    async ({ _category, _type }, { rejectWithValue }) => {
+    async ({ _category, _type, page, isGettingAll }, { rejectWithValue }) => {
         try {
-            const { data } = await productsService.getAll(_category, _type);
+            const { data } = await productsService.getAll(_category, _type, page, isGettingAll);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -99,12 +101,17 @@ const productSlice = createSlice({
     reducers: {
         setSelectedProduct: (state, action) => {
             state.selectedProduct = action.payload
+        },
+        setCurrentPageProducts: (state, action) => {
+            state.currentPageProducts = action.payload
         }
     },
     extraReducers: builder =>
         builder
             .addCase(getAll.fulfilled, (state, action) => {
-                state.products = action.payload
+                state.products = action.payload.products
+                state.totalPagesProducts = action.payload.totalPages
+                state.count = action.payload.count
                 state.loading = false
                 state.error = null
             })
@@ -183,9 +190,13 @@ const productSlice = createSlice({
                 state.loading = false
             })
 
-            .addCase(deleteImage.fulfilled, (state) => {
-                state.loading = false
-                state.error = null;
+            .addCase(deleteImage.fulfilled, (state, action) => {
+                const { productId, imageUrl } = action.meta.arg;
+                const product = state.products.find(p => p._id === productId);
+                if (product) {
+                    product.images = product.images.filter(img => img !== imageUrl);
+                    state.selectedProduct = { ...product };
+                }
             })
             .addCase(deleteImage.pending, (state) => {
                 state.loading = true
@@ -198,10 +209,10 @@ const productSlice = createSlice({
 
 })
 
-const { reducer: productReducer, actions: { setSelectedProduct } } = productSlice;
+const { reducer: productReducer, actions: { setSelectedProduct, setCurrentPageProducts } } = productSlice;
 
 const productActions = {
-    getAll, getById, setSelectedProduct, createProduct, updateProduct, deleteById, uploadPhoto, deleteImage
+    getAll, getById, setSelectedProduct, setCurrentPageProducts, createProduct, updateProduct, deleteById, uploadPhoto, deleteImage
 }
 
 export {

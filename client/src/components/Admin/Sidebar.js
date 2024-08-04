@@ -15,28 +15,25 @@ import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
-import Stack from '@mui/joy/Stack';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
-import QuestionAnswerRoundedIcon from '@mui/icons-material/QuestionAnswerRounded';
-import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import logo from '../../assets/inst.png'
 import { closeSidebar } from './utils';
 import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 
 function Toggler({ defaultExpanded = false, renderToggle, children }) {
-    const [open, setOpen] = React.useState(defaultExpanded);
+    const [open, setOpen] = useState(defaultExpanded);
     return (
-        <React.Fragment>
+        <Box>
             {renderToggle({ open, setOpen })}
             <Box
                 sx={{
@@ -50,7 +47,7 @@ function Toggler({ defaultExpanded = false, renderToggle, children }) {
             >
                 {children}
             </Box>
-        </React.Fragment>
+        </Box>
     );
 }
 
@@ -59,16 +56,17 @@ export default function Sidebar() {
         <Sheet
             className="Sidebar"
             sx={{
-                position: { xs: 'fixed', md: 'sticky' },
+                position: 'fixed',
                 transform: {
                     xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
                     md: 'none',
                 },
                 transition: 'transform 0.4s, width 0.4s',
-                zIndex: 10000,
-                height: '100dvh',
+                // zIndex: 10000,
+                height: '100vh',
                 width: 'var(--Sidebar-width)',
                 top: 0,
+                boxSizing: "border-box",
                 p: 2,
                 flexShrink: 0,
                 display: 'flex',
@@ -76,6 +74,7 @@ export default function Sidebar() {
                 gap: 2,
                 borderRight: '1px solid',
                 borderColor: 'divider',
+
             }}
         >
             <GlobalStyles
@@ -108,10 +107,10 @@ export default function Sidebar() {
                 onClick={() => closeSidebar()}
             />
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-
                 <img src={logo} alt='logo' style={{ height: "50px" }} />
-                <Typography level="title-lg">SHOPERS_VI</Typography>
+                <Typography level='h4' sx={{ fontWeight: 700 }}>SHOPERS_VI</Typography>
             </Box>
+            <Divider/>
             <Box
                 sx={{
                     minHeight: 0,
@@ -136,84 +135,64 @@ export default function Sidebar() {
                         <ListItemButton>
                             <HomeRoundedIcon />
                             <ListItemContent>
-                                <Typography component={Link} to="/" className='link' level="title-sm">Головна</Typography>
+                                <Typography component={Link} to="/" className='link' level="title-md">Головна</Typography>
                             </ListItemContent>
                         </ListItemButton>
                     </ListItem>
 
-                    <ListItem>
+                    {/* <ListItem>
                         <ListItemButton>
                             <DashboardRoundedIcon />
                             <ListItemContent>
-                                <Typography level="title-sm">Dashboard</Typography>
+                                <Typography level="title-md">Dashboard</Typography>
                             </ListItemContent>
                         </ListItemButton>
-                    </ListItem>
+                    </ListItem> */}
 
                     <ListItem>
                         <ListItemButton >
                             <ShoppingCartRoundedIcon />
                             <ListItemContent>
-                                <Typography component={Link} to="/admin/orders" className='link' level="title-sm">Замовлення</Typography>
+                                <Typography component={Link} to="/admin/orders" className='link' level="title-md">Замовлення</Typography>
                             </ListItemContent>
                         </ListItemButton>
                     </ListItem>
 
-                    <ListItem nested>
-                        <Toggler
-                            renderToggle={({ open, setOpen }) => (
-                                <ListItemButton onClick={() => setOpen(!open)}>
-                                    <AssignmentRoundedIcon />
-                                    <ListItemContent>
-                                        <Typography level="title-sm">Каталог</Typography>
-                                    </ListItemContent>
-                                    <KeyboardArrowDownIcon
-                                        sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
-                                    />
-                                </ListItemButton>
-                            )}
-                        >
-                            <List sx={{ gap: 0.5 }}>
-                                <ListItem sx={{ mt: 0.5 }}>
-                                    <ListItemButton component={Link} to="/admin/products">Всі товари</ListItemButton>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemButton component={Link} to="/admin/categories">Категорії</ListItemButton>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemButton component={Link} to="/admin/types" >Типи</ListItemButton>
-                                </ListItem>
-
-                            </List>
-                        </Toggler>
-                    </ListItem>
 
                     <ListItem>
                         <ListItemButton >
-                            <GroupRoundedIcon />
+
+                            <BusinessCenterIcon />
                             <ListItemContent>
-                                <Typography component={Link} to="/admin/users" className='link' level="title-sm">Користувачі</Typography>
+                                <Typography component={Link} to="/admin/products" className='link' level="title-md">Товари</Typography>
                             </ListItemContent>
                         </ListItemButton>
                     </ListItem>
+                    <ListItem>
+                        <ListItemButton >
+                            <CategoryRoundedIcon />
+                            <ListItemContent>
+                                <Typography component={Link} to="/admin/categories" className='link' level="title-md">Категорії</Typography>
+                            </ListItemContent>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemButton >
+                            <AssignmentRoundedIcon />
+                            <ListItemContent>
+                                <Typography component={Link} to="/admin/types" className='link' level="title-md">Типи</Typography>
+                            </ListItemContent>
+                        </ListItemButton>
+                    </ListItem>
+                    {/* <ListItem>
+                        <ListItemButton >
+                            <GroupRoundedIcon />
+                            <ListItemContent>
+                                <Typography component={Link} to="/admin/users" className='link' level="title-md">Користувачі</Typography>
+                            </ListItemContent>
+                        </ListItemButton>
+                    </ListItem> */}
                 </List>
-
-
-            </Box>
-            <Divider />
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <Avatar
-                    variant="outlined"
-                    size="sm"
-                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
-                />
-                <Box sx={{ minWidth: 0, flex: 1 }}>
-                    <Typography level="title-sm">Siriwat K.</Typography>
-                    <Typography level="body-xs">siriwatk@test.com</Typography>
-                </Box>
-                <IconButton size="sm" variant="plain" color="neutral">
-                    <LogoutRoundedIcon />
-                </IconButton>
             </Box>
         </Sheet >
     );

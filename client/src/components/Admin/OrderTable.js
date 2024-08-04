@@ -19,6 +19,7 @@ import {
     MenuButton,
     MenuItem,
     Dropdown,
+    Stack,
 } from '@mui/joy';
 
 import {
@@ -38,6 +39,7 @@ import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import useUser from '../../hooks/useUser';
 import { useEffect } from 'react';
 import { orderActions } from '../../redux';
+import { Pagination } from '@mui/material';
 
 
 
@@ -98,80 +100,15 @@ const OrderTable = () => {
 
     const userId = useUser();
     const dispatch = useDispatch();
-    const { orders, selectedOrder, currentPageOrders, totalPagesOrders } = useSelector(state => state.orderReducer);
+    const { orders, selectedOrder, currentPageOrders, totalPagesOrders, count } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
-        dispatch(orderActions.getAllOrders({ page: 1, isGettingAll: false }));
-    }, [dispatch]);
+        dispatch(orderActions.getAllOrders({ page: currentPageOrders }));
+    }, [dispatch, currentPageOrders]);
 
-
-
-    const renderFilters = () => (
-        <React.Fragment>
-            <FormControl size="sm">
-                <FormLabel>Спосіб оплати</FormLabel>
-                <Select
-                    placeholder="Спосіб оплати"
-                    action={action}
-                    value={selectedPayment}
-                    onChange={(e, newValue) => setSelectedPayment(newValue)}
-                    {...(selectedPayment && {
-                        endDecorator: (
-                            <IconButton
-                                variant="plain"
-                                color="neutral"
-                                onMouseDown={(event) => {
-                                    event.stopPropagation();
-                                }}
-                                onClick={() => {
-                                    setSelectedPayment(null);
-                                    action.current?.focusVisible();
-                                }}
-                                slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-                            ><CloseRounded />
-                            </IconButton>
-                        ),
-                        indicator: null,
-                    })}
-                >
-                    <Option value="Передоплата">Передоплата</Option>
-                    <Option value="Наложка">Наложка</Option>
-
-                </Select>
-            </FormControl>
-            <FormControl size="sm">
-                <FormLabel>Пошта</FormLabel>
-                <Select
-                    placeholder="Пошта"
-                    action={action}
-                    value={selectedPost}
-                    onChange={(e, newValue) => setSelectedPost(newValue)}
-                    {...(selectedPost && {
-                        endDecorator: (
-                            <IconButton
-                                variant="plain"
-                                color="neutral"
-                                onMouseDown={(event) => {
-                                    event.stopPropagation();
-                                }}
-                                onClick={() => {
-                                    setSelectedPost(null);
-                                    action.current?.focusVisible();
-                                }}
-                            >
-                                <CloseRounded />
-                            </IconButton>
-                        ),
-                        indicator: null,
-                    })}
-                >
-                    <Option color="warning" value="Укр пошта">Укр пошта</Option>
-                    <Option color="danger" value="Нова пошта">Нова пошта</Option>
-                </Select>
-            </FormControl>
-        </React.Fragment >
-    );
-
+    const handleSetCurrentPageOrders = async (event, value) => {
+        dispatch(orderActions.setCurrentPageOrders(value));
+    }
 
 
     const filteredOrders = orders.filter(order =>
@@ -180,7 +117,7 @@ const OrderTable = () => {
     );
 
     return (
-        <React.Fragment>
+        <Box>
             <Box
                 sx={{
                     display: 'flex',
@@ -195,91 +132,89 @@ const OrderTable = () => {
                 <Typography level="h2" component="h1">
                     Замовлення
                 </Typography>
-                <Button
-                    color="primary"
-                    startDecorator={<DownloadRoundedIcon />}
-                    size="sm"
-                >
-                    Завантажити PDF
-                </Button>
             </Box>
 
-            {/* <Sheet
-                className="SearchAndFilters-mobile"
-                sx={{
-                    display: { xs: 'flex', sm: 'none' },
-                    my: 1,
-                    gap: 1,
-                }}
-            >
-                <Input
-                    size="sm"
-                    placeholder="Search"
-                    startDecorator={<SearchIcon />}
-                    sx={{ flexGrow: 1 }}
-                />
-                <IconButton
-                    size="sm"
-                    variant="outlined"
-                    color="neutral"
-                    onClick={() => setOpen(true)}
-                >
-                    <FilterAltIcon />
-                </IconButton>
-                <Modal open={open} onClose={() => setOpen(false)}>
-                    <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
-                        <ModalClose />
-                        <Typography id="filter-modal" level="h2">
-                            Filters
-                        </Typography>
-                        <Divider sx={{ my: 2 }} />
-                        <Sheet sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            {renderFilters()}
-                            <Button color="primary" onClick={() => setOpen(false)}>
-                                Submit
-                            </Button>
-                        </Sheet>
-                    </ModalDialog>
-                </Modal>
-            </Sheet> */}
-
-            <Box
-                className="SearchAndFilters-tabletUp"
-                sx={{
-                    borderRadius: 'sm',
-                    py: 2,
-                    display: { xs: 'none', sm: 'flex' },
-                    flexWrap: 'wrap',
-                    gap: 1.5,
-                    '& > *': {
-                        minWidth: { xs: '120px', md: '160px' },
-                    },
-                }}
-            >
-                <FormControl sx={{ flex: 1 }} size="sm">
-                    <FormLabel>Пошук за замовленням</FormLabel>
+            <Stack direction="row" spacing={2}>
+                <FormControl sx={{ width: "50%" }} size="sm">
                     <Input size="sm" placeholder="Пошук" startDecorator={<SearchIcon />} />
                 </FormControl>
-                {renderFilters()}
-            </Box>
+                <FormControl size="sm" sx={{ width: "25%" }}>
+                    {/* <FormLabel>Спосіб оплати</FormLabel> */}
+                    <Select
+                        placeholder="Спосіб оплати"
+                        action={action}
+                        value={selectedPayment}
+                        onChange={(e, newValue) => setSelectedPayment(newValue)}
+                        {...(selectedPayment && {
+                            endDecorator: (
+                                <IconButton
+                                    variant="plain"
+                                    color="neutral"
+                                    onMouseDown={(event) => {
+                                        event.stopPropagation();
+                                    }}
+                                    onClick={() => {
+                                        setSelectedPayment(null);
+                                        action.current?.focusVisible();
+                                    }}
+                                    slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+                                ><CloseRounded />
+                                </IconButton>
+                            ),
+                            indicator: null,
+                        })}
+                    >
+                        <Option value="Передоплата">Передоплата</Option>
+                        <Option value="Наложка">Наложка</Option>
+
+                    </Select>
+                </FormControl>
+
+                <FormControl size="sm" sx={{ width: "25%" }}>
+                    <Select
+                        placeholder="Пошта"
+                        action={action}
+                        value={selectedPost}
+                        onChange={(e, newValue) => setSelectedPost(newValue)}
+                        {...(selectedPost && {
+                            endDecorator: (
+                                <IconButton
+                                    variant="plain"
+                                    color="neutral"
+                                    onMouseDown={(event) => {
+                                        event.stopPropagation();
+                                    }}
+                                    onClick={() => {
+                                        setSelectedPost(null);
+                                        action.current?.focusVisible();
+                                    }}
+                                >
+                                    <CloseRounded />
+                                </IconButton>
+                            ),
+                            indicator: null,
+                        })}
+                    >
+                        <Option value="Укр пошта">Укр пошта</Option>
+                        <Option value="Нова пошта">Нова пошта</Option>
+                    </Select>
+                </FormControl>
+            </Stack >
             <Sheet
                 className="OrderTableContainer"
                 variant="outlined"
                 sx={{
-                    display: { xs: 'none', sm: 'initial' },
                     width: '100%',
                     borderRadius: 'sm',
-                    flexShrink: 1,
-                    overflow: 'auto',
-                    minHeight: 0,
+                    boxShadow: 'sm',
+                    my: 3
                 }}
             >
                 <Table
                     aria-labelledby="tableTitle"
                     stickyHeader
                     hoverRow
-                    sx={{ '--Table-headerUnderlineThickness': '1px' }}
-                >
+                    sx={{ '--Table-headerUnderlineThickness': '1px' }}>
                     <thead>
                         <tr>
                             <th style={{ width: 80, padding: "12px " }}>
@@ -396,39 +331,25 @@ const OrderTable = () => {
                             </tr>
                         ))}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colSpan={6}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Pagination count={totalPagesOrders} color="primary" onChange={handleSetCurrentPageOrders} />
+                                </Box>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </Table>
             </Sheet>
-            <Box
-                className="Pagination"
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                    gap: 2,
-                    py: 2,
-                    minWidth: { xs: '200px', md: '600px' },
-                    marginInline: 'auto',
-                }}
-            >
-                <Button
-                    size="sm"
-                    variant="plain"
-                    color="neutral"
-                    startDecorator={<KeyboardArrowLeftIcon />}
-                >
-                    Previous
-                </Button>
-                <Divider orientation="vertical" />
-                <Button
-                    size="sm"
-                    variant="plain"
-                    color="neutral"
-                    endDecorator={<KeyboardArrowRightIcon />}
-                >
-                    Next
-                </Button>
-            </Box>
-        </React.Fragment>
+
+        </Box>
     );
 }
 

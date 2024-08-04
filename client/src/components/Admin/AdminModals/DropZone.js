@@ -63,7 +63,7 @@ const DropZone = ({ setFile }) => {
                     Клікни
                     <VisuallyHiddenInput type="file" />
                 </Button>
-                або перетягни для заватаження
+                для заватаження
                 <br /> PNG, JPG
             </Typography>
         </Card>

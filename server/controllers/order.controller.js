@@ -45,8 +45,7 @@ module.exports = {
 
     getAllOrders: async (req, res, next) => {
         try {
-            let { page } = req.query;
-            page = page || 1;
+            let { page = 1 } = req.query;
             const limit = 10;
             let count;
 

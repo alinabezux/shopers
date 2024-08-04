@@ -7,6 +7,7 @@ const CategoryPage = () => {
 
     return (
         <Catalogue name={selectedCategory.name} key={selectedCategory._id} />
+
     );
 };
 

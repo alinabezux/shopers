@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { orderService } from "../../services/order.service";
 
-
 const initialState = {
     orders: [],
     selectedOrder: null,
     currentPageOrders: 1,
     totalPagesOrders: null,
+    count: null,
     loadingOrder: false,
     errorOrder: null
 }
@@ -25,9 +25,9 @@ const createOrder = createAsyncThunk(
 
 const getAllOrders = createAsyncThunk(
     'orderSlice/getAllOrders',
-    async ({ page, isGettingAll }, { rejectWithValue }) => {
+    async ({ page }, { rejectWithValue }) => {
         try {
-            const { data } = await orderService.getAllOrders(page, isGettingAll);
+            const { data } = await orderService.getAllOrders(page);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -78,6 +78,7 @@ const orderSlice = createSlice({
             .addCase(getAllOrders.fulfilled, (state, action) => {
                 state.orders = action.payload.orders
                 state.totalPagesOrders = action.payload.totalPages
+                state.count = action.payload.count
                 state.loadingOrder = false
                 state.errorOrder = null
             })

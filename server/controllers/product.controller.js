@@ -16,27 +16,41 @@ module.exports = {
     },
     getAllProducts: async (req, res, next) => {
         try {
-            let { _category, _type } = req.query;
+            let { _category, _type, page = 1, isGettingAll } = req.query;
+            const limit = 20;
             let products;
-            // if(const products = await Product.find({});
+            let count;
+
+            if (JSON.parse(isGettingAll)) {
+                products = await Product.find({})
+                count = await Product.countDocuments();
+
+                return res.json({ products, count: count });
+            }
 
             if (!_category && !_type) {
-                products = await Product.find({})
-                // products = await Product.find({}).limit(limit).skip((page - 1) * limit);
-                // count = await Product.countDocuments();
+                products = await Product.find({}).limit(limit).skip((page - 1) * limit);
+                count = await Product.countDocuments();
             }
             if (_category && !_type) {
-                products = await Product.find({ _category })
-                // products = await Product.find({_category}).limit(limit).skip((page - 1) * limit);
-                // count = await Product.countDocuments({category});
+                products = await Product.find({ _category }).limit(limit).skip((page - 1) * limit);
+                count = await Product.countDocuments({ _category });
             }
+            if (!_category && _type) {
+                products = await Product.find({ _type }).limit(limit).skip((page - 1) * limit);
+                count = await Product.countDocuments({ _type });
+            };
             if (_category && _type) {
-                products = await Product.find({ _category, _type })
-                // products = await Product.find({category, type}).limit(limit).skip((page - 1) * limit);
-                // count = await Product.countDocuments({category, type});
+                products = await Product.find({ _category, _type }).limit(limit).skip((page - 1) * limit);
+                count = await Product.countDocuments({ _category, _type });
             }
 
-            return res.status(200).json(products)
+            return res.json({
+                products,
+                count: count,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page
+            });
         } catch (e) {
             return next(e)
         }
@@ -85,7 +99,7 @@ module.exports = {
             }
             product.images = product.images.filter(img => img !== imageUrl);
             await product.save()
-            
+
             res.status(200).json({ message: 'Image deleted successfully' });
         } catch (e) {
             next(e)

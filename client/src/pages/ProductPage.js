@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { toUrlFriendly } from '../utils'
 
 import { Typography, Box, Stack } from '@mui/material';
-import { Button, Chip, ButtonGroup } from "@mui/joy";
+import { Button, Chip, ButtonGroup, AspectRatio } from "@mui/joy";
 import { Container } from '@mui/joy';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 
@@ -41,7 +41,7 @@ const ProductPage = () => {
 
     const category = categories.find(category => category._id === selectedProduct._category);
     const type = types.find(type => type._id === selectedProduct._type);
-    
+
     console.log(selectedProduct)
     useEffect(() => {
         if (userId) {
@@ -100,21 +100,23 @@ const ProductPage = () => {
 
             <Box className="product-page__content">
                 <Box className="product-page__gallery">
-                    <Swiper
-                        spaceBetween={10}
-                        thumbs={{ swiper: thumbsSwiper }}
-                        modules={[FreeMode, Navigation, Thumbs]}
-                        className="mySwiper2"
-                    >
-                        {selectedProduct.images.map((image, index) => (
-                            <SwiperSlide key={index}>
-                                <img
-                                    src={image}
-                                    alt={`Slide ${index}`}
-                                />
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
+                    <AspectRatio ratio="1" >
+                        <Swiper
+                            spaceBetween={10}
+                            thumbs={{ swiper: thumbsSwiper }}
+                            modules={[FreeMode, Navigation, Thumbs]}
+                            className="mySwiper2"
+                        >
+                            {selectedProduct.images.map((image, index) => (
+                                <SwiperSlide key={index}>
+                                    <img
+                                        src={image}
+                                        alt={`Slide ${index}`}
+                                    />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </AspectRatio>
                     <Swiper
                         onSwiper={setThumbsSwiper}
                         spaceBetween={10}
@@ -126,10 +128,12 @@ const ProductPage = () => {
                     >
                         {selectedProduct.images.map((image, index) => (
                             <SwiperSlide key={index}>
-                                <img
-                                    src={image}
-                                    alt={`Slide ${index}`}
-                                />
+                                <AspectRatio ratio="1" >
+                                    <img
+                                        src={image}
+                                        alt={`Slide ${index}`}
+                                    />
+                                </AspectRatio>
                             </SwiperSlide>
                         ))}
                     </Swiper>
@@ -166,7 +170,9 @@ const ProductPage = () => {
                         {/* <br /> */}
                         <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{selectedProduct?.info?.color}</Typography>
                         <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{selectedProduct?.info?.size}</Typography>
-                        <Typography className="product-page__material"><b style={{ color: "black" }}>Матеріал: </b>{selectedProduct?.info?.material}</Typography>
+                        <Typography className="product-page__material">
+                            {selectedProduct?.info?.material ? <><b style={{ color: "black" }}>Матеріал: </b>{selectedProduct.info.material}</> : null}
+                        </Typography>
                         <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{selectedProduct?.info?.description}</Typography>
                     </Stack>
                 </Box>

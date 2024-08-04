@@ -11,12 +11,16 @@ const TypesMenu = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(typeActions.getTypesByCategoryId({ categoryId: selectedCategory._id }));
-    }, [dispatch, selectedCategory._id]);
+        if (selectedCategory) {
+            dispatch(typeActions.getTypesByCategoryId({ categoryId: selectedCategory._id }));
+        }
+    }, [dispatch, selectedCategory]);
 
     const handleTypeClick = useCallback((type) => {
         dispatch(typeActions.setSelectedType(type));
     }, [dispatch]);
+
+
 
     return (
         <Box sx={{
@@ -52,4 +56,4 @@ const TypesMenu = () => {
     );
 };
 
-export default TypesMenu;
+export { TypesMenu };

@@ -9,11 +9,9 @@ import { Outlet } from 'react-router-dom';
 
 const AdminPage = () => {
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+        <Box sx={{ display: 'flex', maxHeight: '100vh' }}>
             <Sidebar />
             <Box
-                component="main"
-                className="MainContent"
                 sx={{
                     px: { xs: 2, md: 6 },
                     pt: {
@@ -22,12 +20,15 @@ const AdminPage = () => {
                         md: 3,
                     },
                     pb: { xs: 2, sm: 2, md: 3 },
-                    flex: 1,
+                    boxSizing: "border-box",
+                    // flex: 1,
                     display: 'flex',
                     flexDirection: 'column',
-                    minWidth: 0,
-                    height: '100dvh',
+                    height: '100vh',
+                    // width: "100%",
                     gap: 1,
+                    position: "absolute",
+                    left: "var(--Sidebar-width)"
                 }}
             >
                 <Outlet />

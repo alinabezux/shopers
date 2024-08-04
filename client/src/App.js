@@ -30,7 +30,7 @@ function App() {
                 <Route element={<MainLayout />} >
                     <Route path={'/'} element={<HomePage />} />
                     <Route path={'/shop'} element={<ShopPage />} />
-                    <Route path={'/:categoryName'} element={<CategoryPage />} >
+                    <Route path={'/:categoryName/'} element={<CategoryPage />} >
                         <Route path={':typeName'} element={<TypePage />} />
                     </Route>
                     <Route path={'/product/:productName'} element={<ProductPage />} />
@@ -49,7 +49,7 @@ function App() {
                         <Route path="categories" element={<CategoriesTable />} />
                         <Route path="products" element={<ProductsTable />} />
                         <Route path="types" element={<TypesTable />} />
-                        <Route path="users" element={<UsersTable />} />
+                        {/* <Route path="users" element={<UsersTable />} /> */}
                     </Route>
                 </Route>
             </Routes>

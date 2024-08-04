@@ -145,6 +145,7 @@ nav.product-page__breadrumbs {
     width: 25%;
     height: 100%;
     opacity: 0.5;
+    overflow: hidden;
 }
 
 .mySwiper .swiper-slide-thumb-active {

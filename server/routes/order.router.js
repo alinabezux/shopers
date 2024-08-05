@@ -10,8 +10,8 @@ orderRouter.post('/:userId',
     orderController.createOrder)
 
 orderRouter.get('/',
-    // authMiddleware.checkAccessToken,
-    // userMiddleware.checkIfUserExists,
+    authMiddleware.checkAccessToken,
+    authMiddleware.checkRole,
     orderController.getAllOrders)
 
 module.exports = orderRouter;

@@ -9,7 +9,7 @@ import { Outlet } from 'react-router-dom';
 
 const AdminPage = () => {
     return (
-        <Box sx={{ display: 'flex', maxHeight: '100vh' }}>
+        <Box sx={{ display: 'flex', maxHeight: '100vh', position: 'relative' }}>
             <Sidebar />
             <Box
                 sx={{
@@ -21,14 +21,14 @@ const AdminPage = () => {
                     },
                     pb: { xs: 2, sm: 2, md: 3 },
                     boxSizing: "border-box",
-                    // flex: 1,
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100vh',
-                    // width: "100%",
+                    position: "absolute",
                     gap: 1,
                     position: "absolute",
-                    left: "var(--Sidebar-width)"
+                    left: "var(--Sidebar-width)",
+                    right: 0
                 }}
             >
                 <Outlet />

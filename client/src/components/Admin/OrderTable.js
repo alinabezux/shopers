@@ -1,12 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {
     Box,
-    Button,
     Chip,
     Divider,
     FormControl,
-    FormLabel,
     Link,
     Input,
     Select,
@@ -35,13 +33,9 @@ import {
     CloseRounded,
 } from '@mui/icons-material';
 
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import useUser from '../../hooks/useUser';
-import { useEffect } from 'react';
 import { orderActions } from '../../redux';
 import { Pagination } from '@mui/material';
-
-
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -92,10 +86,11 @@ function RowMenu() {
 }
 
 const OrderTable = () => {
-
     const [order, setOrder] = useState('desc');
     const [selectedPost, setSelectedPost] = useState(null);
     const [selectedPayment, setSelectedPayment] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+
     const action = useRef(null);
 
     const userId = useUser();
@@ -113,8 +108,14 @@ const OrderTable = () => {
 
     const filteredOrders = orders.filter(order =>
         (selectedPost ? order.shipping === selectedPost : true) &&
-        (selectedPayment ? order.paymentMethod === selectedPayment : true)
+        (selectedPayment ? order.paymentMethod === selectedPayment : true) &&
+        (
+            order.orderID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+        )
     );
+
 
     return (
         <Box>
@@ -136,10 +137,13 @@ const OrderTable = () => {
 
             <Stack direction="row" spacing={2}>
                 <FormControl sx={{ width: "50%" }} size="sm">
-                    <Input size="sm" placeholder="Пошук" startDecorator={<SearchIcon />} />
+                    <Input
+                        placeholder="Пошук за ID замовлення або ПІБ отримувача"
+                        startDecorator={<SearchIcon />}
+                        value={searchQuery}
+                        onChange={(event) => setSearchQuery(event.target.value)} />
                 </FormControl>
                 <FormControl size="sm" sx={{ width: "25%" }}>
-                    {/* <FormLabel>Спосіб оплати</FormLabel> */}
                     <Select
                         placeholder="Спосіб оплати"
                         action={action}
@@ -341,7 +345,7 @@ const OrderTable = () => {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    <Pagination count={totalPagesOrders} color="primary" onChange={handleSetCurrentPageOrders} />
+                                    <Pagination count={totalPagesOrders || 0} color="primary" onChange={handleSetCurrentPageOrders} />
                                 </Box>
                             </td>
                         </tr>

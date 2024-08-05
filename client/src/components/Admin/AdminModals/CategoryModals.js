@@ -9,6 +9,7 @@ import { DropZone } from "./DropZone";
 
 const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
     const dispatch = useDispatch();
+    const { loading } = useSelector(state => state.categoryReducer);
 
     const { control, handleSubmit, register, formState: { errors }, reset } = useForm();
 
@@ -43,7 +44,7 @@ const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
                                 </FormHelperText>
                             }
                         </FormControl>
-                        <Button type="submit">Зберегти</Button>
+                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
                     </Stack>
                 </Form>
             </ModalDialog>
@@ -54,7 +55,7 @@ const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
 const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
     const dispatch = useDispatch();
 
-    const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
+    const { categories, selectedCategory, loading } = useSelector(state => state.categoryReducer);
 
     const { control, handleSubmit, register, reset, setValue } = useForm();
 
@@ -71,7 +72,6 @@ const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
             setOpenEdit(false);
             reset();
         }
-
     }, [dispatch, selectedCategory, reset])
 
     return (
@@ -84,17 +84,18 @@ const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
                             <FormLabel>Назва</FormLabel>
                             <Input {...register('name')} />
                         </FormControl>
-                        <Button type="submit">Зберегти</Button>
+                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
                     </Stack>
                 </Form>
             </ModalDialog>
         </Modal>
     )
-}
+};
+
 const AddPhotoCategoryModal = ({ openAddPhoto, setOpenAddPhoto }) => {
     const dispatch = useDispatch();
 
-    const {  selectedCategory } = useSelector(state => state.categoryReducer);
+    const { selectedCategory, loading } = useSelector(state => state.categoryReducer);
 
     const { control, handleSubmit } = useForm();
 
@@ -103,14 +104,15 @@ const AddPhotoCategoryModal = ({ openAddPhoto, setOpenAddPhoto }) => {
 
     const handleAddPhoto = useCallback(async () => {
         if (!file) return;
-        console.log(file)
 
         try {
             const formData = new FormData();
             formData.append("image", file);
+            formData.append("prevImage", selectedCategory.image);
+
             await dispatch(categoryActions.uploadPhoto({
                 categoryId: selectedCategory._id,
-                image: formData,
+                formData,
             }));
             setOpenAddPhoto(false);
             setFile(null)
@@ -124,29 +126,28 @@ const AddPhotoCategoryModal = ({ openAddPhoto, setOpenAddPhoto }) => {
             <ModalDialog>
                 <DialogTitle>Додати фото</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleAddPhoto)}>
-                 
+
                     <FormControl>
                         <Stack spacing={2} sx={{ my: 1 }}>
                             <DropZone setFile={setFile} />
                             {file && <Box>  <FileUpload file={file} /></Box>}
 
-                            <Button type="submit" disabled={!file}>Зберегти</Button>
+                            <Button type="submit" disabled={!file} loading={loading ? true : false}>Зберегти</Button>
                         </Stack>
                     </FormControl>
                 </Form>
             </ModalDialog>
         </Modal>
     )
-}
+};
 
 const DeleteCategoryModal = ({ openDelete, setOpenDelete }) => {
     const dispatch = useDispatch();
 
-    const { selectedCategory } = useSelector(state => state.categoryReducer);
+    const { selectedCategory, loading } = useSelector(state => state.categoryReducer);
 
     const handleDeleteCategory = useCallback(async () => {
-        await dispatch(categoryActions.deleteById({ categoryId: selectedCategory._id }));
-        await dispatch(categoryActions.getAll())
+        await dispatch(categoryActions.deleteById({ categoryId: selectedCategory._id, imageUrl: selectedCategory.image }));
         setOpenDelete(false)
     }, [dispatch, selectedCategory]);
 
@@ -163,7 +164,7 @@ const DeleteCategoryModal = ({ openDelete, setOpenDelete }) => {
                     Ви впевнені, що хочете видалити категорію {handleDeleteCategory.name}?
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="solid" color="danger" onClick={handleDeleteCategory}>
+                    <Button variant="solid" loading={loading ? true : false} color="danger" onClick={handleDeleteCategory}>
                         Видалити
                     </Button>
                     <Button variant="plain" color="neutral" onClick={() => setOpenDelete(false)}>
@@ -173,7 +174,7 @@ const DeleteCategoryModal = ({ openDelete, setOpenDelete }) => {
             </ModalDialog>
         </Modal>
     )
-}
+};
 
 
 

@@ -14,6 +14,7 @@ module.exports = {
             return next(e)
         }
     },
+
     getAllProducts: async (req, res, next) => {
         try {
             let { _category, _type, page = 1, isGettingAll } = req.query;
@@ -55,6 +56,7 @@ module.exports = {
             return next(e)
         }
     },
+
     getProductById: async (req, res, next) => {
         try {
             const item = await Product.findById(req.params.productId);
@@ -85,6 +87,7 @@ module.exports = {
             next(e);
         }
     },
+
     deleteImage: async (req, res, next) => {
         const { productId } = req.params;
         const { imageUrl } = req.body;
@@ -93,10 +96,13 @@ module.exports = {
             return res.status(400).json({ message: 'Product ID and image URL are required' });
         }
         try {
+            await S3service.deleteImage('products', productId, imageUrl);
+
             const product = await Product.findById(productId);
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
+            
             product.images = product.images.filter(img => img !== imageUrl);
             await product.save()
 
@@ -105,6 +111,7 @@ module.exports = {
             next(e)
         }
     },
+
     updateProduct: async (req, res, next) => {
         try {
             const newInfo = req.body.product;

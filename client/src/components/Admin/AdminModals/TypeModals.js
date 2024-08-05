@@ -9,7 +9,7 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
     const dispatch = useDispatch();
 
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
-    const { selectedType, error } = useSelector(state => state.typeReducer);
+    const { selectedType, error, loading } = useSelector(state => state.typeReducer);
 
     const { control, handleSubmit, register, formState: { errors }, reset } = useForm();
 
@@ -31,7 +31,6 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
                 reset();
                 setCategory(null);
             } else {
-                // Обробка невдалого запиту
                 console.error("Не вдалося створити тип:", res.error);
             }
         } catch (error) {
@@ -85,7 +84,7 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
                                 </FormHelperText>
                             )}
                         </FormControl>
-                        <Button type="submit">Зберегти</Button>
+                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
                     </Stack>
                 </Form>
             </ModalDialog>
@@ -96,7 +95,7 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
 const EditTypeModal = ({ openEdit, setOpenEdit }) => {
     const dispatch = useDispatch();
 
-    const { selectedType, error } = useSelector(state => state.typeReducer);
+    const { selectedType, error, loading } = useSelector(state => state.typeReducer);
     const { categories } = useSelector(state => state.categoryReducer);
 
     const { control, handleSubmit, register, reset, setValue } = useForm();
@@ -155,23 +154,21 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
                                 ))}
                             </Select>
                         </FormControl>
-                        <Button type="submit">Зберегти</Button>
+                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
                     </Stack>
                 </Form>
             </ModalDialog>
         </Modal>
     )
-}
-
+};
 
 const DeleteTypeModal = ({ openDelete, setOpenDelete }) => {
     const dispatch = useDispatch();
 
-    const { selectedType, error } = useSelector(state => state.typeReducer);
+    const { selectedType, error, loading } = useSelector(state => state.typeReducer);
 
     const handleDeleteType = useCallback(async () => {
         await dispatch(typeActions.deleteById({ typeId: selectedType._id }));
-        await dispatch(typeActions.getAll())
         setOpenDelete(false)
 
     }, [dispatch, selectedType]);
@@ -189,7 +186,7 @@ const DeleteTypeModal = ({ openDelete, setOpenDelete }) => {
                     Ви впевнені, що хочете видалити тип {selectedType.name}?
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="solid" color="danger" onClick={handleDeleteType}>
+                    <Button variant="solid" color="danger" onClick={handleDeleteType} loading={loading ? true : false}>
                         Видалити
                     </Button>
                     <Button variant="plain" color="neutral" onClick={() => setOpenDelete(false)}>
@@ -199,7 +196,7 @@ const DeleteTypeModal = ({ openDelete, setOpenDelete }) => {
             </ModalDialog>
         </Modal>
     )
-}
+};
 
 
 

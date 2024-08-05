@@ -62,7 +62,7 @@ const CategoriesTable = () => {
 
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', boxSizing: "border-box" }}>
+        <Box className="categoryTable" sx={{ display: 'flex', flexDirection: 'column', boxSizing: "border-box" }}>
             <CreateCategoryModal openCreate={openCreate} setOpenCreate={setOpenCreate} />
             <EditCategoryModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
             <AddPhotoCategoryModal openAddPhoto={openAddPhoto} setOpenAddPhoto={setOpenAddPhoto} />

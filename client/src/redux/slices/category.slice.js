@@ -47,9 +47,9 @@ const updateCategory = createAsyncThunk(
 
 const uploadPhoto = createAsyncThunk(
     'categoriesSlice/uploadPhoto',
-    async ({ categoryId, image }, { rejectWithValue }) => {
+    async ({ categoryId, formData }, { rejectWithValue }) => {
         try {
-            const { data } = await categoryService.uploadPhoto(categoryId, image);
+            const { data } = await categoryService.uploadPhoto(categoryId, formData);
             return data
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -59,9 +59,10 @@ const uploadPhoto = createAsyncThunk(
 
 const deleteById = createAsyncThunk(
     'categorySlice/deleteById',
-    async ({ categoryId }, { rejectWithValue }) => {
+    async ({ categoryId, imageUrl }, { rejectWithValue }) => {
         try {
-            await categoryService.deleteById(categoryId);
+            await categoryService.deleteById(categoryId, imageUrl);
+            return categoryId;
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -124,6 +125,8 @@ const categorySlice = createSlice(
                     const findCategory = state.categories.find(value => value._id === action.payload._id);
                     Object.assign(findCategory, action.payload)
                     state.selectedCategory = {}
+                    state.loading = false
+                    state.error = false
                 })
                 .addCase(uploadPhoto.pending, (state) => {
                     state.loading = true
@@ -133,16 +136,18 @@ const categorySlice = createSlice(
                 })
 
                 .addCase(deleteById.fulfilled, (state, action) => {
+                    const deletedId = action.payload;
+                    state.categories = state.categories.filter(item => item._id !== deletedId);
                     state.loading = false
-                    state.error = null
                 })
                 .addCase(deleteById.pending, (state) => {
                     state.loading = true
+                    state.error = null
                 })
                 .addCase(deleteById.rejected, (state, action) => {
                     state.error = action.payload
+                    state.loading = false
                 })
-
     }
 );
 

@@ -14,7 +14,6 @@ import {
     Chip,
     Stack,
     FormControl,
-    FormLabel,
     Input,
     Select,
     Option,
@@ -31,9 +30,8 @@ import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import { AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
 import { Link } from 'react-router-dom'
 import { toUrlFriendly } from '../../utils';
-import { ButtonGroupButtonContext, Pagination } from '@mui/material';
+import { Pagination } from '@mui/material';
 import Link2 from '@mui/joy/Link'
-import TablePagination from '@mui/material/TablePagination';
 
 
 const ProductsTable = () => {
@@ -47,6 +45,8 @@ const ProductsTable = () => {
     const [openImages, setOpenImages] = useState(false);
     const [category, setCategory] = useState('')
     const [type, setType] = useState('')
+    const [searchQuery, setSearchQuery] = useState('');
+
 
     const { products, error, totalPagesProducts, currentPageProducts, count } = useSelector(state => state.productReducer);
     const { selectedCategory, categories } = useSelector(state => state.categoryReducer);
@@ -70,6 +70,10 @@ const ProductsTable = () => {
         }))
     }, [dispatch, currentPageProducts, category, type]);
 
+    const filteredProducts = products.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.article.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const handleDeleteProduct = useCallback(async (product) => {
         dispatch(productActions.setSelectedProduct(product));
@@ -99,6 +103,8 @@ const ProductsTable = () => {
         dispatch(productActions.setCurrentPageProducts(value));
     }
 
+
+
     function RowMenu({ product }) {
         return (
             <Dropdown>
@@ -108,7 +114,7 @@ const ProductsTable = () => {
                 >
                     <MoreHorizRounded />
                 </MenuButton>
-                <Menu size="sm" sx={{ minWidth: 140 }}>
+                <Menu size="sm" sx={{ minWidth: 140 }} placement="left">
                     <MenuItem onClick={() => handleEditProduct(product)}>
                         <ListItemDecorator>
                             <EditRoundedIcon />
@@ -134,7 +140,7 @@ const ProductsTable = () => {
     }
 
     return (
-        <Box>
+        <Box className="productTable">
             <CreateProductModal openCreate={openCreate} setOpenCreate={setOpenCreate} />
             <EditProductModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
             <DeleteProductModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
@@ -167,12 +173,15 @@ const ProductsTable = () => {
 
             <Stack direction="row" spacing={2}>
                 <FormControl sx={{ width: "50%" }} size="sm">
-                    {/* <FormLabel>Пошук</FormLabel> */}
-                    <Input placeholder="Пошук" startDecorator={<Search />} />
+                    <Input
+                        placeholder="Пошук за назвою або артикулом"
+                        startDecorator={<Search />}
+                        value={searchQuery}
+                        onChange={(event) => setSearchQuery(event.target.value)}
+                    />
                 </FormControl>
 
                 <FormControl sx={{ width: "25%" }} size="sm">
-                    {/* <FormLabel>Категорія</FormLabel> */}
                     <Select
                         placeholder="Категорія"
                         onChange={(event, newValue) => setCategory(newValue)}
@@ -254,7 +263,7 @@ const ProductsTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map(product =>
+                        {filteredProducts.map(product =>
                             <tr key={product._id}>
                                 <td><h3>{product.article}</h3></td>
                                 <td>
@@ -313,7 +322,7 @@ const ProductsTable = () => {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    <Pagination count={totalPagesProducts} color="primary" onChange={handleSetCurrentPageProducts} />
+                                    <Pagination count={totalPagesProducts || 0} color="primary" onChange={handleSetCurrentPageProducts} />
                                 </Box>
                             </td>
                         </tr>

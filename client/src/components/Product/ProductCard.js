@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/joy/Card";
-import { AspectRatio, CardContent, CardOverflow, Chip } from "@mui/joy";
+import { AspectRatio, CardContent, CardOverflow, Chip, Skeleton } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
     const userId = useUser();
 
     const dispatch = useDispatch();
-    const { favorite, loading, error } = useSelector(state => state.favoriteReducer);
+    const { favorite, error } = useSelector(state => state.favoriteReducer);
 
     useEffect(() => {
         if (userId) {
@@ -65,6 +65,7 @@ const ProductCard = ({ product }) => {
         setOpenBasket(true);
     }, [userId, dispatch]);
 
+
     return (
         <>
             <Card className="product-card" sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
@@ -73,7 +74,7 @@ const ProductCard = ({ product }) => {
                     <AspectRatio ratio="1">
                         <CardOverflow>
                             {
-                                product.images ?
+                                product.images.length !== 0 ?
                                     <img src={product.images[0]} alt={product.name} /> :
                                     <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                             }
@@ -82,7 +83,8 @@ const ProductCard = ({ product }) => {
                 </Link>
                 <CardContent className="product-card__card-content">
                     <Stack direction="column" spacing={1}>
-                        <Typography variant="h3" className="product-card__card-name">{product.name}</Typography>
+                        <Typography variant="h3" className="product-card__card-name">
+                            {product.name}</Typography>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography className="product-card__card-price">{product.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
@@ -99,7 +101,6 @@ const ProductCard = ({ product }) => {
                         </Chip>
                     </Stack>
                 </CardContent>
-
             </Card>
             <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
             <Snackbar

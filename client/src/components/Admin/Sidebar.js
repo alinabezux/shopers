@@ -26,32 +26,16 @@ import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import logo from '../../assets/inst.png'
 import { closeSidebar } from './utils';
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react';
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 
-function Toggler({ defaultExpanded = false, renderToggle, children }) {
-    const [open, setOpen] = useState(defaultExpanded);
-    return (
-        <Box>
-            {renderToggle({ open, setOpen })}
-            <Box
-                sx={{
-                    display: 'grid',
-                    gridTemplateRows: open ? '1fr' : '0fr',
-                    transition: '0.2s ease',
-                    '& > *': {
-                        overflow: 'hidden',
-                    },
-                }}
-            >
-                {children}
-            </Box>
-        </Box>
-    );
-}
 
 export default function Sidebar() {
+
+    const location = useLocation();
+    const { pathname } = location;
+
     return (
         <Sheet
             className="Sidebar"
@@ -110,7 +94,7 @@ export default function Sidebar() {
                 <img src={logo} alt='logo' style={{ height: "50px" }} />
                 <Typography level='h4' sx={{ fontWeight: 700 }}>SHOPERS_VI</Typography>
             </Box>
-            <Divider/>
+            <Divider />
             <Box
                 sx={{
                     minHeight: 0,
@@ -150,7 +134,7 @@ export default function Sidebar() {
                     </ListItem> */}
 
                     <ListItem>
-                        <ListItemButton >
+                        <ListItemButton selected={pathname.includes('/admin/orders') ? true : false}>
                             <ShoppingCartRoundedIcon />
                             <ListItemContent>
                                 <Typography component={Link} to="/admin/orders" className='link' level="title-md">Замовлення</Typography>
@@ -160,8 +144,7 @@ export default function Sidebar() {
 
 
                     <ListItem>
-                        <ListItemButton >
-
+                        <ListItemButton selected={pathname.includes('/admin/products') ? true : false}>
                             <BusinessCenterIcon />
                             <ListItemContent>
                                 <Typography component={Link} to="/admin/products" className='link' level="title-md">Товари</Typography>
@@ -169,7 +152,7 @@ export default function Sidebar() {
                         </ListItemButton>
                     </ListItem>
                     <ListItem>
-                        <ListItemButton >
+                        <ListItemButton selected={pathname.includes('/admin/categories') ? true : false}>
                             <CategoryRoundedIcon />
                             <ListItemContent>
                                 <Typography component={Link} to="/admin/categories" className='link' level="title-md">Категорії</Typography>
@@ -177,7 +160,7 @@ export default function Sidebar() {
                         </ListItemButton>
                     </ListItem>
                     <ListItem>
-                        <ListItemButton >
+                        <ListItemButton selected={pathname.includes('/admin/types') ? true : false}>
                             <AssignmentRoundedIcon />
                             <ListItemContent>
                                 <Typography component={Link} to="/admin/types" className='link' level="title-md">Типи</Typography>

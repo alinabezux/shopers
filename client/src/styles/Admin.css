@@ -46,3 +46,8 @@
     z-index: 1;
     /* Розміщення тексту поверх псевдоелементу */
 }
+
+.link.active {
+    background-color: #e0e0e0;
+  }
+  

@@ -1,4 +1,4 @@
-import { $host } from "./axios.service";
+import { $authHost, $host } from "./axios.service";
 import { urls } from "../configs/urls";
 
 const productsService = {
@@ -11,11 +11,12 @@ const productsService = {
         }
     }),
     getById: (productId) => $host.get(`${urls.products}/${productId}`),
-    createProduct: (product) => $host.post(urls.products, { product }),
-    uploadPhoto: (productId, images) => $host.patch(`${urls.products}/${productId}`, images),
-    updateProduct: (productId, product) => $host.put(`${urls.products}/${productId}`, { product }),
-    deleteById: (productId) => $host.delete(`${urls.products}/${productId}`),
-    deleteImage: (productId, imageUrl) => $host.delete(`${urls.products}/${productId}/images`, { data: { imageUrl } }),
+
+    createProduct: (product) => $authHost.post(urls.products, { product }),
+    uploadPhoto: (productId, images) => $authHost.patch(`${urls.products}/${productId}`, images),
+    updateProduct: (productId, product) => $authHost.put(`${urls.products}/${productId}`, { product }),
+    deleteById: (productId) => $authHost.delete(`${urls.products}/${productId}`),
+    deleteImage: (productId, imageUrl) => $authHost.delete(`${urls.products}/${productId}/images`, { data: { imageUrl } }),
 }
 
 export { productsService }

@@ -7,7 +7,7 @@ import { Box, Pagination } from "@mui/material";
 const Products = () => {
     const dispatch = useDispatch();
 
-    const { products, error, currentPageProducts, totalPagesProducts } = useSelector(state => state.productReducer);
+    const { products, error, currentPageProducts, totalPagesProducts, loading } = useSelector(state => state.productReducer);
     const { selectedCategory } = useSelector(state => state.categoryReducer);
     const { selectedType } = useSelector(state => state.typeReducer);
 
@@ -29,7 +29,7 @@ const Products = () => {
             <Box className="products__container">
                 {
                     products.map(product =>
-                        <ProductCard key={product._id} product={product} />)
+                        <ProductCard key={product._id} product={product} loading={loading} />)
                 }
             </Box>
             <Box sx={{
@@ -38,7 +38,7 @@ const Products = () => {
                 justifyContent: 'center',
                 mt: 3
             }}>
-                <Pagination count={totalPagesProducts} onChange={handleSetCurrentPageProducts} />
+                <Pagination count={totalPagesProducts || 0} onChange={handleSetCurrentPageProducts} />
             </Box>
             {error && <h1>Error:(</h1>}
         </Box >

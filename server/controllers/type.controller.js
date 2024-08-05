@@ -33,6 +33,7 @@ module.exports = {
         try {
             const newInfo = req.body.type;
             const updatedType = await Type.findByIdAndUpdate(req.params.typeId, newInfo, {new: true});
+            
             res.status(200).json(updatedType);
         } catch (e) {
             next(e);

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { MainLayout } from "./components";
 import {
     CategoryPage,
@@ -44,7 +44,8 @@ function App() {
 
                     <Route path={'/account'} element={<AccountPage />} />
                     <Route path={'/auth'} element={<AuthPage />} />
-                    <Route path={'/admin/'} element={<AdminPage />} >
+                    <Route path={'/admin'} element={<AdminPage />} >
+                        <Route index element={<Navigate to="orders" />} />
                         <Route path="orders" element={<OrderTable />} />
                         <Route path="categories" element={<CategoriesTable />} />
                         <Route path="products" element={<ProductsTable />} />

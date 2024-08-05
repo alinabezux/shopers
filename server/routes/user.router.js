@@ -9,11 +9,14 @@ userRouter.post('/register',
     userController.createUser);
 
 userRouter.get('/',
+    authMiddleware.checkAccessToken,
+    authMiddleware.checkRole,
     userController.getAllUsers);
 
 userRouter.get('/:userId',
     userMiddleware.checkIfUserExists,
     authMiddleware.checkAccessToken,
+    authMiddleware.isRightUser,
     userController.getUserById);
 
 module.exports = userRouter;

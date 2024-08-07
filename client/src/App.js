@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { unstable_HistoryRouter as BrowserRouter } from "react-router-dom"
 import { MainLayout } from "./components";
 import {
     CategoryPage,
@@ -20,12 +21,13 @@ import {
 import './styles';
 import UsersTable from "./components/Admin/UsersTable";
 import { CategoriesTable, OrderTable, ProductsTable, TypesTable } from "./components/Admin";
+import { history } from "./services";
 
 
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter history={history}>
             <Routes>
                 <Route element={<MainLayout />} >
                     <Route path={'/'} element={<HomePage />} />

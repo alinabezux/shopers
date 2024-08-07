@@ -26,8 +26,8 @@ const logIn = createAsyncThunk(
     async ({ user }, { rejectWithValue }) => {
         try {
             const { data } = await authService.login(user);
-            console.log(`login slice - ${data}`)
             localStorage.setItem('access', data.accessToken)
+            // localStorage.setItem('refresh', data.refreshToken)
 
             return data;
         } catch (e) {

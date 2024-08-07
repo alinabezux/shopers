@@ -14,8 +14,8 @@ module.exports = {
         }
     },
     generateTokenPair: (dataToSign = {}) => {
-        const accessToken = jwt.sign(dataToSign, ACCESS_SECRET, { expiresIn: '1d' });
-        const refreshToken = jwt.sign(dataToSign, REFRESH_SECRET, { expiresIn: '30d' });
+        const accessToken = jwt.sign(dataToSign, ACCESS_SECRET, { expiresIn: '1m' });
+        const refreshToken = jwt.sign(dataToSign, REFRESH_SECRET, { expiresIn: '3m' });
 
         return {
             accessToken,
@@ -44,8 +44,11 @@ module.exports = {
             else if (tokenType === 'refreshToken') secret = REFRESH_SECRET
 
             return jwt.verify(token, secret);
+
         } catch (e) {
-            throw new ApiError(401, 'Токен не дійсний.')
+            if (tokenType === 'refreshToken') {
+                throw new ApiError(401, 'Рефреш токен не дійсний.')
+            } else throw new ApiError(401, 'аксес токен не дійсний.')
         }
     },
 }

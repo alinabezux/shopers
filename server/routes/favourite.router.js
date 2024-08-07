@@ -8,18 +8,21 @@ const favouriteRouter = require('express').Router();
 favouriteRouter.get('/:userId',
     userMiddleware.checkIfUserExists,
     authMiddleware.checkAccessToken,
+    authMiddleware.isRightUser,
     favouriteController.getUsersFavourite
 );
 
 favouriteRouter.post('/:userId/:productId',
     userMiddleware.checkIfUserExists,
     authMiddleware.checkAccessToken,
+    authMiddleware.isRightUser,
     favouriteController.addToFavourite
 );
 
 favouriteRouter.delete('/:userId/:productId',
     userMiddleware.checkIfUserExists,
     authMiddleware.checkAccessToken,
+    authMiddleware.isRightUser,
     favouriteController.deleteFromFavourite
 );
 

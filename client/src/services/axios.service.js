@@ -1,22 +1,16 @@
 import axios from "axios";
-import { createBrowserHistory } from "history";
-
-import { baseURL } from "../configs/urls";
+import { createBrowserHistory } from "history"
+import { baseURL, urls } from "../configs/urls";
 import { authService } from "./auth.service";
 
 // const baseURL = process.env.NODE_ENV === "production" ? prodURL : devURL;
 
-const $host = axios.create({
-    withCredentials: true,
-    baseURL
-})
+const $host = axios.create({ withCredentials: true, baseURL })
 
-const $authHost = axios.create({
-    withCredentials: true,
-    baseURL
-})
+const $authHost = axios.create({ withCredentials: true, baseURL })
 
-export const history = createBrowserHistory();
+const history = createBrowserHistory();
+let isRefreshing = false;
 
 $authHost.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
@@ -26,25 +20,29 @@ $authHost.interceptors.request.use((config) => {
     return config
 })
 
-
 $authHost.interceptors.response.use((config) => {
     return config;
-},
-    async (error) => {
-        const originalRequest = error.config;
-        if (error.response?.status === 401 && error.config && !error.config._isRetry) {
-            originalRequest._isRetry = true;
-            try {
-                const { data } = await authService.refresh();
-                localStorage.setItem('access', data.accessToken)
-                $authHost.request(originalRequest)
-            } catch (e) {
-                authService.deleteInfo()
-                history.replace('/auth#logIn?expSession=true')
-            }
-            return $authHost(error.config)
-        }
-        return Promise.reject(error)
-    })
+}, async (error) => {
+    const refreshToken = authService.getRefreshToken();
+    console.log(refreshToken);
 
-export { $host, $authHost };
+    if (error.response?.status === 401 && refreshToken && !isRefreshing) {
+        isRefreshing = true;
+        try {
+            const { data } = await authService.refresh();
+            localStorage.setItem('access', data.accessToken)
+
+        } catch (e) {
+            authService.deleteInfo()
+            history.replace('/auth#logIn?expSession=true')
+        }
+        isRefreshing = false;
+        return $authHost(error.config)
+    }
+    return Promise.reject(error)
+}
+)
+
+
+
+export { $host, $authHost, history };

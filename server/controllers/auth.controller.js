@@ -10,8 +10,8 @@ module.exports = {
 
             const info = await OAuthService.saveTokens(user._id, tokenPair)
 
-            res.cookie('refreshToken', info.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-            return res.status(200).json(info);
+            res.cookie('refreshToken', info.refreshToken, { maxAge: 10 * 60 * 1000 })
+            res.status(200).json(info);
 
         } catch (e) {
             next(e);
@@ -21,12 +21,14 @@ module.exports = {
     refresh: async (req, res, next) => {
         try {
             const { _user } = req.tokenInfo;
+            console.log(`_user - ${_user}`);
 
             const tokenPair = OAuthService.generateTokenPair({ id: _user });
-            const info = await OAuthService.saveTokens(_user, tokenPair)
+            const newInfo = await OAuthService.saveTokens(_user, tokenPair)
+            console.log(newInfo);
 
-            res.cookie('refreshToken', info.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-            return res.status(200).json(info);
+            res.cookie('refreshToken', newInfo.refreshToken, { maxAge: 10 * 60 * 1000 })
+            res.status(200).json(newInfo);
         } catch (e) {
             next(e);
         }
@@ -35,10 +37,9 @@ module.exports = {
     logOut: async (req, res, next) => {
         try {
             const { refreshToken } = req.cookies;
-
             await OAuth.deleteOne({ refreshToken });
             res.clearCookie('refreshToken');
-            return res.sendStatus(204);
+            res.sendStatus(204);
         } catch (e) {
             next(e);
         }

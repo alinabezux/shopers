@@ -1,11 +1,22 @@
 import { $authHost, $host } from "./axios.service";
 import { urls } from "../configs/urls";
 import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie"
 
 const authService = {
     register: (user) => $host.post(urls.auth.registration, { user }),
     login: (user) => $host.post(urls.auth.logIn, { user }),
+    refresh: () => $authHost.post(urls.auth.refresh),
+
     getAccessToken: () => localStorage.getItem('access'),
+    getRefreshToken: () => Cookies.get('refreshToken'),
+
+
+    logOut: () => $authHost.post(urls.auth.logOut),
+    deleteInfo: () => {
+        localStorage.removeItem('access')
+        Cookies.remove('refreshToken')
+    },
     getUser: () => {
         const accessToken = localStorage.getItem('access');
         if (!accessToken) {
@@ -20,14 +31,5 @@ const authService = {
             return null; // Повернення null, якщо токен невалідний
         }
     },
-
-    refresh: () => $authHost.post(urls.auth.refresh, { withCredentials: true }),
-
-    logOut: () => $authHost.post(urls.auth.logOut),
-    deleteInfo: () => {
-        localStorage.removeItem('access')
-    },
-
-    // getRefreshToken: () => localStorage.getItem('refresh'),
 }
 export { authService }

@@ -13,12 +13,12 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 const Profile = ({ user }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const handleLogOut = async () => {
         await dispatch(authActions.logOut())
         navigate('/')
-        window.location.reload()
     };
+    
     return (
         <Box className='accountpage__profile' >
             <Box className='accountpage__profile-cards'>
@@ -78,8 +78,8 @@ const Profile = ({ user }) => {
                     </FormControl>
                 </Card>
             </Box>
-           
-            <Button className='accountpage__button' color="success" variant="solid"  endDecorator={<Edit />}>ЗБЕРЕГТИ ЗМІНИ</Button>
+
+            <Button className='accountpage__button' color="success" variant="solid" endDecorator={<Edit />}>ЗБЕРЕГТИ ЗМІНИ</Button>
             <Button variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
         </Box >
     )

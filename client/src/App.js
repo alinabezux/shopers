@@ -22,6 +22,7 @@ import './styles';
 import UsersTable from "./components/Admin/UsersTable";
 import { CategoriesTable, OrderTable, ProductsTable, TypesTable } from "./components/Admin";
 import { history } from "./services";
+import PrivateRoute from "./components/Admin/PrivateRoute";
 
 
 
@@ -46,14 +47,18 @@ function App() {
 
                     <Route path={'/account'} element={<AccountPage />} />
                     <Route path={'/auth'} element={<AuthPage />} />
-                    <Route path={'/admin'} element={<AdminPage />} >
-                        <Route index element={<Navigate to="orders" />} />
-                        <Route path="orders" element={<OrderTable />} />
-                        <Route path="categories" element={<CategoriesTable />} />
-                        <Route path="products" element={<ProductsTable />} />
-                        <Route path="types" element={<TypesTable />} />
-                        {/* <Route path="users" element={<UsersTable />} /> */}
+
+                    <Route path="/admin" element={<PrivateRoute />}>
+                        <Route path='' element={<AdminPage />} >
+                            <Route index element={<Navigate to="orders" />} />
+                            <Route path="orders" element={<OrderTable />} />
+                            <Route path="categories" element={<CategoriesTable />} />
+                            <Route path="products" element={<ProductsTable />} />
+                            <Route path="types" element={<TypesTable />} />
+                            {/* <Route path="users" element={<UsersTable />} /> */}
+                        </Route>
                     </Route>
+
                 </Route>
             </Routes>
         </BrowserRouter>

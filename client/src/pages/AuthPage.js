@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Stack, Box } from "@mui/material";
-import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
-import { useLocation, Link } from 'react-router-dom'
+import { Tabs, TabList, Tab, TabPanel, Alert } from '@mui/joy';
+import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import { tabClasses } from '@mui/joy/Tab'
 import image from '../assets/loginpage.jpg'
 import Snackbar from '@mui/joy/Snackbar';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+import WarningIcon from '@mui/icons-material/Warning';
 
 import { LogIn, Register } from '../components';
 
 const AuthPage = () => {
-
-    const [activeTab, setActiveTab] = useState('logIn');
+    const [query] = useSearchParams();
     const location = useLocation();
+    
+    const [activeTab, setActiveTab] = useState('logIn');
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     useEffect(() => {
@@ -56,6 +58,27 @@ const AuthPage = () => {
                                 <Tab disableIndicator sx={{ fontWeight: "500" }} value="signUp" id="signUp">ЗАРЕЄСТРУВАТИСЬ</Tab>
                             </Link>
                         </TabList>
+                        {query.has('expSession') &&
+                            <Alert
+                                startDecorator={<WarningIcon />}
+                                color="danger"
+                                // size="sm"
+                                variant="soft"
+                                sx={{ width: "300px", mt: 2 }}
+                            >
+                                Сесія вашого акаунту закінчилась. <br />Будь ласка, увійдіть.
+                            </Alert>
+                        }
+                        {query.has('admin') &&
+                            <Alert
+                                startDecorator={<WarningIcon />}
+                                color="danger"
+                                // size="sm"
+                                variant="soft"
+                                sx={{ width: "300px", mt: 2 }}
+                            >
+                                Підтвердіть,що ви адміністратор!
+                            </Alert>}
                         <TabPanel value="logIn">
                             <LogIn />
                         </TabPanel>
@@ -79,6 +102,8 @@ const AuthPage = () => {
             >
                 Успішно зареєстровано!
             </Snackbar>
+
+
         </Box >
     );
 };

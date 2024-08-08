@@ -5,43 +5,48 @@ const ApiError = require("../errors/ApiError");
 module.exports = {
     getUsersBasket: async (req, res, next) => {
         try {
-            const productsData = [];
-
             const productsInBasket = await ProductInBasket.find({ _user: req.params.userId })
-            for (const productInBasket of productsInBasket) {
-                const product = await Product.findById(productInBasket._product)
-                productsData.push({
-                    ...product._doc,
-                    quantity: productInBasket.quantity,
-                })
-            }
-            res.json(productsData).status(200);
-
+                .populate('_product'); // Населяємо поле _product
+    
+            const productsData = productsInBasket.map(productInBasket => ({
+                ...productInBasket._product._doc,
+                quantity: productInBasket.quantity
+            }));
+    
+            res.status(200).json(productsData);
         } catch (e) {
             next(e);
         }
     },
+    
 
     addToBasket: async (req, res, next) => {
         try {
-
-            let productInBasket = await ProductInBasket.findOne({ _product: req.params.productId, _user: req.params.userId })
-
+            let productInBasket = await ProductInBasket.findOne({ 
+                _product: req.params.productId, 
+                _user: req.params.userId 
+            });
+    
             if (productInBasket) {
                 productInBasket = await ProductInBasket.findOneAndUpdate(
                     { _id: productInBasket._id },
                     { $inc: { quantity: 1 } },
                     { new: true }
-                )
-            } else
+                ).populate('_product'); // Населяємо поле _product
+            } else {
                 productInBasket = await ProductInBasket.create({
                     _user: req.params.userId,
                     _product: req.params.productId
                 });
-
-            res.json(productInBasket).status(200)
+    
+                // Населяємо поле _product після створення нового документа
+                productInBasket = await ProductInBasket.findById(productInBasket._id).populate('_product');
+            }
+    
+            console.log(productInBasket);
+            res.status(200).json(productInBasket);
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -63,7 +68,7 @@ module.exports = {
     changeProductQuantity: async (req, res, next) => {
         try {
             let updatedProductInBasket;
-            
+
             let productInBasket = await ProductInBasket.findOne({ _product: req.params.productId, _user: req.params.userId })
             if (productInBasket) {
                 updatedProductInBasket = await ProductInBasket.findOneAndUpdate(
@@ -74,7 +79,7 @@ module.exports = {
             } else {
                 res.status(404).json({ message: "Такого продукту не існує в даній корзині" });
             }
-            res.json(updatedProductInBasket).status(200)
+            res.status(200).json(updatedProductInBasket)
 
         } catch (e) {
             next(e)

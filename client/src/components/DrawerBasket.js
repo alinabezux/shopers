@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import { authService } from '../services/auth.service';
 import { basketActions } from '../redux/slices/basket.slice';
-import useUser from '../hooks/useUser';
 
 const BlackButton = styled(Button2)(() => ({
     color: 'black',
@@ -42,7 +41,9 @@ const BlackButton = styled(Button2)(() => ({
 const DrawerBasket = ({ open, onClose }) => {
     const dispatch = useDispatch();
     const { basket, loading, error } = useSelector(state => state.basketReducer);
-    const userId = useUser();
+    const { userId } = useSelector(state => state.authReducer);
+
+    // const userId = useUser();
 
     useEffect(() => {
         if (userId) {

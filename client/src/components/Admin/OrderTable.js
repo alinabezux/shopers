@@ -33,7 +33,6 @@ import {
     CloseRounded,
 } from '@mui/icons-material';
 
-import useUser from '../../hooks/useUser';
 import { orderActions } from '../../redux';
 import { Pagination } from '@mui/material';
 
@@ -93,7 +92,6 @@ const OrderTable = () => {
 
     const action = useRef(null);
 
-    const userId = useUser();
     const dispatch = useDispatch();
     const { orders, selectedOrder, currentPageOrders, totalPagesOrders, count } = useSelector(state => state.orderReducer);
 

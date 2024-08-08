@@ -4,13 +4,11 @@ import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel
 import Checkbox from '@mui/joy/Checkbox';
 import ukrpost from '../assets/ukrpost.png'
 import novapost from '../assets/novapost.png'
-import liqpay from '../assets/logo_liqpay.png'
 import { ProductInBasket } from '../components';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
-import useUser from '../hooks/useUser';
 import { basketActions, orderActions } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { postService } from '../services';
@@ -19,15 +17,10 @@ import { useForm, Form, Controller } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { InfoOutlined } from '@mui/icons-material';
 import platamono from '../assets/plata_light_bg@2x.png'
-import applepay from '../assets/footer_apple_pay_light_bg@2x.png'
-import googlepay from '../assets/footer_google_pay_light_bg@2x.png'
-import mc from '../assets/footer_mc_light_bg@2x.png'
-import visa from '../assets/footer_visa_light_bg@2x.png'
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userId = useUser();
     const [post, setPost] = useState('Нова пошта');
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
@@ -41,6 +34,8 @@ const CheckoutPage = () => {
 
     const { basket, loading, error } = useSelector(state => state.basketReducer);
     const { user } = useSelector(state => state.userReducer);
+    const { userId } = useSelector(state => state.authReducer);
+
 
 
     const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();

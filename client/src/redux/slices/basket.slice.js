@@ -37,6 +37,7 @@ const deleteFromBasket = createAsyncThunk(
     async ({ userId, productId }, { rejectWithValue }) => {
         try {
             await basketService.deleteFromBasket(userId, productId);
+            return productId
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -72,11 +73,12 @@ const basketSlice = createSlice({
             })
             .addCase(getBasket.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 
 
             .addCase(addToBasket.fulfilled, (state, action) => {
-                state.basket.push(action.payload)
+                state.basket.push(...action.payload._product)
                 state.loading = false
                 state.error = null;
             })
@@ -85,10 +87,14 @@ const basketSlice = createSlice({
             })
             .addCase(addToBasket.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 
 
-            .addCase(deleteFromBasket.fulfilled, (state) => {
+            .addCase(deleteFromBasket.fulfilled, (state, action) => {
+                const deletedId = action.payload;
+                state.basket = state.basket.filter(item => item._id !== deletedId);
+
                 state.loading = false
                 state.error = null;
             })
@@ -97,6 +103,7 @@ const basketSlice = createSlice({
             })
             .addCase(deleteFromBasket.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 
 
@@ -114,6 +121,7 @@ const basketSlice = createSlice({
             })
             .addCase(updateProductInBasketQuantity.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 
 });

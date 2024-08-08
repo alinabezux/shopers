@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { Typography, Box } from "@mui/material";
 import { FormControl, FormLabel, Input, Button, Card, CardContent } from '@mui/joy';
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
@@ -15,6 +15,8 @@ import Snackbar from '@mui/joy/Snackbar';
 const LogIn = ({ setOpenLoginSnackbar }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [query] = useSearchParams();
+
     const { control, handleSubmit, register } = useForm();
 
     const { loading, logInError } = useSelector(state => state.authReducer);
@@ -29,8 +31,12 @@ const LogIn = ({ setOpenLoginSnackbar }) => {
                 }
             }))
             if (res.meta.requestStatus === 'fulfilled') {
-                navigate('/')
-                window.location.reload()
+                if (query.has('admin')) {
+                    navigate('/admin')
+                } else {
+                    navigate('/')
+                }
+
             }
             // else if (res.meta.requestStatus === 'fulfilled' && isAdmin) window.location.reload();
         } catch (e) {
@@ -55,7 +61,7 @@ const LogIn = ({ setOpenLoginSnackbar }) => {
                         </Alert> : null}
                     <FormControl>
                         <FormLabel>Логін чи e-mail адреса</FormLabel>
-                        <Input className='authpage__input' 
+                        <Input className='authpage__input'
                             startDecorator={<EmailRoundedIcon />}
                             name="email"
                             type="email"

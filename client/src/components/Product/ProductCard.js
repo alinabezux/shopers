@@ -6,26 +6,27 @@ import { Stack, Typography } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import { basketActions, favoriteActions, productActions } from "../../redux";
 import { toUrlFriendly } from '../../utils';
 import { Link } from "react-router-dom";
 import { DrawerBasket } from '../DrawerBasket';
-import useUser from '../../hooks/useUser';
 import Snackbar from '@mui/joy/Snackbar';
 
 const ProductCard = ({ product }) => {
+    const dispatch = useDispatch();
+
     const [openBasket, setOpenBasket] = useState(false);
     const [favourite, setFavourite] = useState(false);
 
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    const userId = useUser();
-
-    const dispatch = useDispatch();
     const { favorite, error } = useSelector(state => state.favoriteReducer);
+    const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {
         if (userId) {
@@ -45,23 +46,28 @@ const ProductCard = ({ product }) => {
     }, [dispatch, product]);
 
     const handleAddProductToFavourite = useCallback(async (product) => {
-        await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
-        await dispatch(favoriteActions.getFavorite(userId))
-        setSnackbarMessage(`${product.name} додано у список бажань.`);
-        setOpenSnackbar(true)
-    }, [userId, dispatch]);
+        if (userId) {
+            await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
+            setSnackbarMessage(`${product.name} додано у список бажань.`);
+            setOpenSnackbar(true)
+        } else {
+            setOpenErrorSnackbar(true)
+        }
+
+    }, [dispatch, userId, product._id]);
 
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
         await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
-        await dispatch(favoriteActions.getFavorite(userId))
         setSnackbarMessage(`${product.name} видалено зі списку бажань.`);
+
         setOpenSnackbar(true)
     }, [userId, dispatch])
 
     const handleAddProductToBasket = useCallback(async (product) => {
-        await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
-        await dispatch(basketActions.getBasket(userId));
+        if (userId) {
+            await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
+        }
         setOpenBasket(true);
     }, [userId, dispatch]);
 
@@ -85,6 +91,7 @@ const ProductCard = ({ product }) => {
                     <Stack direction="column" spacing={1}>
                         <Typography variant="h3" className="product-card__card-name">
                             {product.name}</Typography>
+                        <Typography sx={{ fontSize: "16px" }}>Колір: {product?.info?.color}</Typography>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography className="product-card__card-price">{product.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
@@ -122,6 +129,21 @@ const ProductCard = ({ product }) => {
                 <Typography>
                     {snackbarMessage}
                 </Typography>
+            </Snackbar>
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                startDecorator={<AccountCircleRoundedIcon />}
+                color="warning" size="lg" variant="soft"
+                autoHideDuration={3000}
+                open={openErrorSnackbar}
+                onClose={(event, reason) => {
+                    if (reason === 'clickaway') {
+                        return;
+                    }
+                    setOpenErrorSnackbar(false);
+                }}
+            >
+                <Link to='/auth#logIn' className='link' sx={{ margin: 0, p: 0, textAlign: "center" }} ><b>Увійдіть</b></Link>щоб додати до списку бажань.
             </Snackbar>
         </>
     );

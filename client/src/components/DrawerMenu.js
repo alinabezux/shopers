@@ -18,14 +18,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, typeActions } from "../redux";
 import { toUrlFriendly } from '../utils'
-import useUser from '../hooks/useUser';
-import Snackbar from '@mui/joy/Snackbar';
 
 const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
     const dispatch = useDispatch();
-    const userId = useUser();
 
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
+    const { userId } = useSelector(state => state.authReducer);
     const { types } = useSelector(state => state.typeReducer);
 
     const handleMenu = useCallback((category) => {

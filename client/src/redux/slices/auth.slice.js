@@ -3,6 +3,7 @@ import { authService } from "../../services";
 
 const initialState = {
     users: [],
+    userId: null,
 
     loading: false,
     logInError: null,
@@ -51,7 +52,15 @@ const logOut = createAsyncThunk(
 const authSlice = createSlice({
     name: 'authSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        setUserId: (state, action) => {
+            state.userId = action.payload;
+        },
+        clearUserId: (state) => {
+            state.userId = null;
+        }
+
+    },
     extraReducers: builder =>
         builder
             .addCase(register.fulfilled, (state, action) => {
@@ -68,6 +77,7 @@ const authSlice = createSlice({
             })
 
             .addCase(logIn.fulfilled, (state, action) => {
+                state.userId = action.payload._user
                 state.loading = false
                 state.logInError = null
             })
@@ -83,6 +93,7 @@ const authSlice = createSlice({
             .addCase(logOut.fulfilled, (state) => {
                 state.loading = false
                 state.error = null;
+                state.userId = null
             })
             .addCase(logOut.pending, (state) => {
                 state.loading = true
@@ -95,10 +106,10 @@ const authSlice = createSlice({
 });
 
 
-const { reducer: authReducer } = authSlice;
+const { reducer: authReducer, actions: { setUserId, clearUserId } } = authSlice;
 
 const authActions = {
-    register, logIn, logOut
+    register, logIn, logOut, setUserId, clearUserId
 }
 
 export {

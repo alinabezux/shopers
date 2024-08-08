@@ -25,10 +25,8 @@ import Edit from '@mui/icons-material/Edit';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import { Chip } from '@mui/joy';
-import { authService } from '../services/auth.service';
 import Snackbar from '@mui/joy/Snackbar';
-import useUser from '../hooks/useUser';
-import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+
 
 const Header = () => {
     const [openDrawerMenu, setOpenDrawerMenu] = useState(false);
@@ -43,7 +41,7 @@ const Header = () => {
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
     const { user } = useSelector(state => state.userReducer);
-    const userId = useUser();
+    const { userId } = useSelector(state => state.authReducer);
 
 
     useEffect(() => {
@@ -103,9 +101,7 @@ const Header = () => {
     const handleLogOut = async () => {
         await dispatch(authActions.logOut())
         // setUserId(null)
-        window.location.reload()
-        navigate('/')
-        // await dispatch(userActions.getUserById(userId));
+        // navigate('/')
     };
 
     return (

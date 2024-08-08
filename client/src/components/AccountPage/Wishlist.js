@@ -4,16 +4,13 @@ import { Link } from 'react-router-dom';
 import {
     Box,
     Typography,
-    Stack
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useDispatch, useSelector } from "react-redux";
 import { favoriteActions } from '../../redux';
 import { ProductInFavorite } from '../ProductInFavorite';
-import useUser from '../../hooks/useUser';
-import Snackbar from '@mui/joy/Snackbar';
-import FavoriteIcon from "@mui/icons-material/Favorite";
+
 
 const BlackButton = styled(Button2)(() => ({
     color: 'black',
@@ -34,15 +31,13 @@ const BlackButton = styled(Button2)(() => ({
 const Wishlist = () => {
     const dispatch = useDispatch();
     const { favorite, loading, error } = useSelector(state => state.favoriteReducer);
-
-    const userId = useUser();
+    const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
-            console.log(favorite.length)
         }
-    }, [dispatch, userId, favorite.length])
+    }, [dispatch, userId])
 
     return (
         <Box className='accountpage__wishlist' >

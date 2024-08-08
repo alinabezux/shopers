@@ -34,11 +34,12 @@ $authHost.interceptors.response.use((config) => {
 
         } catch (e) {
             authService.deleteInfo()
-            history.replace('/auth#logIn?expSession=true')
+            history.replace('/auth?expSession=true')
         }
         isRefreshing = false;
         return $authHost(error.config)
     }
+    // history.replace('/auth?expSession=true')
     return Promise.reject(error)
 }
 )

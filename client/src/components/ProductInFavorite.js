@@ -1,17 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/joy/Card";
-import { AspectRatio, CardContent, CardOverflow, Chip } from "@mui/joy";
+import { AspectRatio, CardContent, CardOverflow } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
-import { ChipDelete } from '@mui/joy';
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 
 import { Link } from "react-router-dom";
 import { basketActions, favoriteActions, productActions } from '../redux';
-import useUser from '../hooks/useUser';
 import { DrawerBasket } from './DrawerBasket';
 import { toUrlFriendly } from '../utils';
 
@@ -21,21 +18,24 @@ const ProductInFavorite = ({ product }) => {
     const [openBasket, setOpenBasket] = useState(false);
     const [favourite, setFavourite] = useState(false);
 
-    const userId = useUser();
+    const { userId } = useSelector(state => state.authReducer);
+
 
     const handleShowDetails = useCallback((product) => {
         dispatch(productActions.setSelectedProduct(product));
     }, [dispatch, product]);
 
     const handleAddProductToBasket = useCallback(async (product) => {
-        await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
-        await dispatch(basketActions.getBasket(userId));
+        if (userId) {
+            await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
+        }
         setOpenBasket(true);
     }, [userId, dispatch]);
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
-        await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
-        await dispatch(favoriteActions.getFavorite(userId))
+        if (userId) {
+            await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
+        }
     }, [userId, dispatch])
 
     return (
@@ -56,7 +56,7 @@ const ProductInFavorite = ({ product }) => {
                 <CardContent>
                     <Stack direction="column" spacing={1}>
                         <Typography className="accountpage__wishlist-title" variant="h5" >{product.name}</Typography>
-                        <Typography className="accountpage__wishlist-color">Колір: {product.info.color}</Typography>
+                        <Typography className="accountpage__wishlist-color">Колір: {product?.info?.color}</Typography>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography className="accountpage__wishlist-price">{product.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>

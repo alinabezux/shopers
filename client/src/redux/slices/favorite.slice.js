@@ -25,6 +25,9 @@ const addToFavorite = createAsyncThunk(
     async ({ userId, productId }, { rejectWithValue }) => {
         try {
             const { data } = await favoriteService.addToFavorite(userId, productId);
+            console.log(data);
+
+
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -37,6 +40,7 @@ const deleteFromFavorite = createAsyncThunk(
     async ({ userId, productId }, { rejectWithValue }) => {
         try {
             await favoriteService.deleteFromFavorite(userId, productId);
+            return productId;
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -62,6 +66,7 @@ const favoriteSlice = createSlice({
             })
             .addCase(getFavorite.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 
 
@@ -75,10 +80,14 @@ const favoriteSlice = createSlice({
             })
             .addCase(addToFavorite.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 
 
-            .addCase(deleteFromFavorite.fulfilled, (state) => {
+            .addCase(deleteFromFavorite.fulfilled, (state, action) => {
+                const deletedId = action.payload;
+                state.favorite = state.favorite.filter(item => item._id !== deletedId);
+
                 state.loading = false
                 state.error = null;
             })
@@ -87,6 +96,7 @@ const favoriteSlice = createSlice({
             })
             .addCase(deleteFromFavorite.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 });
 

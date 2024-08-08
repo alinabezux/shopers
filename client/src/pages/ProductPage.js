@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { toUrlFriendly } from '../utils'
 
 import { Typography, Box, Stack } from '@mui/material';
@@ -17,23 +17,23 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { basketActions, favoriteActions } from '../redux';
-import useUser from '../hooks/useUser';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Snackbar from '@mui/joy/Snackbar';
 import { DrawerBasket } from '../components';
+import AccountCircleRounded from '@mui/icons-material/AccountCircleRounded';
 
 const ProductPage = () => {
     const [openBasket, setOpenBasket] = useState(false);
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [favourite, setFavourite] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-
-    const userId = useUser();
     const dispatch = useDispatch();
 
+    const { userId } = useSelector(state => state.authReducer);
     const { selectedProduct } = useSelector(state => state.productReducer);
     const { categories } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
@@ -42,7 +42,6 @@ const ProductPage = () => {
     const category = categories.find(category => category._id === selectedProduct._category);
     const type = types.find(type => type._id === selectedProduct._type);
 
-    console.log(selectedProduct)
     useEffect(() => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
@@ -57,23 +56,27 @@ const ProductPage = () => {
     }, [favorite, selectedProduct._id]);
 
     const handleAddProductToFavourite = useCallback(async (product) => {
-        await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
-        await dispatch(favoriteActions.getFavorite(userId))
-        setSnackbarMessage(`${product.name} додано у список бажань.`);
-        setOpenSnackbar(true)
+        if (userId) {
+            await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
+            setSnackbarMessage(`${product.name} додано у список бажань.`);
+            setOpenSnackbar(true)
+        } else {
+            setOpenErrorSnackbar(true)
+        }
     }, [userId, dispatch]);
 
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
         await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
-        await dispatch(favoriteActions.getFavorite(userId))
         setSnackbarMessage(`${product.name} видалено зі списку бажань.`);
+
         setOpenSnackbar(true)
     }, [userId, dispatch])
 
     const handleAddProductToBasket = useCallback(async (product) => {
-        await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
-        await dispatch(basketActions.getBasket(userId));
+        if (userId) {
+            await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
+        }
         setOpenBasket(true);
     }, [userId, dispatch]);
 
@@ -167,7 +170,6 @@ const ProductPage = () => {
                             {selectedProduct.quantity} в наявності
                         </Chip>
                         <br />
-                        {/* <br /> */}
                         <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{selectedProduct?.info?.color}</Typography>
                         <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{selectedProduct?.info?.size}</Typography>
                         <Typography className="product-page__material">
@@ -198,7 +200,21 @@ const ProductPage = () => {
                 </Typography>
             </Snackbar>
             <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
-
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                startDecorator={<AccountCircleRounded />}
+                color="warning" size="lg" variant="soft"
+                autoHideDuration={3000}
+                open={openErrorSnackbar}
+                onClose={(event, reason) => {
+                    if (reason === 'clickaway') {
+                        return;
+                    }
+                    setOpenErrorSnackbar(false);
+                }}
+            >
+                <Link to='/auth#logIn' className='link' sx={{ margin: 0, p: 0, textAlign: "center" }} ><b>Увійдіть</b></Link>щоб додати до списку бажань.
+            </Snackbar>
         </Container>
     );
 };

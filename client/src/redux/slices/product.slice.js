@@ -165,6 +165,7 @@ const productSlice = createSlice({
             })
             .addCase(updateProduct.rejected, (state, action) => {
                 state.error = action.payload
+                state.loading = false
             })
 
             .addCase(uploadPhoto.fulfilled, (state, action) => {

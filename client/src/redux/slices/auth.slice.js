@@ -3,7 +3,7 @@ import { authService } from "../../services";
 
 const initialState = {
     users: [],
-    userId: null,
+    userId: authService.getUser(),
 
     loading: false,
     logInError: null,
@@ -28,8 +28,7 @@ const logIn = createAsyncThunk(
         try {
             const { data } = await authService.login(user);
             localStorage.setItem('access', data.accessToken)
-            // localStorage.setItem('refresh', data.refreshToken)
-
+            sessionStorage.setItem('userId', data._user);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -53,12 +52,12 @@ const authSlice = createSlice({
     name: 'authSlice',
     initialState,
     reducers: {
-        setUserId: (state, action) => {
-            state.userId = action.payload;
-        },
-        clearUserId: (state) => {
-            state.userId = null;
-        }
+        // setUserId: (state, action) => {
+        //     state.userId = action.payload;
+        // },
+        // clearUserId: (state) => {
+        //     state.userId = null;
+        // }
 
     },
     extraReducers: builder =>
@@ -91,9 +90,9 @@ const authSlice = createSlice({
             })
 
             .addCase(logOut.fulfilled, (state) => {
+                state.userId = null
                 state.loading = false
                 state.error = null;
-                state.userId = null
             })
             .addCase(logOut.pending, (state) => {
                 state.loading = true
@@ -106,10 +105,10 @@ const authSlice = createSlice({
 });
 
 
-const { reducer: authReducer, actions: { setUserId, clearUserId } } = authSlice;
+const { reducer: authReducer } = authSlice;
 
 const authActions = {
-    register, logIn, logOut, setUserId, clearUserId
+    register, logIn, logOut
 }
 
 export {

@@ -24,7 +24,6 @@ $authHost.interceptors.response.use((config) => {
     return config;
 }, async (error) => {
     const refreshToken = authService.getRefreshToken();
-    console.log(refreshToken);
 
     if (error.response?.status === 401 && refreshToken && !isRefreshing) {
         isRefreshing = true;
@@ -39,7 +38,6 @@ $authHost.interceptors.response.use((config) => {
         isRefreshing = false;
         return $authHost(error.config)
     }
-    // history.replace('/auth?expSession=true')
     return Promise.reject(error)
 }
 )

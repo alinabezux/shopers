@@ -1,10 +1,6 @@
 import React from 'react';
 import Sidebar from '../components/Admin/Sidebar';
 import Box from '@mui/joy/Box';
-import Typography from '@mui/joy/Typography';
-import OrderTable from '../components/Admin/OrderTable';
-import Button from '@mui/joy/Button';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { Outlet } from 'react-router-dom';
 
 const AdminPage = () => {

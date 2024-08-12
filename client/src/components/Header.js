@@ -11,7 +11,7 @@ import {
     Badge,
 } from "@mui/material";
 import { Menu, MenuItem } from "@mui/joy";
-import { Link,  NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions, categoryActions, typeActions, userActions } from "../redux";
@@ -39,7 +39,7 @@ const Header = () => {
     const navigate = useNavigate();
 
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
-    const { types } = useSelector(state => state.typeReducer);
+    const { types, selectedType } = useSelector(state => state.typeReducer);
     const { user } = useSelector(state => state.userReducer);
     const { userId } = useSelector(state => state.authReducer);
 
@@ -73,9 +73,11 @@ const Header = () => {
     }, [dispatch, selCat])
 
     const handleCategoryClick = useCallback((category) => {
+        if (selectedType) {
+            dispatch(typeActions.clearSelectedType());
+        }
         dispatch(categoryActions.setSelectedCategory(category));
-        handleCloseMenu();
-    }, [dispatch]);
+    }, [dispatch, selectedType]);
 
     const handleTypeClick = useCallback((category, type) => {
         dispatch(categoryActions.setSelectedCategory(category));
@@ -100,8 +102,6 @@ const Header = () => {
 
     const handleLogOut = async () => {
         await dispatch(authActions.logOut())
-        // setUserId(null)
-        // navigate('/')
     };
 
     return (

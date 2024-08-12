@@ -78,6 +78,9 @@ const categorySlice = createSlice(
             setSelectedCategory: (state, action) => {
                 state.selectedCategory = action.payload
             },
+            clearSelectedCategory: (state) => {
+                state.selectedCategory = {};
+            }
         },
         extraReducers: builder =>
             builder
@@ -151,10 +154,10 @@ const categorySlice = createSlice(
     }
 );
 
-const { reducer: categoryReducer, actions: { setSelectedCategory } } = categorySlice;
+const { reducer: categoryReducer, actions: { setSelectedCategory, clearSelectedCategory } } = categorySlice;
 
 const categoryActions = {
-    getAll, setSelectedCategory, createCategory, updateCategory, deleteById, uploadPhoto
+    getAll, setSelectedCategory, createCategory, updateCategory, deleteById, uploadPhoto, clearSelectedCategory
 }
 
 export {

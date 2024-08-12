@@ -77,6 +77,9 @@ const typeSlice = createSlice({
     reducers: {
         setSelectedType: (state, action) => {
             state.selectedType = action.payload
+        },
+        clearSelectedType: (state) => {
+            state.selectedType = {};
         }
     },
     extraReducers: builder =>
@@ -154,10 +157,10 @@ const typeSlice = createSlice({
             })
 });
 
-const { reducer: typeReducer, actions: { setSelectedType } } = typeSlice;
+const { reducer: typeReducer, actions: { setSelectedType, clearSelectedType } } = typeSlice;
 
 const typeActions = {
-    getAll, getTypesByCategoryId, setSelectedType, createType, updateType, deleteById
+    getAll, getTypesByCategoryId, setSelectedType, createType, updateType, deleteById, clearSelectedType
 }
 
 export {

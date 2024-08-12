@@ -21,7 +21,6 @@ const TypesMenu = () => {
     }, [dispatch]);
 
 
-
     return (
         <Box sx={{
             display: "flex",

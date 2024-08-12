@@ -25,9 +25,6 @@ const addToFavorite = createAsyncThunk(
     async ({ userId, productId }, { rejectWithValue }) => {
         try {
             const { data } = await favoriteService.addToFavorite(userId, productId);
-            console.log(data);
-
-
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)

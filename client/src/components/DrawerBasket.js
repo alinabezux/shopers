@@ -16,8 +16,7 @@ import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useMemo, useState } from "react";
-import { authService } from '../services/auth.service';
+import { useEffect, useMemo } from "react";
 import { basketActions } from '../redux/slices/basket.slice';
 
 const BlackButton = styled(Button2)(() => ({
@@ -47,7 +46,8 @@ const DrawerBasket = ({ open, onClose }) => {
         if (userId) {
             dispatch(basketActions.getBasket(userId));
         }
-    }, [dispatch, userId]);
+    }, [dispatch, userId, basket.length]); 
+    
 
 
     const totalPrice = useMemo(() => {

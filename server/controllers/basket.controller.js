@@ -6,7 +6,7 @@ module.exports = {
     getUsersBasket: async (req, res, next) => {
         try {
             const productsInBasket = await ProductInBasket.find({ _user: req.params.userId })
-                .populate('_product'); // Населяємо поле _product
+                .populate('_product');
     
             const productsData = productsInBasket.map(productInBasket => ({
                 ...productInBasket._product._doc,
@@ -39,11 +39,9 @@ module.exports = {
                     _product: req.params.productId
                 });
     
-                // Населяємо поле _product після створення нового документа
                 productInBasket = await ProductInBasket.findById(productInBasket._id).populate('_product');
             }
     
-            console.log(productInBasket);
             res.status(200).json(productInBasket);
         } catch (e) {
             next(e);

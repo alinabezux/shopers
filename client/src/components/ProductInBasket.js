@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/joy/Card";
 import { AspectRatio, Button, CardContent, Chip, ButtonGroup } from "@mui/joy";
@@ -41,22 +41,25 @@ const ProductInBasket = ({ product }) => {
         }
     }
 
+
     return (
         <Card variant="plain" orientation="horizontal" size="sm" color="neutral" className="product-in-basket">
             <AspectRatio ratio="1" className="product-in-basket__card-image">
-                {
-                    product?.images ?
-                        <img src={product.images[0]} alt={product?.name} /> :
-                        <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
-                }
+                {product?.images && product?.images.length > 0 ? (
+                    <img src={product?.images[0]} alt={product.name} />
+                ) : (
+                    <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
+                )}
             </AspectRatio>
             <CardContent className="product-in-basket__card-content">
                 <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                    <Typography className="product-in-basket__card-name">{product?.name}</Typography>
+                    <Typography className="product-in-basket__card-name">{product.name}</Typography>
                     <ChipDelete onClick={() => handleDeleteProductInBasket(product)} />
                 </Stack>
-
-                <Typography className="product-in-basket__card-color">Колір: {product?.info?.color}</Typography>
+                {product?.info?.color ?
+                    <Typography className="product-in-basket__card-color">Колір: {product?.info?.color}</Typography>
+                    : null
+                }
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography className="product-in-basket__card-price">{product.price} грн.</Typography>
                     <Chip className="product-in-basket__card-cashback" size="sm" variant="soft" color="success">

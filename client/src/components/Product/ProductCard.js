@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/joy/Card";
-import { AspectRatio, CardContent, CardOverflow, Chip, Skeleton } from "@mui/joy";
+import { AspectRatio, CardContent, CardOverflow, Chip } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";

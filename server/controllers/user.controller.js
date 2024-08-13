@@ -23,6 +23,36 @@ module.exports = {
             next(e);
         }
     },
+    updateUser: async (req, res, next) => {
+        try {
+            const newInfo = req.body.user;
+
+            if (!newInfo) {
+                throw new ApiError(400, 'Немає даних')
+            }
+
+            const updatedUser = await User.findByIdAndUpdate(req.params.userId, newInfo, { new: true });
+            res.status(200).json(updatedUser);
+
+        } catch (e) {
+            next(e)
+        }
+    },
+
+    changePassword: async (req, res, next) => {
+        try {
+            const { currentPassword, newPassword } = req.body;
+
+            await OAuthService.comparePasswords(currentPassword, req.user.password);
+
+            const hashedPassword = await OAuthService.hashPassword(newPassword);
+            await User.findByIdAndUpdate(req.params.userId, { password: hashedPassword }, { new: true });
+
+            res.status(200).json({ message: 'Пароль успішно змінено' });
+        } catch (e) {
+            next(e);
+        }
+    },
     getAllUsers: async (req, res, next) => {
         try {
             let { page } = req.query;

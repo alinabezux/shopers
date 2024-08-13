@@ -19,4 +19,15 @@ userRouter.get('/:userId',
     authMiddleware.isRightUser,
     userController.getUserById);
 
+userRouter.put('/:userId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.isRightUser,
+    userController.updateUser);
+
+userRouter.put('/:userId/changePassword',
+    userMiddleware.checkIfUserExists,
+    authMiddleware.checkAccessToken,
+    authMiddleware.isRightUser,
+    userController.changePassword);
+
 module.exports = userRouter;

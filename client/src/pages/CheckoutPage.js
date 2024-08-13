@@ -36,10 +36,8 @@ const CheckoutPage = () => {
     const { user } = useSelector(state => state.userReducer);
     const { userId } = useSelector(state => state.authReducer);
 
-
-
     const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();
-    // const { loadingOrder, errorOrder } = useSelector(state => state.orderSelector);
+    
     const regions = [
         { value: 1, label: "Вінницька область" },
         { value: 2, label: "Волинська область" },

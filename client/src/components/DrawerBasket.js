@@ -46,8 +46,8 @@ const DrawerBasket = ({ open, onClose }) => {
         if (userId) {
             dispatch(basketActions.getBasket(userId));
         }
-    }, [dispatch, userId, basket.length]); 
-    
+    }, [dispatch, userId, basket.length]);
+
 
 
     const totalPrice = useMemo(() => {
@@ -63,7 +63,7 @@ const DrawerBasket = ({ open, onClose }) => {
     }, [basket]);
 
     return (
-        <Drawer open={open} anchor="right">
+        <Drawer open={open} onClose={onClose} anchor="right">
             <Box className='basket'>
                 <Box className='basket__header' >
                     <Typography className='basket__title' variant="h4" >КОШИК</Typography>
@@ -84,7 +84,7 @@ const DrawerBasket = ({ open, onClose }) => {
                                 <Box className='basket__products'>
                                     <Stack direction="column" spacing={2} alignItems="center">
                                         {basket.map(product => (
-                                            <ProductInBasket key={product._id} product={product} />
+                                            <ProductInBasket key={product._id} product={product} setOpenBasket={onClose} />
                                         ))}
                                     </Stack>
                                 </Box>

@@ -42,12 +42,12 @@ const ProductInFavorite = ({ product }) => {
         <>
             <Card className="accountpage__wishlist-card" sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
                 onClick={() => handleShowDetails(product)}>
-                <Link className='link' to={`/product/${(toUrlFriendly(product.name))}`} key={product._id} sx={{ zIndex: "1", }}>
+                <Link className='link' to={`/product/${(toUrlFriendly(product?.name))}`} key={product._id} sx={{ zIndex: "1", }}>
                     <AspectRatio ratio="1">
                         <CardOverflow>
                             {
-                                product.images ?
-                                    <img src={product.images[0]} alt={product.name} /> :
+                                product?.images && product?.images.length > 0?
+                                    <img src={product?.images[0]} alt={product?.name} /> :
                                     <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                             }
                         </CardOverflow>
@@ -55,10 +55,10 @@ const ProductInFavorite = ({ product }) => {
                 </Link>
                 <CardContent>
                     <Stack direction="column" spacing={1}>
-                        <Typography className="accountpage__wishlist-title" variant="h5" >{product.name}</Typography>
+                        <Typography className="accountpage__wishlist-title" variant="h5" >{product?.name}</Typography>
                         <Typography className="accountpage__wishlist-color">Колір: {product?.info?.color}</Typography>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography className="accountpage__wishlist-price">{product.price} ₴</Typography>
+                            <Typography className="accountpage__wishlist-price">{product?.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
                                 <FavoriteIcon sx={{ color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} />
                                 <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />

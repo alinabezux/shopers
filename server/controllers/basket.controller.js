@@ -5,9 +5,8 @@ const ApiError = require("../errors/ApiError");
 module.exports = {
     getUsersBasket: async (req, res, next) => {
         try {
-            const productsInBasket = await ProductInBasket.find({ _user: req.params.userId })
-                .populate('_product');
-    
+            const productsInBasket = await ProductInBasket.find({ _user: req.params.userId }).populate('_product');
+                
             const productsData = productsInBasket.map(productInBasket => ({
                 ...productInBasket._product._doc,
                 quantity: productInBasket.quantity
@@ -32,7 +31,7 @@ module.exports = {
                     { _id: productInBasket._id },
                     { $inc: { quantity: 1 } },
                     { new: true }
-                ).populate('_product'); // Населяємо поле _product
+                ).populate('_product'); 
             } else {
                 productInBasket = await ProductInBasket.create({
                     _user: req.params.userId,

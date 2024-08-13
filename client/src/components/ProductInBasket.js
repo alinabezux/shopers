@@ -5,10 +5,13 @@ import { AspectRatio, Button, CardContent, Chip, ButtonGroup } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
 import { ChipDelete } from '@mui/joy';
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
-import { basketActions } from '../redux';
+import { basketActions, productActions } from '../redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { toUrlFriendly } from '../utils';
 
-const ProductInBasket = ({ product }) => {
+const ProductInBasket = ({ product, setOpenBasket }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [quantity, setQuantity] = useState(product.quantity);
     const { userId } = useSelector(state => state.authReducer);
 
@@ -40,20 +43,28 @@ const ProductInBasket = ({ product }) => {
             handleDeleteProductInBasket(product);
         }
     }
+    const handleShowDetails = useCallback((product) => {
+        dispatch(productActions.setSelectedProduct(product));
+        setOpenBasket(false)
+    }, [dispatch, product]);
 
 
     return (
-        <Card variant="plain" orientation="horizontal" size="sm" color="neutral" className="product-in-basket">
-            <AspectRatio ratio="1" className="product-in-basket__card-image">
-                {product?.images && product?.images.length > 0 ? (
-                    <img src={product?.images[0]} alt={product.name} />
-                ) : (
-                    <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
-                )}
-            </AspectRatio>
+        <Card variant="plain" orientation="horizontal" size="sm" color="neutral" className="product-in-basket" >
+            <Link to={`/product/${toUrlFriendly(product?.name)}`} className="link" onClick={() => handleShowDetails(product)}>
+                <AspectRatio ratio="1" className="product-in-basket__card-image">
+                    {product?.images && product?.images.length > 0 ? (
+                        <img src={product?.images[0]} alt={product.name} />
+                    ) : (
+                        <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
+                    )}
+                </AspectRatio>
+            </Link>
             <CardContent className="product-in-basket__card-content">
                 <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                    <Typography className="product-in-basket__card-name">{product.name}</Typography>
+                    <Link to={`/product/${toUrlFriendly(product?.name)}`} className="link" onClick={() => handleShowDetails(product)}>
+                        <Typography className="product-in-basket__card-name">{product.name}</Typography>
+                    </Link>
                     <ChipDelete onClick={() => handleDeleteProductInBasket(product)} />
                 </Stack>
                 {product?.info?.color ?

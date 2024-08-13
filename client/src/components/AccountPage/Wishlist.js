@@ -37,7 +37,7 @@ const Wishlist = () => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
-    }, [dispatch, userId])
+    }, [dispatch, userId, favorite.length])
 
     return (
         <Box className='accountpage__wishlist' >

@@ -5,15 +5,12 @@ const ApiError = require("../errors/ApiError");
 module.exports = {
     getUsersFavourite: async (req, res, next) => {
         try {
-            const productsData = [];
-            const productsInFavourite = await ProductInFavourite.find({ _user: req.params.userId })
-            for (const productInFavourite of productsInFavourite) {
-                const product = await Product.findById(productInFavourite._product)
-                productsData.push({
-                    ...product._doc
-                })
-            }
-            res.json(productsData).status(200);
+            const productsInFavourite = await ProductInFavourite.find({ _user: req.params.userId }).populate('_product');
+            const productsData = productsInFavourite.map(productInFavourite => ({
+                ...productInFavourite._product._doc,
+            }));
+
+            res.status(200).json(productsData);
 
         } catch (e) {
             next(e);
@@ -27,7 +24,9 @@ module.exports = {
                 _product: req.params.productId
             });
 
-            res.json(productInFavourite).status(200)
+            productInFavourite = await ProductInFavourite.findById(productInFavourite._id).populate('_product');
+
+            res.status(200).json(productInFavourite)
         } catch (e) {
             next(e)
         }

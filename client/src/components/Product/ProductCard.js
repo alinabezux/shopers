@@ -32,7 +32,7 @@ const ProductCard = ({ product }) => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
-    }, [dispatch, userId])
+    }, [dispatch, userId, favorite.length])
 
     useEffect(() => {
         if (favorite) {
@@ -54,7 +54,7 @@ const ProductCard = ({ product }) => {
             setOpenErrorSnackbar(true)
         }
 
-    }, [dispatch, userId, product._id]);
+    }, [dispatch, userId]);
 
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {

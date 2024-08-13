@@ -69,8 +69,7 @@ const ProductPage = () => {
 
     const increaseQuantity = () => {
         if (quantity < product.quantity) {
-            const newQuantity = quantity + 1;
-            setQuantity(newQuantity);
+            setQuantity(prevQuantity => prevQuantity + 1);
         }
     };
 
@@ -82,7 +81,7 @@ const ProductPage = () => {
 
     const handleAddProductToFavourite = useCallback(async (product) => {
         if (userId) {
-            await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id, quantity }));
+            await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
             setSnackbarMessage(`${product.name} додано у список бажань.`);
             setOpenSnackbar(true)
         } else {
@@ -99,10 +98,10 @@ const ProductPage = () => {
 
     const handleAddProductToBasket = useCallback(async (product) => {
         if (userId) {
-            await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
+            await dispatch(basketActions.addToBasket({ userId, productId: product._id, quantity }));
         }
         setOpenBasket(true);
-    }, [userId, dispatch]);
+    }, [userId, dispatch, quantity]);
 
     return (
         <Container className="product-page">
@@ -192,7 +191,7 @@ const ProductPage = () => {
                             </ButtonGroup>
                             <Button variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
-                        <Chip className="product-page__cashback" size="md" variant="soft" color="danger">
+                        <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
                             {product.quantity} в наявності
                         </Chip>
                         <br />

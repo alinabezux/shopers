@@ -6,41 +6,44 @@ module.exports = {
     getUsersBasket: async (req, res, next) => {
         try {
             const productsInBasket = await ProductInBasket.find({ _user: req.params.userId }).populate('_product');
-                
+
             const productsData = productsInBasket.map(productInBasket => ({
                 ...productInBasket._product._doc,
                 quantity: productInBasket.quantity
             }));
-    
+
             res.status(200).json(productsData);
         } catch (e) {
             next(e);
         }
     },
-    
+
 
     addToBasket: async (req, res, next) => {
         try {
-            let productInBasket = await ProductInBasket.findOne({ 
-                _product: req.params.productId, 
-                _user: req.params.userId 
+            const { quantity, options } = req.body;
+            let productInBasket = await ProductInBasket.findOne({
+                _product: req.params.productId,
+                _user: req.params.userId
             });
-    
+
             if (productInBasket) {
                 productInBasket = await ProductInBasket.findOneAndUpdate(
                     { _id: productInBasket._id },
-                    { $inc: { quantity: 1 } },
+                    { quantity },
                     { new: true }
-                ).populate('_product'); 
+                ).populate('_product');
             } else {
                 productInBasket = await ProductInBasket.create({
                     _user: req.params.userId,
-                    _product: req.params.productId
+                    _product: req.params.productId,
+                    quantity
                 });
-    
+
                 productInBasket = await ProductInBasket.findById(productInBasket._id).populate('_product');
             }
-    
+            console.log(productInBasket);
+
             res.status(200).json(productInBasket);
         } catch (e) {
             next(e);

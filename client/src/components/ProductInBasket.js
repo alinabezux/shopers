@@ -51,7 +51,7 @@ const ProductInBasket = ({ product, setOpenBasket }) => {
 
     return (
         <Card variant="plain" orientation="horizontal" size="sm" color="neutral" className="product-in-basket" >
-            <Link to={`/product/${toUrlFriendly(product?.name)}`} className="link" onClick={() => handleShowDetails(product)}>
+            <Link to={`/product/${toUrlFriendly(product?.name || product?._product?.name)}`} className="link" onClick={() => handleShowDetails(product)}>
                 <AspectRatio ratio="1" className="product-in-basket__card-image">
                     {product?.images && product?.images.length > 0 ? (
                         <img src={product?.images[0]} alt={product.name} />
@@ -62,7 +62,7 @@ const ProductInBasket = ({ product, setOpenBasket }) => {
             </Link>
             <CardContent className="product-in-basket__card-content">
                 <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                    <Link to={`/product/${toUrlFriendly(product?.name)}`} className="link" onClick={() => handleShowDetails(product)}>
+                    <Link to={`/product/${toUrlFriendly(product?.name || product?._product?.name)}`} className="link" onClick={() => handleShowDetails(product)}>
                         <Typography className="product-in-basket__card-name">{product.name}</Typography>
                     </Link>
                     <ChipDelete onClick={() => handleDeleteProductInBasket(product)} />

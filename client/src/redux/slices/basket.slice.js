@@ -22,9 +22,9 @@ const getBasket = createAsyncThunk(
 
 const addToBasket = createAsyncThunk(
     'basketSlice/addToBasket',
-    async ({ userId, productId }, { rejectWithValue }) => {
+    async ({ userId, productId, quantity = 1 }, { rejectWithValue }) => {
         try {
-            const { data } = await basketService.addToBasket(userId, productId);
+            const { data } = await basketService.addToBasket(userId, productId, quantity);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)

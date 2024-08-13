@@ -16,7 +16,7 @@ import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { basketActions, favoriteActions } from '../redux';
+import { basketActions, favoriteActions, productActions } from '../redux';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Snackbar from '@mui/joy/Snackbar';
@@ -30,6 +30,8 @@ const ProductPage = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [product, setProduct] = useState({});
+    const [quantity, setQuantity] = useState(1);
 
     const dispatch = useDispatch();
 
@@ -39,8 +41,18 @@ const ProductPage = () => {
     const { types } = useSelector(state => state.typeReducer);
     const { favorite, loading, error } = useSelector(state => state.favoriteReducer);
 
-    const category = categories.find(category => category._id === selectedProduct._category);
-    const type = types.find(type => type._id === selectedProduct._type);
+    const category = categories.find(category => category._id === product._category);
+    const type = types.find(type => type._id === product._type);
+
+    useEffect(() => {
+        const savedProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+        if (savedProduct && Object.keys(selectedProduct).length === 0) {
+            setProduct(savedProduct);
+            dispatch(productActions.setSelectedProduct(savedProduct));
+        } else if (selectedProduct) {
+            setProduct(selectedProduct);
+        }
+    }, [dispatch, selectedProduct]);
 
     useEffect(() => {
         if (userId) {
@@ -50,21 +62,33 @@ const ProductPage = () => {
 
     useEffect(() => {
         if (favorite) {
-            const isFavourite = favorite.some(item => item._id === selectedProduct._id);
+            const isFavourite = favorite.some(item => item._id === product._id);
             setFavourite(isFavourite);
         }
-    }, [favorite, selectedProduct._id]);
+    }, [favorite, product._id]);
+
+    const increaseQuantity = () => {
+        if (quantity < product.quantity) {
+            const newQuantity = quantity + 1;
+            setQuantity(newQuantity);
+        }
+    };
+
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(prevQuantity => prevQuantity - 1);
+        }
+    };
 
     const handleAddProductToFavourite = useCallback(async (product) => {
         if (userId) {
-            await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
+            await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id, quantity }));
             setSnackbarMessage(`${product.name} додано у список бажань.`);
             setOpenSnackbar(true)
         } else {
             setOpenErrorSnackbar(true)
         }
     }, [userId, dispatch]);
-
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
         await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
@@ -96,7 +120,7 @@ const ProductPage = () => {
                     <NavLink className="link product-page__breadrumb" underline="hover" key="1" to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} >
                         {type.name}
                     </NavLink>
-                    <Typography sx={{ color: "black" }}>{selectedProduct.name}</Typography>
+                    <Typography sx={{ color: "black" }}>{product.name}</Typography>
                 </Breadcrumbs>)
                 : null
             }
@@ -110,7 +134,7 @@ const ProductPage = () => {
                             modules={[FreeMode, Navigation, Thumbs]}
                             className="mySwiper2"
                         >
-                            {selectedProduct.images.map((image, index) => (
+                            {(product.images || []).map((image, index) => (
                                 <SwiperSlide key={index}>
                                     <img
                                         src={image}
@@ -119,6 +143,7 @@ const ProductPage = () => {
                                 </SwiperSlide>
                             ))}
                         </Swiper>
+
                     </AspectRatio>
                     <Swiper
                         onSwiper={setThumbsSwiper}
@@ -129,7 +154,7 @@ const ProductPage = () => {
                         modules={[FreeMode, Navigation, Thumbs]}
                         className="mySwiper"
                     >
-                        {selectedProduct.images.map((image, index) => (
+                        {(product.images || []).map((image, index) => (
                             <SwiperSlide key={index}>
                                 <AspectRatio ratio="1" >
                                     <img
@@ -140,42 +165,43 @@ const ProductPage = () => {
                             </SwiperSlide>
                         ))}
                     </Swiper>
+
                 </Box>
                 <Box>
                     <Stack direction="column" spacing={1} className="product-page__info">
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="h4" className="product-page__name">{selectedProduct.name}</Typography>
+                            <Typography variant="h4" className="product-page__name">{product.name}</Typography>
                             {
-                                favourite ? <FavoriteIcon className="product-page__heart-icon" sx={{ color: '#730000', fontSize: "35px" }} onClick={() => handleDeleteProductFromFavorite(selectedProduct)} /> :
-                                    <FavoriteBorderIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" onClick={() => handleAddProductToFavourite(selectedProduct)} />
+                                favourite ? <FavoriteIcon className="product-page__heart-icon" sx={{ color: '#730000', fontSize: "35px" }} onClick={() => handleDeleteProductFromFavorite(product)} /> :
+                                    <FavoriteBorderIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" onClick={() => handleAddProductToFavourite(product)} />
                             }
 
                         </Stack>
 
                         <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography variant="h5" className="product-page__price">{selectedProduct.price} грн.</Typography>
+                            <Typography variant="h5" className="product-page__price">{product.price} грн.</Typography>
                             <Chip className="product-page__cashback" size="md" variant="soft" color="success" >
-                                {selectedProduct.cashback} грн. кешбек
+                                {product.cashback} грн. кешбек
                             </Chip>
                         </Stack>
                         <Stack direction="row" spacing={2} alignItems="center" >
                             <ButtonGroup className="product-page__counter" variant='outlined' aria-label="outlined button group">
-                                <Button className="product-page__quantity"> - </Button>
-                                <Button className="product-page__quantity">{selectedProduct.quantity}</Button>
-                                <Button className="product-page__quantity">+</Button>
+                                <Button className="product-page__quantity" onClick={decreaseQuantity}> - </Button>
+                                <Button className="product-page__quantity">{quantity}</Button>
+                                <Button className="product-page__quantity" onClick={increaseQuantity}>+</Button>
                             </ButtonGroup>
-                            <Button variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(selectedProduct)}>ДОДАТИ В КОШИК</Button>
+                            <Button variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
                         <Chip className="product-page__cashback" size="md" variant="soft" color="danger">
-                            {selectedProduct.quantity} в наявності
+                            {product.quantity} в наявності
                         </Chip>
                         <br />
-                        <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{selectedProduct?.info?.color}</Typography>
-                        <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{selectedProduct?.info?.size}</Typography>
+                        <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{product?.info?.color}</Typography>
+                        <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{product?.info?.size}</Typography>
                         <Typography className="product-page__material">
-                            {selectedProduct?.info?.material ? <><b style={{ color: "black" }}>Матеріал: </b>{selectedProduct.info.material}</> : null}
+                            {product?.info?.material ? <><b style={{ color: "black" }}>Матеріал: </b>{product.info.material}</> : null}
                         </Typography>
-                        <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{selectedProduct?.info?.description}</Typography>
+                        <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{product?.info?.description}</Typography>
                     </Stack>
                 </Box>
             </Box>

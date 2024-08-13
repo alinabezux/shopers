@@ -103,6 +103,8 @@ const productSlice = createSlice({
     reducers: {
         setSelectedProduct: (state, action) => {
             state.selectedProduct = action.payload
+
+            localStorage.setItem('selectedProduct', JSON.stringify(action.payload));
         },
         setCurrentPageProducts: (state, action) => {
             state.currentPageProducts = action.payload

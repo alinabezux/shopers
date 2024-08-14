@@ -46,13 +46,19 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
                 <DialogTitle>Створити новий тип</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleCreateType)}>
                     <Stack spacing={2}>
-                        <FormControl required error={!!errors.name}>
+                        <FormControl required error={!!errors.name || error}>
                             <FormLabel>Назва</FormLabel>
                             <Input {...register('name', { required: "Обов'язкове поле" })} />
                             {errors.name &&
                                 <FormHelperText >
                                     <InfoOutlined sx={{ mr: 1 }} />
                                     {errors.name.message}
+                                </FormHelperText>
+                            }
+                            {error &&
+                                <FormHelperText >
+                                    <InfoOutlined sx={{ mr: 1 }} />
+                                    {error.message}
                                 </FormHelperText>
                             }
                         </FormControl>
@@ -143,9 +149,15 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
                 <DialogTitle>Редагувати тип</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleEditType)}>
                     <Stack spacing={2}>
-                        <FormControl>
+                        <FormControl error={error}>
                             <FormLabel>Назва</FormLabel>
                             <Input {...register('name')} />
+                            {error &&
+                                <FormHelperText >
+                                    <InfoOutlined sx={{ mr: 1 }} />
+                                    {error.message}
+                                </FormHelperText>
+                            }
                         </FormControl>
                         <FormControl>
                             <FormLabel>Категорія, до якої відноситься даний тип</FormLabel>

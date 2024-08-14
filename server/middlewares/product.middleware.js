@@ -11,7 +11,6 @@ module.exports = {
             }
 
             const product = await Product.findOne({ article });
-            console.log(product);
 
             if (product) {
                 throw new ApiError(409, 'Продукт з таким артикулом вже існує.');

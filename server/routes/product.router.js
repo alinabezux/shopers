@@ -15,6 +15,7 @@ productRouter.post('/',
 productRouter.put('/:productId',
     authMiddleware.checkAccessToken,
     authMiddleware.checkRole,
+    productMiddleware.checkIsArticleUnique,
     productController.updateProduct);
 
 productRouter.patch('/:productId',

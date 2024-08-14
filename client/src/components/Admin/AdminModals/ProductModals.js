@@ -298,9 +298,15 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
                 <DialogTitle>Редагувати товар</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleEditType)}>
                     <Box className="checkout__info" sx={{ gap: "15px" }}>
-                        <FormControl className="checkout__form">
+                        <FormControl className="checkout__form" error={error}>
                             <FormLabel>Артикул</FormLabel>
                             <Input {...register('article')} />
+                            {error &&
+                                <FormHelperText >
+                                    <InfoOutlined sx={{ mr: 1 }} />
+                                    {error.message}
+                                </FormHelperText>
+                            }
                         </FormControl>
 
                         <FormControl className="checkout__form">

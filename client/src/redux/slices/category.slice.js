@@ -94,18 +94,22 @@ const categorySlice = createSlice(
                 })
                 .addCase(getAll.rejected, (state, action) => {
                     state.error = action.payload
+                    state.loading = false
                 })
 
                 .addCase(createCategory.fulfilled, (state, action) => {
                     state.categories.push(action.payload)
+
                     state.loading = false
                     state.error = null
                 })
                 .addCase(createCategory.pending, (state) => {
                     state.loading = true
+                    state.error = null
                 })
                 .addCase(createCategory.rejected, (state, action) => {
                     state.error = action.payload
+                    state.loading = false
                 })
 
                 .addCase(updateCategory.fulfilled, (state, action) => {
@@ -117,11 +121,11 @@ const categorySlice = createSlice(
                 })
                 .addCase(updateCategory.pending, (state) => {
                     state.loading = true
-                    state.error = null
+                    state.error = false
                 })
                 .addCase(updateCategory.rejected, (state, action) => {
                     state.error = action.payload
-                    state.loading = null
+                    state.loading = false
                 })
 
                 .addCase(uploadPhoto.fulfilled, (state, action) => {
@@ -133,19 +137,22 @@ const categorySlice = createSlice(
                 })
                 .addCase(uploadPhoto.pending, (state) => {
                     state.loading = true
+                    state.error = false
                 })
                 .addCase(uploadPhoto.rejected, (state, action) => {
                     state.error = action.payload
+                    state.loading = false
                 })
 
                 .addCase(deleteById.fulfilled, (state, action) => {
                     const deletedId = action.payload;
                     state.categories = state.categories.filter(item => item._id !== deletedId);
+
                     state.loading = false
                 })
                 .addCase(deleteById.pending, (state) => {
                     state.loading = true
-                    state.error = null
+                    state.error = false
                 })
                 .addCase(deleteById.rejected, (state, action) => {
                     state.error = action.payload

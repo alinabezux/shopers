@@ -1,9 +1,9 @@
-import { AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Skeleton, Stack, Typography } from "@mui/joy";
+import { Alert, AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Stack, Typography } from "@mui/joy";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../../../redux";
 import { useForm, Form, Controller } from "react-hook-form";
-import { FileUploadRounded, InfoOutlined, WarningRounded } from "@mui/icons-material";
+import { ErrorOutlineRounded, FileUploadRounded, InfoOutlined, WarningRounded } from "@mui/icons-material";
 import { FileUpload } from "./FileUpload";
 import { styled } from '@mui/joy';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
@@ -24,10 +24,10 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
     const dispatch = useDispatch();
 
     const { categories, } = useSelector(state => state.categoryReducer);
-    const { types, error } = useSelector(state => state.typeReducer);
-    const { loading } = useSelector(state => state.productReducer);
+    const { types } = useSelector(state => state.typeReducer);
+    const { loading, error } = useSelector(state => state.productReducer);
 
-    const { control, handleSubmit, register, formState: { errors }, reset } = useForm();
+    const { control, handleSubmit, register, formState: { errors }, reset, setValue } = useForm();
 
     const [category, setCategory] = useState(null)
     const [type, setType] = useState(null)
@@ -54,6 +54,8 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
             if (res.meta.requestStatus === 'fulfilled') {
                 setOpenCreate(false);
                 reset();
+                setValue('category', null);
+                setValue('type', null);
                 setCategory(null);
                 setType(null);
             } else {
@@ -71,7 +73,7 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
                 <DialogTitle>Створити новий товар</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleCreateProduct)}>
                     <Box className="checkout__info" sx={{ gap: "15px" }}>
-                        <FormControl required error={!!errors.article} className="checkout__form">
+                        <FormControl required error={!!errors.article || error} className="checkout__form">
                             <FormLabel>Артикул</FormLabel>
                             <Input {...register('article', { required: "Обов'язкове поле" })} />
                             {errors.article &&
@@ -80,6 +82,13 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
                                     {errors.article.message}
                                 </FormHelperText>
                             }
+                            {error &&
+                                <FormHelperText >
+                                    <InfoOutlined sx={{ mr: 1 }} />
+                                    {error.message}
+                                </FormHelperText>
+                            }
+
                         </FormControl>
 
                         <FormControl required error={!!errors.name} className="checkout__form">

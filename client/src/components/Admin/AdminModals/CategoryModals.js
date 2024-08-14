@@ -9,7 +9,7 @@ import { DropZone } from "./DropZone";
 
 const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
     const dispatch = useDispatch();
-    const { loading } = useSelector(state => state.categoryReducer);
+    const { loading, error } = useSelector(state => state.categoryReducer);
 
     const { control, handleSubmit, register, formState: { errors }, reset } = useForm();
 
@@ -34,13 +34,19 @@ const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
                 <DialogTitle>Створити новий категорію</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleCreateCategory)}>
                     <Stack spacing={2}>
-                        <FormControl required error={!!errors.name}>
+                        <FormControl required error={!!errors.name || error}>
                             <FormLabel>Назва</FormLabel>
                             <Input {...register('name', { required: "Обов'язкове поле" })} />
                             {errors.name &&
                                 <FormHelperText >
                                     <InfoOutlined sx={{ mr: 1 }} />
                                     {errors.name.message}
+                                </FormHelperText>
+                            }
+                            {error &&
+                                <FormHelperText >
+                                    <InfoOutlined sx={{ mr: 1 }} />
+                                    {error.message}
                                 </FormHelperText>
                             }
                         </FormControl>
@@ -55,7 +61,7 @@ const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
 const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
     const dispatch = useDispatch();
 
-    const { categories, selectedCategory, loading } = useSelector(state => state.categoryReducer);
+    const { categories, selectedCategory, loading, error } = useSelector(state => state.categoryReducer);
 
     const { control, handleSubmit, register, reset, setValue } = useForm();
 
@@ -80,9 +86,15 @@ const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
                 <DialogTitle>Редагувати категорію</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleEditCategory)}>
                     <Stack spacing={2}>
-                        <FormControl>
+                        <FormControl error={error}>
                             <FormLabel>Назва</FormLabel>
                             <Input {...register('name')} />
+                            {error &&
+                                <FormHelperText >
+                                    <InfoOutlined sx={{ mr: 1 }} />
+                                    {error.message}
+                                </FormHelperText>
+                            }
                         </FormControl>
                         <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
                     </Stack>

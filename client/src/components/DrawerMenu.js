@@ -88,8 +88,8 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                                         fontSize: "25px",
                                         textTransform: 'lowercase'
                                     }}>
-                                    <NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`}
-                                        className={({ isActive }) => isActive ? "link active" : "link"}>{type.name}
+                                    <NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className="link" >
+                                        {type.name}
                                     </NavLink>
                                 </h3>))
                             }

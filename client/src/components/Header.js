@@ -133,11 +133,7 @@ const Header = () => {
                                         fontFamily: "Geologica",
                                         fontSize: 20,
                                         fontWeight: 600,
-                                        transition: 'color 0.3s ease',
-                                        '&:hover': {
-                                            color: "#700b03"
-                                        }
-
+                                        transition: 'color 0.3s ease'
                                     }}
                                     aria-controls={anchorEl && selCat._id === category._id ? `basic-menu-${category._id}` : undefined}
                                     aria-haspopup="true"

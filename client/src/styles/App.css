@@ -12,9 +12,6 @@ body {
 
 }
 
-/* * {
-    font-family: "Geologica", sans-serif !important;
-} */
 
 
 body::-webkit-scrollbar {
@@ -25,13 +22,9 @@ body::-webkit-scrollbar {
 .link {
     color: inherit;
     text-decoration: none;
-
-
 }
 
-.link.active {
-    color: #700b03;
-}
+
 
 h4.title {
     font-weight: 600;

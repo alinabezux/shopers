@@ -7,7 +7,7 @@ import { toUrlFriendly } from '../utils'
 
 const TypesMenu = () => {
     const { selectedCategory } = useSelector(state => state.categoryReducer);
-    const { typesByCategory } = useSelector(state => state.typeReducer);
+    const { typesByCategory, selectedType } = useSelector(state => state.typeReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -19,7 +19,6 @@ const TypesMenu = () => {
     const handleTypeClick = useCallback((type) => {
         dispatch(typeActions.setSelectedType(type));
     }, [dispatch]);
-
 
     return (
         <Box sx={{
@@ -39,13 +38,9 @@ const TypesMenu = () => {
                             textTransform: 'lowercase',
                             fontWeight: 300,
                             mx: "7px",
-                            transition: 'color 0.3s ease',
-                            '&:hover': {
-                                color: "#9E2922"
-                            }
-
+                            transition: 'color 0.3s ease'
                         }}>
-                        <NavLink to={`/${(toUrlFriendly(selectedCategory.name))}/${(toUrlFriendly(type.name))}`} className={({ isActive }) => isActive ? "link active" : "link"}>
+                        <NavLink to={`/${(toUrlFriendly(selectedCategory.name))}/${(toUrlFriendly(type.name))}`} className="link">
                             {type.name}
                         </NavLink>
                     </Typography>

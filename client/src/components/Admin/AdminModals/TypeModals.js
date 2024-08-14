@@ -11,7 +11,7 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
     const { selectedType, error, loading } = useSelector(state => state.typeReducer);
 
-    const { control, handleSubmit, register, formState: { errors }, reset } = useForm();
+    const { control, handleSubmit, register, formState: { errors }, reset, setValue } = useForm();
 
     const [category, setCategory] = useState(null)
 
@@ -29,6 +29,7 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
             if (res.meta.requestStatus === 'fulfilled') {
                 setOpenCreate(false);
                 reset();
+                setValue('category', null);
                 setCategory(null);
             } else {
                 console.error("Не вдалося створити тип:", res.error);

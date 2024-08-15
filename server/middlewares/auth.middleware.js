@@ -1,3 +1,5 @@
+const { FORGOT_PASSWORD_ACTION_ENUM } = require("../configs/tokenActions.enum");
+const ActionToken = require("../db/models/ActionToken");
 const OAuth = require("../db/models/OAuth");
 const User = require("../db/models/User");
 const ApiError = require("../errors/ApiError");
@@ -106,4 +108,30 @@ module.exports = {
             next(e);
         }
     },
+    checkActionToken: async (req, res, next) => {
+        try {
+            const actionToken = req.get('Authorization');
+
+            if (!actionToken) {
+                throw new ApiError('No token', 401);
+            }
+
+            OAuthService.checkActionToken(actionToken, FORGOT_PASSWORD_ACTION_ENUM);
+
+            const tokenInfo = await ActionToken
+                .findOne({token: actionToken, tokenType: FORGOT_PASSWORD_ACTION_ENUM})
+                .populate('_user');
+
+
+            if (!tokenInfo) {
+                throw new ApiError('Token not valid', 401);
+            }
+
+            req.user = tokenInfo._user;
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
 }

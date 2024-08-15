@@ -1,5 +1,11 @@
+const { CLIENT_URL } = require("../configs/configs");
+const { FORGOT_PASSWORD_ACTION_ENUM } = require("../configs/tokenActions.enum");
+const ActionToken = require("../db/models/ActionToken");
 const OAuth = require("../db/models/OAuth");
+const User = require("../db/models/User");
+const { FORGOT_PASSWORD } = require("../email-templates/email-actions.enum");
 const OAuthService = require("../services/OAuthService");
+const emailService = require('../services/email.service')
 
 module.exports = {
     logIn: async (req, res, next) => {
@@ -43,5 +49,38 @@ module.exports = {
         } catch (e) {
             next(e);
         }
+    },
+    forgotPassword: async (req, res, next) => {
+        try {
+            const user = req.user;
+            
+            const actionToken = OAuthService.generateActionToken(FORGOT_PASSWORD_ACTION_ENUM, { email: user.email });
+            const forgotPassFEUrl = `${CLIENT_URL}/password/new?token=${actionToken}`
+
+            await ActionToken.create({ token: actionToken, _user: user._id, tokenType: FORGOT_PASSWORD_ACTION_ENUM });
+            
+            await emailService.sendEmail(user.email, FORGOT_PASSWORD, { url: forgotPassFEUrl });
+
+            res.json('Посилання для відновлення паролю надіслано на пошту.');
+
+        } catch (e) {
+            next(e);
+        }
+
+    },
+    setNewPassword: async (res, req, next) => {
+        try {
+            const { user, body } = req;
+
+            const hashPassword = await OAuthService.hashPassword(body.password);
+
+            await ActionToken.deleteOne({ token: req.get('Authorization') });
+            await User.findByIdAndUpdate(user._id, { password: hashPassword }, { new: true });
+
+            res.json('Пароль успішно змінено.');
+        } catch (e) {
+            next(e);
+        }
     }
+
 }

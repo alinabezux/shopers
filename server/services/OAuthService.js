@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const ApiError = require("../errors/ApiError")
-const { ACCESS_SECRET, REFRESH_SECRET } = require("../configs/configs")
+const { ACCESS_SECRET, REFRESH_SECRET, CONFIRM_ACCOUNT_ACTION_TOKEN_SECRET, FORGOT_PASSWORD_ACTION_TOKEN_SECRET } = require("../configs/configs")
 const OAuth = require("../db/models/OAuth");
+const tokenTypes = require('../configs/tokenActions.enum')
+const { config } = require('dotenv');
 
 module.exports = {
     hashPassword: (password) => bcrypt.hash(password, 10),
@@ -36,6 +38,7 @@ module.exports = {
         return info;
 
     },
+
     checkToken: (token, tokenType = 'accessToken') => {
         try {
             let secret = '';
@@ -51,4 +54,37 @@ module.exports = {
             } else throw new ApiError(401, 'аксес токен не дійсний.')
         }
     },
+
+    generateActionToken: (actionType, dataToSign = {}) => {
+        let secretWord = '';
+
+        switch (actionType) {
+            case tokenTypes.CONFIRM_ACCOUNT:
+                secretWord = CONFIRM_ACCOUNT_ACTION_TOKEN_SECRET
+                break;
+            case tokenTypes.FORGOT_PASSWORD_ACTION_ENUM:
+                secretWord = FORGOT_PASSWORD_ACTION_TOKEN_SECRET
+                break;
+        }
+
+        return jwt.sign(dataToSign, secretWord, { expiresIn: '7d' })
+    },
+    checkActionToken: (token, actionType) => {
+        try {
+            let secretWord = '';
+
+            switch (actionType) {
+                case tokenTypes.CONFIRM_ACCOUNT:
+                    secretWord = CONFIRM_ACCOUNT_ACTION_TOKEN_SECRET
+                    break;
+                case tokenTypes.FORGOT_PASSWORD_ACTION_ENUM:
+                    secretWord = FORGOT_PASSWORD_ACTION_TOKEN_SECRET
+                    break;
+            }
+            jwt.verify(token, secretWord);
+
+        } catch (e) {
+            throw new ApiError('Token not valid', 401);
+        }
+    }
 }

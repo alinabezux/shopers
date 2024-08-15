@@ -60,7 +60,7 @@ const LogIn = ({ setOpenLoginSnackbar }) => {
                             {logInError.message}
                         </Alert> : null}
                     <FormControl>
-                        <FormLabel>Логін чи e-mail адреса</FormLabel>
+                        <FormLabel>E-mail адреса</FormLabel>
                         <Input className='authpage__input'
                             startDecorator={<EmailRoundedIcon />}
                             name="email"
@@ -81,8 +81,9 @@ const LogIn = ({ setOpenLoginSnackbar }) => {
                     </FormControl>
                 </CardContent>
                 <Button variant="soft" color="primary" sx={{ mt: 1 }} type='submit' className='authpage__button'>УВІЙТИ</Button>
+                <Link to='/password/forgot' className='link  fgp_pswrd'>Забули пароль?</Link>
             </Card>
-        </Form>
+        </Form >
 
 
     );

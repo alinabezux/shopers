@@ -81,7 +81,7 @@ const Register = ({ setOpenSnackbar }) => {
                     </FormControl>
 
                     <FormControl required error={errors.email ? true : false}>
-                        <FormLabel>Логін чи e-mail адреса</FormLabel>
+                        <FormLabel>E-mail адреса</FormLabel>
                         <Input className='authpage__input'
                             startDecorator={<EmailRoundedIcon />}
                             name="email"

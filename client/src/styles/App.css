@@ -24,6 +24,15 @@ body::-webkit-scrollbar {
     text-decoration: none;
 }
 
+.fgp_pswrd {
+    width: 100%;
+    text-align: center;
+
+    &:hover {
+        color: #113d69;
+    }
+}
+
 
 
 h4.title {

@@ -23,6 +23,8 @@ import UsersTable from "./components/Admin/UsersTable";
 import { CategoriesTable, OrderTable, ProductsTable, TypesTable } from "./components/Admin";
 import { history } from "./services";
 import PrivateRoute from "./components/Admin/PrivateRoute";
+import { SetNewPasswordPage } from "./pages/SetNewPasswordPage";
+import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 
 
 
@@ -45,8 +47,10 @@ function App() {
                     <Route path={'/dogovir-oferty'} element={<DogovirOfertuPage />} />
                     <Route path={'/politika-konfidencijnosti'} element={<PrivacyPolicyPage />} />
 
-                    <Route path={'/account'} element={<AccountPage />} />
-                    <Route path={'/auth'} element={<AuthPage />} />
+                    <Route path='/account' element={<AccountPage />} />
+                    <Route path='/auth' element={<AuthPage />} />
+                    <Route path='/password/new' element={<SetNewPasswordPage />} />
+                    <Route path='/password/forgot' element={<ForgotPasswordPage />} />
 
                     <Route path="/admin" element={<PrivateRoute />}>
                         <Route path='' element={<AdminPage />} >

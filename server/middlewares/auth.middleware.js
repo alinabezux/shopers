@@ -104,7 +104,6 @@ module.exports = {
 
             next();
         } catch (e) {
-            // res.clearCookie('refreshToken');
             next(e);
         }
     },

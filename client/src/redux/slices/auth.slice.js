@@ -36,6 +36,18 @@ const logIn = createAsyncThunk(
     }
 );
 
+const forgotPassword = createAsyncThunk(
+    'authSlice/forgotPassword',
+    async ({ email }, { rejectWithValue }) => {
+        try {
+            const { data } = await authService.forgotPassword(email);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 const logOut = createAsyncThunk(
     'authSlice/logOut',
     async (_, { rejectWithValue }) => {
@@ -52,12 +64,6 @@ const authSlice = createSlice({
     name: 'authSlice',
     initialState,
     reducers: {
-        // setUserId: (state, action) => {
-        //     state.userId = action.payload;
-        // },
-        // clearUserId: (state) => {
-        //     state.userId = null;
-        // }
 
     },
     extraReducers: builder =>
@@ -89,6 +95,19 @@ const authSlice = createSlice({
                 state.logInError = action.payload
             })
 
+            .addCase(forgotPassword.fulfilled, (state, action) => {
+                state.loading = false
+                state.error = null
+            })
+            .addCase(forgotPassword.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+
             .addCase(logOut.fulfilled, (state) => {
                 state.userId = null
                 state.loading = false
@@ -108,7 +127,7 @@ const authSlice = createSlice({
 const { reducer: authReducer } = authSlice;
 
 const authActions = {
-    register, logIn, logOut
+    register, logIn, logOut, forgotPassword
 }
 
 export {

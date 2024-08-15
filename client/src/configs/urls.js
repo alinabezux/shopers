@@ -11,7 +11,8 @@ const urls = {
         registration: '/users/register',
         logIn: '/auth/logIn',
         refresh: '/auth/refresh',
-        logOut: '/auth/logOut'
+        logOut: '/auth/logOut',
+        forgotPassword:'/auth/password/forgot',
     },
     basket: '/basket',
     favorite: '/favorite',

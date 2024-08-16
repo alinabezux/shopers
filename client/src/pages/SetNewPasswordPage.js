@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Typography } from "@mui/material";
-import { FormControl, FormLabel, Input, Button, Card, CardContent } from '@mui/joy';
+import { FormControl, FormLabel, Input, Button, Card, CardContent, Container, Box } from '@mui/joy';
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
@@ -40,58 +40,62 @@ const SetNewPasswordPage = () => {
     }, [dispatch, navigate, token, reset])
 
     return (
+        <Container className='forgotPage'>
+            <Box className='forgotPage__main'>
+                <Typography variant="h4" className='title' >МІЙ КАБІНЕТ</Typography>
+                <Form onSubmit={handleSubmit(submit)} control={control}>
+                    <Card className='forgotPage__card' variant="plain"
+                        sx={{
+                            boxShadow: 'md',
+                        }}
+                    >
+                        <CardContent sx={{ gap: 1 }} >
+                            <Typography variant='h5' >
+                                Зміна паролю
+                            </Typography>
 
-        <Form onSubmit={handleSubmit(submit)} control={control}>
-            <Card variant="plain" className='authpage__card'
-                sx={{
-                    boxShadow: 'md',
-                }}
-            >
-                <CardContent sx={{ gap: 1 }} >
-                    <Typography variant='h5' >
-                        Зміна паролю
-                    </Typography>
+                            {error ?
+                                <Alert color="danger" variant="soft">
+                                    <AlternateEmailRoundedIcon />
+                                    {error.message}
+                                </Alert> : null}
 
-                    {error ?
-                        <Alert color="danger" variant="soft">
-                            <AlternateEmailRoundedIcon />
-                            {error.message}
-                        </Alert> : null}
-
-                    <FormControl error={errors.newPassword || errors.confirmPassword ? true : false}>
-                        <FormLabel>Новий пароль</FormLabel>
-                        <Input className='accountpage__input'
-                            {...register('newPassword', { required: "Обов'язкове поле" })}
-                            type="password"
-                        />
-                        {errors.newPassword &&
-                            <FormHelperText >
-                                <InfoOutlined sx={{ mr: 1 }} />
-                                {errors.newPassword.message}
-                            </FormHelperText>
-                        }
-                    </FormControl>
-                    <FormControl error={errors.confirmPassword ? true : false}>
-                        <FormLabel>Повторіть новий пароль</FormLabel>
-                        <Input className='accountpage__input'
-                            {...register('confirmPassword', {
-                                required: "Обов'язкове поле",
-                                validate: value => value === watch('newPassword') || 'Паролі не співпадають'
-                            })}
-                            type="password"
-                        />
-                        {errors.confirmPassword &&
-                            <FormHelperText >
-                                <InfoOutlined sx={{ mr: 1 }} />
-                                {errors.confirmPassword.message}
-                            </FormHelperText>
-                        }
-                    </FormControl>
-                </CardContent>
-                <Button loading={loading} variant="soft" color="primary" type='submit' sx={{ mt: 1 }} className='authpage__button'
-                >ЗМІНИТИ ПАРОЛЬ</Button>
-            </Card>
-        </Form>
+                            <FormControl error={errors.newPassword || errors.confirmPassword ? true : false}>
+                                <FormLabel>Новий пароль</FormLabel>
+                                <Input className='accountpage__input'
+                                    {...register('newPassword', { required: "Обов'язкове поле" })}
+                                    type="password"
+                                />
+                                {errors.newPassword &&
+                                    <FormHelperText >
+                                        <InfoOutlined sx={{ mr: 1 }} />
+                                        {errors.newPassword.message}
+                                    </FormHelperText>
+                                }
+                            </FormControl>
+                            <FormControl error={errors.confirmPassword ? true : false}>
+                                <FormLabel>Повторіть новий пароль</FormLabel>
+                                <Input className='accountpage__input'
+                                    {...register('confirmPassword', {
+                                        required: "Обов'язкове поле",
+                                        validate: value => value === watch('newPassword') || 'Паролі не співпадають'
+                                    })}
+                                    type="password"
+                                />
+                                {errors.confirmPassword &&
+                                    <FormHelperText >
+                                        <InfoOutlined sx={{ mr: 1 }} />
+                                        {errors.confirmPassword.message}
+                                    </FormHelperText>
+                                }
+                            </FormControl>
+                        </CardContent>
+                        <Button loading={loading} variant="soft" color="primary" type='submit' sx={{ mt: 1 }} className='authpage__button'
+                        >ЗМІНИТИ ПАРОЛЬ</Button>
+                    </Card>
+                </Form>
+            </Box>
+        </Container>
 
 
     );

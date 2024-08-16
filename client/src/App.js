@@ -49,8 +49,8 @@ function App() {
 
                     <Route path='/account' element={<AccountPage />} />
                     <Route path='/auth' element={<AuthPage />} />
-                    <Route path='/password/new' element={<SetNewPasswordPage />} />
                     <Route path='/password/forgot' element={<ForgotPasswordPage />} />
+                    <Route path='/password/new' element={<SetNewPasswordPage />} />
 
                     <Route path="/admin" element={<PrivateRoute />}>
                         <Route path='' element={<AdminPage />} >

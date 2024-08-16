@@ -31,10 +31,10 @@ const ForgotPasswordPage = () => {
         } catch (e) {
             console.log("catch e: ", e);
         }
-    }, [dispatch,setOpenSnackbar])
+    }, [dispatch, setOpenSnackbar])
 
     return (
-        <Container sx={{ width: "500px", marginTop: "30px" }}>
+        <Container className='forgotPage'>
             <Snackbar
                 startDecorator={<DoneRounded />}
                 anchorOrigin={{
@@ -52,34 +52,37 @@ const ForgotPasswordPage = () => {
             >
                 Посилання для відновлення паролю надіслано на пошту.
             </Snackbar>
-            <Form onSubmit={handleSubmit(submit)} control={control} className='authpage__tabpanel'>
-                <Typography sx={{ margin: 1 }}>
-                    Забули пароль? Будь ласка, введіть вашу e-mail адресу. Ви отримаєте електронний лист з посиланням для створення нового паролю.
+            <Box className='forgotPage__main'>
+                <Typography variant="h4" className='title' >МІЙ КАБІНЕТ</Typography>
+                <Typography>
+                    Забули пароль? Введіть ваш e-mail.<br /> Ми надішлемо вам електронний лист з інструкцією для створення нового паролю.
                 </Typography>
-                <Card variant="plain" className='authpage__card'
-                    sx={{ boxShadow: 'md', margin: 1 }}
-                >
-                    <CardContent sx={{ gap: 1 }}>
-                        {error ?
-                            <Alert color="danger" variant="soft">
-                                <ErrorOutlineRounded />
-                                {error.message}
-                            </Alert> : null}
-                        <FormControl>
-                            <FormLabel>E-mail адреса</FormLabel>
-                            <Input className='authpage__input'
-                                startDecorator={<EmailRounded />}
-                                name="email"
-                                type="email"
-                                placeholder="johndoe@email.com"
-                                {...register('email', { required: true })}
-                            />
-                        </FormControl>
+                <Form onSubmit={handleSubmit(submit)} control={control}>
+                    <Card variant="plain" className='forgotPage__card'
+                        sx={{ boxShadow: 'md', margin: 1 }}
+                    >
+                        <CardContent sx={{ gap: 1 }}>
+                            {error ?
+                                <Alert color="danger" variant="soft">
+                                    <ErrorOutlineRounded />
+                                    {error.message}
+                                </Alert> : null}
+                            <FormControl>
+                                <FormLabel>E-mail адреса</FormLabel>
+                                <Input className='authpage__input'
+                                    startDecorator={<EmailRounded />}
+                                    name="email"
+                                    type="email"
+                                    placeholder="johndoe@email.com"
+                                    {...register('email', { required: true })}
+                                />
+                            </FormControl>
 
-                    </CardContent>
-                    <Button loading={loading} variant="soft" color="neutral" sx={{ mt: 1 }} type='submit' className='authpage__button'>СКИНУТИ ПАРОЛЬ</Button>
-                </Card>
-            </Form >
+                        </CardContent>
+                        <Button loading={loading} variant="soft" color="neutral" sx={{ mt: 1 }} type='submit' className='authpage__button'>СКИНУТИ ПАРОЛЬ</Button>
+                    </Card>
+                </Form >
+            </Box>
         </Container>
     );
 };

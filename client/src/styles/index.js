@@ -11,6 +11,7 @@ export * from './Header.css'
 export * from './AuthPage.css'
 export * from './AccountPage.css'
 export * from './Admin.css'
+export * from './ForgotPassPage.css'
 
 
 

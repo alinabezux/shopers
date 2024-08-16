@@ -70,17 +70,9 @@ module.exports = {
     },
     setNewPassword: async (req, res, next) => {
         try {
-            const user = req.user;
-            console.log(`user`);
-            console.log(user);
-
-            const body = req.body;
-            console.log(`body`);
-            console.log(body);
+            const { user, body } = req;
 
             const hashPassword = await OAuthService.hashPassword(body.newPassword);
-            console.log(`hashPassword`);
-            console.log(hashPassword);
 
             await ActionToken.deleteOne({ token: req.get('Authorization') });
             await User.findByIdAndUpdate(user._id, { password: hashPassword }, { new: true });

@@ -7,9 +7,13 @@ const authService = {
     register: (user) => $host.post(urls.auth.registration, { user }),
     login: (user) => $host.post(urls.auth.logIn, { user }),
     refresh: () => $authHost.post(urls.auth.refresh),
+
     forgotPassword: (email) => $host.post(urls.auth.forgotPassword, { email }),
-    
-    setNewPassword: (newPassword) => $host.put(urls.auth.forgotPassword, { newPassword }),
+    setNewPassword: (token, newPassword) => $host.put(urls.auth.forgotPassword, { newPassword }, {
+        headers: {
+            'Authorization': token
+        }
+    }),
 
     getAccessToken: () => localStorage.getItem('access'),
     getRefreshToken: () => Cookies.get('refreshToken'),

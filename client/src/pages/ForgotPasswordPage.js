@@ -15,7 +15,6 @@ import { authActions } from '../redux';
 
 const ForgotPasswordPage = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [query] = useSearchParams();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const { control, handleSubmit, register } = useForm();
@@ -32,7 +31,7 @@ const ForgotPasswordPage = () => {
         } catch (e) {
             console.log("catch e: ", e);
         }
-    }, [dispatch])
+    }, [dispatch,setOpenSnackbar])
 
     return (
         <Container sx={{ width: "500px", marginTop: "30px" }}>
@@ -78,7 +77,7 @@ const ForgotPasswordPage = () => {
                         </FormControl>
 
                     </CardContent>
-                    <Button variant="soft" color="neutral" sx={{ mt: 1 }} type='submit' className='authpage__button'>СКИНУТИ ПАРОЛЬ</Button>
+                    <Button loading={loading} variant="soft" color="neutral" sx={{ mt: 1 }} type='submit' className='authpage__button'>СКИНУТИ ПАРОЛЬ</Button>
                 </Card>
             </Form >
         </Container>

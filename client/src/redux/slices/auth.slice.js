@@ -47,6 +47,17 @@ const forgotPassword = createAsyncThunk(
         }
     }
 );
+const setNewPassword = createAsyncThunk(
+    'authSlice/setNewPassword',
+    async ({ token, newPassword }, { rejectWithValue }) => {
+        try {
+            const { data } = await authService.setNewPassword(token, newPassword);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
 
 const logOut = createAsyncThunk(
     'authSlice/logOut',
@@ -108,6 +119,18 @@ const authSlice = createSlice({
                 state.error = action.payload
             })
 
+            .addCase(setNewPassword.fulfilled, (state) => {
+                state.loading = false;
+            })
+            .addCase(setNewPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(setNewPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
             .addCase(logOut.fulfilled, (state) => {
                 state.userId = null
                 state.loading = false
@@ -127,7 +150,7 @@ const authSlice = createSlice({
 const { reducer: authReducer } = authSlice;
 
 const authActions = {
-    register, logIn, logOut, forgotPassword
+    register, logIn, logOut, forgotPassword, setNewPassword
 }
 
 export {

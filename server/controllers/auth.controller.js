@@ -53,31 +53,39 @@ module.exports = {
     forgotPassword: async (req, res, next) => {
         try {
             const user = req.user;
-            
+
             const actionToken = OAuthService.generateActionToken(FORGOT_PASSWORD_ACTION_ENUM, { email: user.email });
             const forgotPassFEUrl = `${CLIENT_URL}/password/new?token=${actionToken}`
 
             await ActionToken.create({ token: actionToken, _user: user._id, tokenType: FORGOT_PASSWORD_ACTION_ENUM });
-            
+
             await emailService.sendEmail(user.email, FORGOT_PASSWORD, { url: forgotPassFEUrl });
 
-            res.json('Посилання для відновлення паролю надіслано на пошту.');
+            res.status(200).json('Посилання для відновлення паролю надіслано на пошту.');
 
         } catch (e) {
             next(e);
         }
 
     },
-    setNewPassword: async (res, req, next) => {
+    setNewPassword: async (req, res, next) => {
         try {
-            const { user, body } = req;
+            const user = req.user;
+            console.log(`user`);
+            console.log(user);
 
-            const hashPassword = await OAuthService.hashPassword(body.password);
+            const body = req.body;
+            console.log(`body`);
+            console.log(body);
+
+            const hashPassword = await OAuthService.hashPassword(body.newPassword);
+            console.log(`hashPassword`);
+            console.log(hashPassword);
 
             await ActionToken.deleteOne({ token: req.get('Authorization') });
             await User.findByIdAndUpdate(user._id, { password: hashPassword }, { new: true });
 
-            res.json('Пароль успішно змінено.');
+            res.status(200).json('Пароль успішно змінено.');
         } catch (e) {
             next(e);
         }

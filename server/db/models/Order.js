@@ -9,7 +9,7 @@ const generateSixDigitId = () => {
 const orderSchema = new Schema({
     orderID: { type: String, required: true, unique: true, default: generateSixDigitId },
     _user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    orderItems: [{ type: String, required: true }],
+    orderItems: [{ type: Object, required: true }],
     shipping: { type: String, default: NOVAPOST, required: true, },
 
     // deliveryInfo

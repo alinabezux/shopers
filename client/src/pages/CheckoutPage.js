@@ -17,6 +17,7 @@ import { useForm, Form, Controller } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { InfoOutlined } from '@mui/icons-material';
 import platamono from '../assets/plata_light_bg@2x.png'
+import { monoService } from '../services/mono.service';
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -37,7 +38,7 @@ const CheckoutPage = () => {
     const { userId } = useSelector(state => state.authReducer);
 
     const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();
-    
+
     const regions = [
         { value: 1, label: "Вінницька область" },
         { value: 2, label: "Волинська область" },
@@ -133,7 +134,9 @@ const CheckoutPage = () => {
             }
             const res = await dispatch(orderActions.createOrder(orderData))
             if (res.meta.requestStatus === 'fulfilled') {
-                navigate(`/order/${res.payload.orderID}`);
+                const link = res.payload.invoice.pageUrl;
+
+                window.location.href = link;
             }
         } catch (error) {
             console.error('Error creating order:', error);
@@ -204,9 +207,6 @@ const CheckoutPage = () => {
             dispatch(basketActions.getBasket(userId));
         }
     }, [dispatch, userId]);
-
-
-
 
 
     return (

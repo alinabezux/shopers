@@ -270,8 +270,9 @@ const OrderTable = () => {
                                     </Typography>
 
                                 </td>
-                                <td>{order.orderItems.map((item, index) => (
-                                    <li key={index}>{item}</li>))}
+                                <td>
+                                    {/* {order?.orderItems.map((item, index) => (
+                                        <li key={index}>{item.name}</li>))} */}
                                     <Divider sx={{ my: 2 }} />
                                     <Typography level="body2">Сума: {order.totalSum} грн.</Typography>
                                 </td>

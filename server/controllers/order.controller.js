@@ -2,23 +2,35 @@ const Order = require("../db/models/Order");
 const Product = require("../db/models/Product");
 const ProductInBasket = require("../db/models/ProductInBasket");
 const User = require("../db/models/User");
+const monoService = require("../services/mono.service");
 
 
 module.exports = {
     createOrder: async (req, res, next) => {
         try {
-            const { userId } = req.params;
+            const userId = req.user._id;
 
             const productsInBasket = await ProductInBasket.find({ _user: userId }).populate('_product');
 
+            // console.log('----');
+            // const products = productsInBasket.map(productInBasket => productInBasket._id);
+            // console.log(products);
+
             const products = productsInBasket.map(productInBasket => {
-                return `${productInBasket._product.name} - ${productInBasket.quantity} шт.`;
+                return {
+                    name: productInBasket._product.name,
+                    info: productInBasket._product?.info,
+                    quantity: productInBasket.quantity,
+                    price: productInBasket._product.price,
+                    img: productInBasket._product.images[0],
+                    article: productInBasket._product.article
+                };
             });
 
             const orderData = {
                 ...req.body.order,
                 _user: userId,
-                orderItems: products,
+                orderItems: products
             };
 
             const [order, user] = await Promise.all([
@@ -26,6 +38,7 @@ module.exports = {
                 User.findById(userId),
                 ProductInBasket.deleteMany({ _user: userId })
             ]);
+
 
             // Обчислення нових бонусів
 
@@ -35,8 +48,9 @@ module.exports = {
                 const newBonus = user.bonus + req.body.order.cashback;
                 await User.findByIdAndUpdate(userId, { bonus: newBonus }, { new: true });
             }
+            const invoice = await monoService.createInvoice(order)
 
-            res.json(order);
+            res.status(200).json({ order, invoice });
 
         } catch (e) {
             next(e);
@@ -46,11 +60,16 @@ module.exports = {
     getAllOrders: async (req, res, next) => {
         try {
             let { page = 1 } = req.query;
-            const limit = 10;
+            const limit = 20;
             let count;
 
             const orders = await Order.find({}).limit(limit).skip((page - 1) * limit);
+
             count = await Order.countDocuments();
+
+            console.log('-------------');
+            const lastOrder = orders[orders.length - 1];
+            console.log(lastOrder);
 
             res.json({
                 orders,

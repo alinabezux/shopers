@@ -12,7 +12,7 @@ const urls = {
         logIn: '/auth/logIn',
         refresh: '/auth/refresh',
         logOut: '/auth/logOut',
-        forgotPassword:'/auth/password/forgot',
+        forgotPassword: '/auth/password/forgot',
     },
     basket: '/basket',
     favorite: '/favorite',

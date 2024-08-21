@@ -20,4 +20,5 @@ module.exports = {
     S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
     S3_SECRET_KEY: process.env.S3_SECRET_KEY,
 
+    MONO_TOKEN: process.env.MONO_TOKEN
 }

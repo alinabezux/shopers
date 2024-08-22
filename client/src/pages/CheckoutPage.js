@@ -36,6 +36,7 @@ const CheckoutPage = () => {
     const { basket, loading, error } = useSelector(state => state.basketReducer);
     const { user } = useSelector(state => state.userReducer);
     const { userId } = useSelector(state => state.authReducer);
+    const { loadingOrder } = useSelector(state => state.orderReducer);
 
     const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();
 
@@ -134,9 +135,9 @@ const CheckoutPage = () => {
             }
             const res = await dispatch(orderActions.createOrder(orderData))
             if (res.meta.requestStatus === 'fulfilled') {
-                const link = res.payload.invoice.pageUrl;
+                window.location.href = res.payload.invoice.pageUrl;
 
-                window.location.href = link;
+
             }
         } catch (error) {
             console.error('Error creating order:', error);
@@ -439,7 +440,7 @@ const CheckoutPage = () => {
                                         {post === 'Нова пошта' &&
                                             <Stack direction="row" alignItems="center" justifyContent="space-between">
                                                 <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-start">
-                                                    <Radio value="Наложка" color="neutral" onChange={handleChangePayment} />
+                                                    <Radio value="Накладений платіж" color="neutral" onChange={handleChangePayment} />
                                                     <Typography sx={{ maxWidth: "70%" }}>Накладений платіж по передоплаті 100 грн. (тільки Нова пошта)</Typography>
                                                 </Stack>
                                                 <Tooltip arrow placement="right" variant="outlined" title={
@@ -502,7 +503,7 @@ const CheckoutPage = () => {
                                             </Tooltip>
                                         </Stack>
 
-                                        <Button type='submit' variant="solid" color="neutral" className="basket__button" endDecorator={<DoneRoundedIcon />}>
+                                        <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="basket__button" endDecorator={<DoneRoundedIcon />}>
                                             ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
                                         </Button>
                                         <Typography sx={{

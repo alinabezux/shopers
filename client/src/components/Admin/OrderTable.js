@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {
     Box,
@@ -64,25 +64,6 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-function RowMenu() {
-    return (
-        <Dropdown>
-            <MenuButton
-                slots={{ root: IconButton }}
-                slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
-            >
-                <MoreHorizRoundedIcon />
-            </MenuButton>
-            <Menu size="sm" sx={{ minWidth: 140 }}>
-                <MenuItem>Edit</MenuItem>
-                <MenuItem>Rename</MenuItem>
-                <MenuItem>Move</MenuItem>
-                <Divider />
-                <MenuItem color="danger">Delete</MenuItem>
-            </Menu>
-        </Dropdown>
-    );
-}
 
 const OrderTable = () => {
     const [order, setOrder] = useState('desc');
@@ -103,6 +84,9 @@ const OrderTable = () => {
         dispatch(orderActions.setCurrentPageOrders(value));
     }
 
+    const handleDeleteOrder = useCallback(async (order) => {
+        dispatch(orderActions.deleteById(order._id));
+    }, [dispatch]);
 
     const filteredOrders = orders.filter(order =>
         (selectedPost ? order.shipping === selectedPost : true) &&
@@ -114,6 +98,24 @@ const OrderTable = () => {
         )
     );
 
+
+    function RowMenu({ order }) {
+        return (
+            <Dropdown>
+                <MenuButton
+                    slots={{ root: IconButton }}
+                    slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
+                >
+                    <MoreHorizRoundedIcon />
+                </MenuButton>
+                <Menu size="sm" sx={{ minWidth: 140 }}>
+                    <MenuItem>Редагувати</MenuItem>
+                    <Divider />
+                    <MenuItem color="danger" onClick={() => handleDeleteOrder(order)}>Видалити</MenuItem>
+                </Menu>
+            </Dropdown>
+        );
+    }
 
     return (
         <Box>
@@ -167,7 +169,7 @@ const OrderTable = () => {
                         })}
                     >
                         <Option value="Передоплата">Передоплата</Option>
-                        <Option value="Наложка">Наложка</Option>
+                        <Option value="Накладений платіж">Накладений платіж</Option>
 
                     </Select>
                 </FormControl>
@@ -329,7 +331,7 @@ const OrderTable = () => {
                                 </td>
 
                                 <td style={{ textAlign: 'right' }}>
-                                    <RowMenu />
+                                    <RowMenu order={order} />
                                 </td>
                             </tr>
                         ))}

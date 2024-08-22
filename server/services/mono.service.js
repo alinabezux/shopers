@@ -1,10 +1,15 @@
 const axios = require('axios');
 const { MONO_TOKEN, CLIENT_URL } = require('../configs/configs');
-
+const { CASH } = require('../configs/order.enum');
 module.exports = {
     createInvoice: async (order) => {
+        let sum;
+        if (order.paymentMethod === CASH) {
+            sum = 10000
+        } else sum = order.totalSum * 100;
+
         const invoiceData = {
-            amount: order.totalSum * 100,
+            amount: sum,
             merchantPaymInfo: {
                 reference: order.orderID,
                 destination: "Оплата за товар",
@@ -26,7 +31,7 @@ module.exports = {
                     'Content-Type': 'application/json'
                 }
             });
-          
+
             return response.data;
 
         } catch (error) {

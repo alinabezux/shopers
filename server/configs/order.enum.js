@@ -1,6 +1,6 @@
 module.exports = {
     CARD: 'Передоплата',
-    CASH: 'Наложка',
+    CASH: 'Накладений платіж',
     NOVAPOST: 'Нова пошта',
     UKRPOST: 'Укр пошта',
 }

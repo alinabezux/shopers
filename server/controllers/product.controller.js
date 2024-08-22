@@ -80,7 +80,8 @@ module.exports = {
             const newProduct = await Product.findByIdAndUpdate(
                 req.params.productId,
                 { $push: { images: { $each: imageUrls } } },
-                { new: true });
+                { new: true }
+            );
 
             res.json(newProduct);
         } catch (e) {
@@ -102,7 +103,7 @@ module.exports = {
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
-            
+
             product.images = product.images.filter(img => img !== imageUrl);
             await product.save()
 

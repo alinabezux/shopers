@@ -3,12 +3,16 @@ import { orderService } from "../../services/order.service";
 
 const initialState = {
     orders: [],
+    userOrders: [],
     selectedOrder: null,
+
     currentPageOrders: 1,
     totalPagesOrders: null,
     count: null,
+
     loadingOrder: false,
-    errorOrder: null
+    errorOrder: null,
+    error: null
 }
 
 const createOrder = createAsyncThunk(
@@ -25,9 +29,22 @@ const createOrder = createAsyncThunk(
 
 const getAllOrders = createAsyncThunk(
     'orderSlice/getAllOrders',
-    async ({ page }, { rejectWithValue }) => {
+    async (page, { rejectWithValue }) => {
         try {
             const { data } = await orderService.getAllOrders(page);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const getUserOrders = createAsyncThunk(
+    'orderSlice/getUserOrders',
+    async (userId, { rejectWithValue }) => {
+        try {
+            const { data } = await orderService.getUserOrders(userId);
+
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -41,6 +58,18 @@ const updateOrderStatus = createAsyncThunk(
         try {
             const { data } = await orderService.updateOrderStatus(orderId, status);
             return data
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const deleteById = createAsyncThunk(
+    'orderSlice/deleteById',
+    async (orderId , { rejectWithValue }) => {
+        try {
+            await orderService.deleteById(orderId);
+            return orderId;
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -79,6 +108,7 @@ const orderSlice = createSlice({
                 state.orders = action.payload.orders
                 state.totalPagesOrders = action.payload.totalPages
                 state.count = action.payload.count
+
                 state.loadingOrder = false
                 state.errorOrder = null
             })
@@ -87,6 +117,22 @@ const orderSlice = createSlice({
             })
             .addCase(getAllOrders.rejected, (state, action) => {
                 state.errorOrder = action.payload
+                state.loadingOrder = false
+            })
+
+
+            .addCase(getUserOrders.fulfilled, (state, action) => {
+                state.userOrders = action.payload
+                state.loadingOrder = false
+                state.error = null
+            })
+            .addCase(getUserOrders.pending, (state) => {
+                state.loadingOrder = true
+                state.error = null
+            })
+            .addCase(getUserOrders.rejected, (state, action) => {
+                state.errorOrder = action.payload
+                state.error = false
             })
 
 
@@ -100,13 +146,31 @@ const orderSlice = createSlice({
             })
             .addCase(updateOrderStatus.rejected, (state, action) => {
                 state.errorOrder = action.payload
+                state.loadingOrder = false
+            })
+
+
+            .addCase(deleteById.fulfilled, (state, action) => {
+                const deletedId = action.payload;
+                state.orders = state.orders.filter(item => item._id !== deletedId);
+
+                state.loadingOrder = false
+                state.error = null;
+
+            })
+            .addCase(deleteById.pending, (state, action) => {
+                state.loadingOrder = true
+            })
+            .addCase(deleteById.rejected, (state, action) => {
+                state.error = action.payload
+                state.loadingOrder = false
             })
 });
 
 const { reducer: orderReducer, actions: { setSelectedOrder, setCurrentPageOrders } } = orderSlice;
 
 const orderActions = {
-    createOrder, getAllOrders, setSelectedOrder, updateOrderStatus, setCurrentPageOrders
+    createOrder, getAllOrders, setSelectedOrder, updateOrderStatus, setCurrentPageOrders, getUserOrders, deleteById
 }
 
 export { orderReducer, orderActions }

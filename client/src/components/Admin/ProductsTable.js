@@ -35,7 +35,6 @@ import Link2 from '@mui/joy/Link'
 
 
 const ProductsTable = () => {
-
     const dispatch = useDispatch();
 
     const [openCreate, setOpenCreate] = useState(false);

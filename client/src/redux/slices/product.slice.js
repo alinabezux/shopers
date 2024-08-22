@@ -202,6 +202,7 @@ const productSlice = createSlice({
                 state.loading = false
             })
 
+            
             .addCase(deleteImage.fulfilled, (state, action) => {
                 const { productId, imageUrl } = action.payload;
                 const product = state.products.find(p => p._id === productId);

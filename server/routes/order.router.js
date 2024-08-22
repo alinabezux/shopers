@@ -7,12 +7,23 @@ const orderRouter = require('express').Router();
 orderRouter.post('/:userId',
     authMiddleware.checkAccessToken,
     userMiddleware.checkIfUserExists,
-    orderController.createOrder)
+    orderController.createOrder);
 
 orderRouter.get('/',
     authMiddleware.checkAccessToken,
     authMiddleware.checkRole,
-    orderController.getAllOrders)
+    orderController.getAllOrders);
+
+orderRouter.get('/:userId',
+    userMiddleware.checkIfUserExists,
+    authMiddleware.checkAccessToken,
+    authMiddleware.isRightUser,
+    orderController.getUserOrders);
+
+orderRouter.delete('/:orderId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.checkRole,
+    orderController.deleteOrderById);
 
 
 

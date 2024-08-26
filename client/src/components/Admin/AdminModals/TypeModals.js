@@ -130,10 +130,8 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
         if (category) {
             typeProperties._category = category;
         }
-        console.log(typeProperties);
 
         const res = await dispatch(typeActions.updateType({ typeId: selectedType._id, type: typeProperties }));
-        console.log(res)
 
         if (res.meta.requestStatus === 'fulfilled') {
             setOpenEdit(false);

@@ -12,7 +12,7 @@ productRouter.post('/',
     productMiddleware.checkIsArticleUnique,
     productController.createProduct);
 
-productRouter.put('/:productId',
+productRouter.patch('/:productId',
     authMiddleware.checkAccessToken,
     authMiddleware.checkRole,
     productMiddleware.checkIsArticleUnique,

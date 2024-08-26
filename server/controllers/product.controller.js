@@ -116,6 +116,7 @@ module.exports = {
     updateProduct: async (req, res, next) => {
         try {
             const newInfo = req.body.product;
+            
             const { price } = req.body.product;
             const cashback = Math.trunc(price * 0.02);
 
@@ -129,7 +130,18 @@ module.exports = {
 
     deleteProduct: async (req, res, next) => {
         try {
-            await Product.deleteOne({ _id: req.params.productId })
+            const { productId } = req.params;
+
+            const product = await Product.findById(productId);
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+            const imageDeletionPromises = product.images.map((imageUrl) =>
+                S3service.deleteImage('products', productId, imageUrl)
+            );
+            await Promise.all(imageDeletionPromises);
+
+            await Product.deleteOne({ _id: productId })
 
             res.sendStatus(204);
         } catch (e) {

@@ -354,7 +354,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 
                         <FormControl className="checkout__form">
                             <FormLabel>Кількість</FormLabel>
-                            <Input {...register('quantity')} />
+                            <Input  {...register('quantity')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">

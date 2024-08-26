@@ -42,6 +42,7 @@ const orderSchema = new Schema({
     cashback: { type: Number, required: true },
     useBonus: { type: Boolean, required: true },
     status: { type: String, required: true, default: "Нове" },
+    paymentStatus: { type: String }
 },
     { timestamps: true }
 )

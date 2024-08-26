@@ -129,4 +129,4 @@ const DrawerBasket = ({ open, onClose }) => {
     );
 };
 
-export { DrawerBasket };
+export { DrawerBasket, BlackButton };

@@ -2,6 +2,7 @@ const Order = require("../db/models/Order");
 const Product = require("../db/models/Product");
 const ProductInBasket = require("../db/models/ProductInBasket");
 const User = require("../db/models/User");
+const ApiError = require("../errors/ApiError");
 const monoService = require("../services/mono.service");
 
 
@@ -28,6 +29,10 @@ module.exports = {
                 };
             });
 
+            if (products.length === 0) {
+                return res.status(400).json({ message: "No products in basket" });
+            }
+
             const orderData = {
                 ...req.body.order,
                 _user: userId,
@@ -38,25 +43,46 @@ module.exports = {
                 Order.create(orderData),
                 User.findById(userId),
             ]);
+
+
             const invoice = await monoService.createInvoice(order)
+            console.log('invoice');
+            console.log(invoice);
 
-            // if (invoice.invoiceId) {
-            //     if (req.body.order.useBonus === true) {
-            //         await User.findByIdAndUpdate(userId, { bonus: req.body.order.cashback }, { new: true });
-            //     } else {
-            //         const newBonus = user.bonus + req.body.order.cashback;
-            //         await User.findByIdAndUpdate(userId, { bonus: newBonus }, { new: true });
-            //     }
+            const status = await monoService.getInvoiceStatus(invoice.invoiceId)
+            console.log('status');
+            console.log(status);
 
-            //     for (const item of products) {
-            //         await Product.findByIdAndUpdate(
-            //             item._productId,
-            //             { $inc: { quantity: -item.quantity } }, // зменшуємо кількість на складі
-            //             { new: true }
-            //         );
-            //     }
-            //     await ProductInBasket.deleteMany({ _user: userId });
-            // }
+            if (status.status === 'created') {
+                if (req.body.order.useBonus === true) {
+                    await User.findByIdAndUpdate(userId, { bonus: req.body.order.cashback }, { new: true });
+                } else {
+                    const newBonus = user.bonus + req.body.order.cashback;
+                    await User.findByIdAndUpdate(userId, { bonus: newBonus }, { new: true });
+                }
+
+                for (const item of products) {
+                    console.log('item._productId');
+                    console.log(item._productId);
+
+                    await Product.findByIdAndUpdate(
+                        item._productId,
+                        { $inc: { quantity: -item.quantity } }, // зменшуємо кількість на складі
+                        { new: true }
+                    );
+                }
+                await ProductInBasket.deleteMany({ _user: userId });
+
+                const order = await Order.findOne({ 'orderID': status.reference });
+                console.log('order');
+                console.log(order);
+
+                if (order) {
+                    order.paymentStatus = status.status;
+                    await order.save();
+                }
+            }
+
 
             res.status(200).json({ order, invoice });
 

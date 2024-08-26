@@ -5,6 +5,7 @@ module.exports = {
     MONGO_URL: process.env.MONGO_URL,
 
     CLIENT_URL: process.env.CLIENT_URL,
+    SERVER_URL: process.env.SERVER_URL,
 
     NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL,
     NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD,

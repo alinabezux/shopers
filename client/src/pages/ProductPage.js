@@ -184,16 +184,22 @@ const ProductPage = () => {
                             </Chip>
                         </Stack>
                         <Stack direction="row" spacing={2} alignItems="center" >
-                            <ButtonGroup className="product-page__counter" variant='outlined' aria-label="outlined button group">
+                            <ButtonGroup disabled={product.quantity <= 0} className="product-page__counter" variant='outlined' aria-label="outlined button group">
                                 <Button className="product-page__quantity" onClick={decreaseQuantity}> - </Button>
                                 <Button className="product-page__quantity">{quantity}</Button>
                                 <Button className="product-page__quantity" onClick={increaseQuantity}>+</Button>
                             </ButtonGroup>
-                            <Button variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
+                            <Button disabled={product.quantity <= 0} variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
-                        <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
-                            {product.quantity} в наявності
-                        </Chip>
+                        {product.quantity > 0 ?
+                            <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
+                                {product.quantity} в наявності
+                            </Chip> :
+                            <Chip className="product-page__cashback" size="md" variant="soft" color="danger">
+                                Немає в наявності
+                            </Chip>
+                        }
+
                         <br />
                         <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{product?.info?.color}</Typography>
                         <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{product?.info?.size}</Typography>
@@ -240,7 +246,7 @@ const ProductPage = () => {
             >
                 <Link to='/auth#logIn' className='link' sx={{ margin: 0, p: 0, textAlign: "center" }} ><b>Увійдіть</b></Link>щоб додати до списку бажань.
             </Snackbar>
-        </Container>
+        </Container >
     );
 };
 

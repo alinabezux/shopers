@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/joy/Card";
-import { AspectRatio, CardContent, CardOverflow } from "@mui/joy";
+import { AspectRatio, CardContent, CardOverflow, Chip } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -46,7 +46,7 @@ const ProductInFavorite = ({ product }) => {
                     <AspectRatio ratio="1">
                         <CardOverflow>
                             {
-                                product?.images && product?.images.length > 0?
+                                product?.images && product?.images.length > 0 ?
                                     <img src={product?.images[0]} alt={product?.name} /> :
                                     <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                             }
@@ -61,12 +61,21 @@ const ProductInFavorite = ({ product }) => {
                             <Typography className="accountpage__wishlist-price">{product?.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
                                 <FavoriteIcon sx={{ color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} />
-                                <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
-                                {/*<DoneIcon sx={{fontSize: 20}}/>*/}
-                            </Stack>
 
-                            {/*<DoneIcon sx={{fontSize: 20}}/>*/}
+                                {product.quantity > 0 &&
+                                    <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
+                                }
+                            </Stack>
                         </Stack>
+                        {product.quantity > 0 ?
+                            <Chip className="product-card__card-cashback" size="sm" variant="soft" color="success">
+                                {product.cashback} грн. кешбек
+                            </Chip>
+                            :
+                            <Chip className="product-card__card-cashback" size="sm" variant="soft" color="danger">
+                                Немає в наявності
+                            </Chip>
+                        }
                     </Stack>
                 </CardContent>
             </Card>

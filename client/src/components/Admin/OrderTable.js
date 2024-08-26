@@ -18,6 +18,12 @@ import {
     MenuItem,
     Dropdown,
     Stack,
+    Modal,
+    ModalDialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
 } from '@mui/joy';
 
 import {
@@ -31,6 +37,7 @@ import {
     KeyboardArrowLeft as KeyboardArrowLeftIcon,
     MoreHorizRounded as MoreHorizRoundedIcon,
     CloseRounded,
+    WarningRounded,
 } from '@mui/icons-material';
 
 import { orderActions } from '../../redux';
@@ -70,33 +77,43 @@ const OrderTable = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [openDelete, setOpenDelete] = useState(false);
 
     const action = useRef(null);
 
     const dispatch = useDispatch();
-    const { orders, selectedOrder, currentPageOrders, totalPagesOrders, count } = useSelector(state => state.orderReducer);
+    const { orders, selectedOrder, currentPageOrders, totalPagesOrders, count, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
         dispatch(orderActions.getAllOrders({ page: currentPageOrders }));
     }, [dispatch, currentPageOrders]);
 
-    const handleSetCurrentPageOrders = async (event, value) => {
+    const handleSetCurrentPageOrders = (event, value) => {
         dispatch(orderActions.setCurrentPageOrders(value));
     }
 
-    const handleDeleteOrder = useCallback(async (order) => {
-        dispatch(orderActions.deleteById(order._id));
+    const handleDelete = useCallback(async (order) => {
+        await dispatch(orderActions.setSelectedOrder(order))
+        setOpenDelete(true)
     }, [dispatch]);
+
+    const handleDeleteOrder = useCallback(async () => {
+        if (selectedOrder) {
+            await dispatch(orderActions.deleteById(selectedOrder._id));
+            setOpenDelete(false);
+        }
+    }, [dispatch, selectedOrder, setOpenDelete]);
 
     const filteredOrders = orders.filter(order =>
         (selectedPost ? order.shipping === selectedPost : true) &&
         (selectedPayment ? order.paymentMethod === selectedPayment : true) &&
         (
-            order.orderID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            order.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            order.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+            (order.orderID && order.orderID.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (order.firstName && order.firstName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (order.lastName && order.lastName.toLowerCase().includes(searchQuery.toLowerCase()))
         )
     );
+
 
 
     function RowMenu({ order }) {
@@ -111,7 +128,7 @@ const OrderTable = () => {
                 <Menu size="sm" sx={{ minWidth: 140 }}>
                     <MenuItem>Редагувати</MenuItem>
                     <Divider />
-                    <MenuItem color="danger" onClick={() => handleDeleteOrder(order)}>Видалити</MenuItem>
+                    <MenuItem color="danger" onClick={() => handleDelete(order)}>Видалити</MenuItem>
                 </Menu>
             </Dropdown>
         );
@@ -119,6 +136,26 @@ const OrderTable = () => {
 
     return (
         <Box>
+            <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
+                <ModalDialog variant="outlined" role="alertdialog" >
+                    <DialogTitle>
+                        <WarningRounded />
+                        Підтвердження
+                    </DialogTitle>
+                    <Divider />
+                    <DialogContent>
+                        Ви впевнені, що хочете видалити це замовлення?
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="solid" color="danger" onClick={handleDeleteOrder} loading={loadingOrder ? true : false}>
+                            Видалити
+                        </Button>
+                        <Button variant="plain" color="neutral" onClick={() => setOpenDelete(false)}>
+                            Скасувати
+                        </Button>
+                    </DialogActions>
+                </ModalDialog>
+            </Modal>
             <Box
                 sx={{
                     display: 'flex',

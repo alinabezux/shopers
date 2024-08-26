@@ -74,23 +74,23 @@ const ProductsTable = () => {
         product.article.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleDeleteProduct = useCallback(async (product) => {
-        dispatch(productActions.setSelectedProduct(product));
+    const handleDeleteProduct = useCallback(async(product) => {
+        await dispatch(productActions.setSelectedProduct(product));
         setOpenDelete(true)
     }, [dispatch]);
 
-    const handleEditProduct = useCallback(async (product) => {
-        dispatch(productActions.setSelectedProduct(product));
+    const handleEditProduct = useCallback(async(product) => {
+        await dispatch(productActions.setSelectedProduct(product));
         setOpenEdit(true)
     }, [dispatch]);
 
-    const handleAddPhotoProduct = useCallback((product) => {
-        dispatch(productActions.setSelectedProduct(product));
+    const handleAddPhotoProduct = useCallback(async(product) => {
+        await dispatch(productActions.setSelectedProduct(product));
         setOpenAddPhoto(true);
     }, [dispatch]);
 
-    const handleOpenImages = useCallback((product) => {
-        dispatch(productActions.setSelectedProduct(product));
+    const handleOpenImages = useCallback(async(product) => {
+        await dispatch(productActions.setSelectedProduct(product));
         setOpenImages(true);
     }, [dispatch]);
 
@@ -98,7 +98,7 @@ const ProductsTable = () => {
         dispatch(productActions.setSelectedProduct(product));
     }, [dispatch]);
 
-    const handleSetCurrentPageProducts = async (event, value) => {
+    const handleSetCurrentPageProducts = (event, value) => {            //?
         dispatch(productActions.setCurrentPageProducts(value));
     }
 

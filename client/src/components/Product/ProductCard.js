@@ -99,13 +99,21 @@ const ProductCard = ({ product }) => {
                                     favourite ? <FavoriteIcon sx={{ color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} /> :
                                         <FavoriteBorderIcon onClick={() => handleAddProductToFavourite(product)} />
                                 }
-                                <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
-                                {/*<DoneIcon sx={{fontSize: 20}}/>*/}
+                                {product.quantity > 0 &&
+                                    <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
+                                }
                             </Stack>
                         </Stack>
-                        <Chip className="product-card__card-cashback" size="sm" variant="soft" color="success">
-                            {product.cashback} грн. кешбек
-                        </Chip>
+
+                        {product.quantity > 0 ?
+                            <Chip className="product-card__card-cashback" size="sm" variant="soft" color="success">
+                                {product.cashback} грн. кешбек
+                            </Chip>
+                            :
+                            <Chip className="product-card__card-cashback" size="sm" variant="soft" color="danger">
+                                Немає в наявності
+                            </Chip>
+                        }
                     </Stack>
                 </CardContent>
             </Card>

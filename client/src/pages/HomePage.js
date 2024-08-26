@@ -32,7 +32,6 @@ const WhiteButton = styled(Button)(({ theme }) => ({
 }));
 
 const HomePage = () => {
-
     return (
         <Box className="homepage">
             <Box className="homepage__section1">

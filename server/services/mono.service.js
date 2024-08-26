@@ -34,7 +34,7 @@ module.exports = {
                 }))
             },
             redirectUrl: `${CLIENT_URL}/order/${order.orderID}`,
-            webHookUrl: `http://localhost:5000/api/payment/status`,
+            webHookUrl: `${SERVER_URL}/api/mono/paymentStatus`,
         };
 
         try {

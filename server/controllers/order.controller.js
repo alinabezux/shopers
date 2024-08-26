@@ -67,7 +67,7 @@ module.exports = {
 
                     await Product.findByIdAndUpdate(
                         item._productId,
-                        { $inc: { quantity: -item.quantity } }, // зменшуємо кількість на складі
+                        { $inc: { quantity: -item.quantity } }, 
                         { new: true }
                     );
                 }

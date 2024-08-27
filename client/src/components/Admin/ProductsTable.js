@@ -103,7 +103,6 @@ const ProductsTable = () => {
     }
 
 
-
     function RowMenu({ product }) {
         return (
             <Dropdown>

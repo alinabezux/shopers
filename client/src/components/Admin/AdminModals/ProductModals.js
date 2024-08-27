@@ -225,28 +225,29 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
     const [category, setCategory] = useState('')
     const [type, setType] = useState('')
 
-    useEffect(() => {
-        if (selectedProduct) {
-            setValue('article', selectedProduct.article)
-            setValue('name', selectedProduct.name)
-            setValue('quantity', selectedProduct.quantity)
-            setValue('price', selectedProduct.price)
+    // useEffect(() => {
+    //     if (selectedProduct) {
+    //         setValue('article', selectedProduct.article)
+    //         setValue('name', selectedProduct.name)
+    //         setValue('quantity', selectedProduct.quantity)
+    //         setValue('price', selectedProduct.price)
 
-            setValue('color', selectedProduct?.info?.color)
-            setValue('size', selectedProduct?.info?.size)
-            setValue('material', selectedProduct?.info?.material)
-            setValue('description', selectedProduct?.info?.description)
+    //         setValue('color', selectedProduct?.info?.color)
+    //         setValue('size', selectedProduct?.info?.size)
+    //         setValue('material', selectedProduct?.info?.material)
+    //         setValue('description', selectedProduct?.info?.description)
 
-            setCategory(selectedProduct._category);
-            setType(selectedProduct._type)
-        }
-    }, [selectedProduct, setValue])
+    //         setCategory(selectedProduct._category);
+    //         setType(selectedProduct._type)
+    //     }
+    // }, [selectedProduct, setValue])
 
 
     const handleEditType = useCallback(async (data) => {
         let productProperties = {
-            info: {}
+            // info: {}
         };
+
         if (data.article) {
             productProperties.article = data.article;
         }
@@ -300,7 +301,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
                     <Box className="checkout__info" sx={{ gap: "15px" }}>
                         <FormControl className="checkout__form" error={error}>
                             <FormLabel>Артикул</FormLabel>
-                            <Input {...register('article')} />
+                            <Input placeholder={selectedProduct.article} {...register('article')} />
                             {error &&
                                 <FormHelperText >
                                     <InfoOutlined sx={{ mr: 1 }} />
@@ -311,12 +312,14 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 
                         <FormControl className="checkout__form">
                             <FormLabel>Назва</FormLabel>
-                            <Input {...register('name')} />
+                            <Input placeholder={selectedProduct.name} {...register('name')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">
                             <FormLabel>Категорія, до якої відноситься даний товар</FormLabel>
-                            <Select onChange={(event, newValue) => setCategory(newValue)} value={category || ''}>
+                            <Select onChange={(event, newValue) => setCategory(newValue)} value={category || ''}
+                                placeholder={(categories.find(item => item._id === selectedProduct._category))?.name}
+                            >
                                 {categories.map((category) => (
                                     <Option value={category._id} key={category._id}>{category.name}</Option>
                                 ))}
@@ -325,7 +328,9 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 
                         <FormControl className="checkout__form">
                             <FormLabel>Тип, до якої відноситься даний товар</FormLabel>
-                            <Select onChange={(event, newValue) => setType(newValue)} value={type || ''}>
+                            <Select onChange={(event, newValue) => setType(newValue)} value={type || ''}
+                                placeholder={(types.find(item => item._id === selectedProduct._type))?.name}
+                            >
                                 {types.map((type) => (
                                     <Option value={type._id} key={type._id}>{type.name}</Option>
                                 ))}
@@ -334,32 +339,32 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 
                         <FormControl className="checkout__form" >
                             <FormLabel>Колір</FormLabel>
-                            <Input {...register('color')} />
+                            <Input placeholder={selectedProduct?.info?.color} {...register('color')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">
                             <FormLabel>Розмір</FormLabel>
-                            <Input {...register('size')} />
+                            <Input placeholder={selectedProduct?.info?.size} {...register('size')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">
                             <FormLabel>Матеріал</FormLabel>
-                            <Input {...register('material')} />
+                            <Input placeholder={selectedProduct?.info?.material} {...register('material')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">
                             <FormLabel>Опис</FormLabel>
-                            <Input {...register('description')} />
+                            <Input placeholder={selectedProduct?.info?.description} {...register('description')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">
                             <FormLabel>Кількість</FormLabel>
-                            <Input  {...register('quantity')} />
+                            <Input placeholder={selectedProduct.quantity} {...register('quantity')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">
                             <FormLabel>Ціна</FormLabel>
-                            <Input {...register('price')} />
+                            <Input placeholder={selectedProduct.price} {...register('price')} />
                         </FormControl>
 
                         <Button type="submit" loading={loading ? true : false}>Зберегти</Button>

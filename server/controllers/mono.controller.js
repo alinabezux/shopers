@@ -31,14 +31,16 @@ module.exports = {
             const { reference, status, modifiedDate } = req.body;
             const order = await Order.findOne({ 'orderID': reference });
 
-            // if (order) {
-            //     // Оновлюємо статус замовлення тільки якщо новий статус має новіші дані
-            //     if (new Date(modifiedDate) > new Date(order.modifiedDate)) {
-            //         order.paymentStatus = status;
-            //         order.modifiedDate = modifiedDate; // оновлюємо дату модифікації
-            //         await order.save();
-            //     }
-            // }
+            if (order) {
+                console.log(order);
+
+                // Оновлюємо статус замовлення тільки якщо новий статус має новіші дані
+                // if (new Date(modifiedDate) > new Date(order.modifiedDate)) {
+                order.paymentStatus = status;
+                // order.modifiedDate = modifiedDate; // оновлюємо дату модифікації
+                await order.save();
+                // }
+            }
 
             res.status(200).json({ message: 'Status updated successfully' });
         } catch (error) {

@@ -12,7 +12,6 @@ module.exports = {
 
         let cashback;
 
-
         const invoiceData = {
             amount: sum,
             merchantPaymInfo: {
@@ -24,13 +23,13 @@ module.exports = {
                     sum: item.price * 100 * item.quantity,
                     icon: "string",
                     code: item.article,
-                    discounts: [
-                        {
-                            "type": "DISCOUNT",
-                            "mode": "VALUE",
-                            "value": bonusSum/orderItems.length
-                        }
-                    ]
+                    // discounts: [
+                    //     {
+                    //         "type": "DISCOUNT",
+                    //         "mode": "VALUE",
+                    //         "value": bonusSum/orderItems.length
+                    //     }
+                    // ]
                 }))
             },
             redirectUrl: `${CLIENT_URL}/order/${order.orderID}`,

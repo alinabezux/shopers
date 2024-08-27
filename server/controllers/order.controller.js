@@ -13,9 +13,8 @@ module.exports = {
 
             const productsInBasket = await ProductInBasket.find({ _user: userId }).populate('_product');
 
-            // console.log('----');
+            console.log('----');
             // const products = productsInBasket.map(productInBasket => productInBasket._id);
-            // console.log(products);
 
             const products = productsInBasket.map(productInBasket => {
                 return {
@@ -28,6 +27,7 @@ module.exports = {
                     article: productInBasket._product.article
                 };
             });
+            console.log(products);
 
             if (products.length === 0) {
                 return res.status(400).json({ message: "No products in basket" });
@@ -67,7 +67,7 @@ module.exports = {
 
                     await Product.findByIdAndUpdate(
                         item._productId,
-                        { $inc: { quantity: -item.quantity } }, 
+                        { $inc: { quantity: -item.quantity } },
                         { new: true }
                     );
                 }
@@ -82,7 +82,6 @@ module.exports = {
                     await order.save();
                 }
             }
-
 
             res.status(200).json({ order, invoice });
 

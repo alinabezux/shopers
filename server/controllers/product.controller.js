@@ -115,12 +115,32 @@ module.exports = {
 
     updateProduct: async (req, res, next) => {
         try {
+            const { productId } = req.params;
             const newInfo = req.body.product;
-            
-            const { price } = req.body.product;
-            const cashback = Math.trunc(price * 0.02);
 
-            const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, { ...newInfo, cashback }, { new: true });
+            if (!productId || !newInfo) {
+                return res.status(400).json({ message: 'Product ID і дані для оновлення обов\'язкові.' });
+            }
+
+            if (newInfo.article) {
+                console.log(newInfo.article);
+                const product = await Product.findOne({ article: newInfo.article });
+                console.log(product);
+
+                if (product) {
+                    return res.status(409).json({ message: 'Продукт з таким артикулом вже існує.' });
+                }
+            }
+
+            if (newInfo.price) {
+                newInfo.cashback = Math.trunc(newInfo.price * 0.02);
+            }
+
+            const updatedProduct = await Product.findByIdAndUpdate(
+                productId,
+                { $set: { ...newInfo } },
+                { new: true });
+
             res.status(200).json(updatedProduct);
 
         } catch (e) {

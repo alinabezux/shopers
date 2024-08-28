@@ -24,6 +24,8 @@ import {
     DialogContent,
     DialogActions,
     Button,
+    Card,
+    AspectRatio,
 } from '@mui/joy';
 
 import {
@@ -42,6 +44,7 @@ import {
 
 import { orderActions } from '../../redux';
 import { Pagination } from '@mui/material';
+import { TypographyInheritContext } from '@mui/joy/Typography/Typography';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -259,10 +262,8 @@ const OrderTable = () => {
                     <thead>
                         <tr>
                             <th style={{ width: 80, padding: "12px " }}>
-                                <Link
-                                    underline="none"
+                                <Typography
                                     color="primary"
-                                    component="button"
                                     onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
                                     fontWeight="lg"
                                     endDecorator={<ArrowDropDownIcon />}
@@ -275,7 +276,7 @@ const OrderTable = () => {
                                     }}
                                 >
                                     № / Дата
-                                </Link>
+                                </Typography>
                             </th>
                             <th style={{ width: 250, padding: '12px 6px' }}>Замовлення</th>
                             <th style={{ width: 300, padding: '12px 6px' }}>Дані покупця</th>
@@ -286,23 +287,18 @@ const OrderTable = () => {
                     </thead>
                     <tbody>
                         {stableSort(filteredOrders, getComparator(order, 'createdAt')).map((order) => (
-                            <tr key={order.orderID}>
+                            <tr key={order.orderID} >
                                 <td>
                                     <Typography
                                         fontWeight="lg"
                                         textColor="text.primary"
                                         textDecoration="none"
-                                        component="a"
-                                        href="#"
                                         sx={{ display: 'block', padding: "12px" }}
                                     >
                                         {order.orderID}
                                     </Typography>
                                     <Typography
                                         fontWeight="lg"
-                                        textColor="text.primary"
-                                        textDecoration="none"
-                                        component="a"
                                         sx={{ display: 'block', padding: "12px" }}
                                     >
                                         {order.createdAt.split('T')[0].split('-').reverse().join('.')}
@@ -310,10 +306,27 @@ const OrderTable = () => {
 
                                 </td>
                                 <td>
-                                    {/* {order?.orderItems.map((item, index) => (
-                                        <li key={index}>{item.name}</li>))} */}
+                                    {order?.orderItems.map((item, index) => (
+                                        <Card variant="soft" orientation="horizontal" sx={{ margin: "10px 0" }}>
+                                            {/* <AspectRatio ratio="1" sx={{ width: 50 }}>
+                                                <img
+                                                    src={item.img}
+                                                    srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
+                                                    loading="lazy"
+                                                    alt=""
+                                                />
+                                            </AspectRatio> */}
+                                            <div>
+                                                <Typography level="title-sm">{item.article}</Typography>
+                                                <Typography level="title-md">{item.name} - {item.quantity} шт.</Typography>
+                                                <Typography level="body-sm">колір: {item?.info?.color}</Typography>
+                                                <Typography level="body-sm">розмір: {item?.info?.size}</Typography>
+                                                <Typography level="title-sm">{item.price} грн.</Typography>
+                                            </div>
+                                        </Card>
+                                    ))}
                                     <Divider sx={{ my: 2 }} />
-                                    <Typography level="body2">Сума: {order.totalSum} грн.</Typography>
+                                    <Typography level="title-sm">Сума: {order.totalSum} грн.</Typography>
                                 </td>
                                 <td>
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -352,18 +365,16 @@ const OrderTable = () => {
                                     <Chip
                                         size="sm"
                                         variant="soft"
-                                        color={
-                                            order.status === 'Paid'
-                                                ? 'success'
-                                                : order.status === 'Refunded'
-                                                    ? 'danger'
+                                        color={order.paymentStatus === 'created' ? 'primary'
+                                            : order.paymentStatus === 'success' ? 'success'
+                                                : order.paymentStatus === 'failure' ? 'danger'
                                                     : 'neutral'
                                         }
                                         startDecorator={
-                                            order.status === 'Paid' ? <CheckRoundedIcon /> : null
+                                            order.paymentStatus === 'success' ? <CheckRoundedIcon /> : null
                                         }
                                     >
-                                        {order.status}
+                                        {order.paymentStatus}
                                     </Chip>
                                 </td>
 

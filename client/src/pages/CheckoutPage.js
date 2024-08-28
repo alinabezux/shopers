@@ -503,7 +503,7 @@ const CheckoutPage = () => {
                                             </Tooltip>
                                         </Stack>
 
-                                        <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="basket__button" endDecorator={<DoneRoundedIcon />}>
+                                        <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="accountpage__button" endDecorator={<DoneRoundedIcon />}>
                                             ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
                                         </Button>
                                         <Typography sx={{

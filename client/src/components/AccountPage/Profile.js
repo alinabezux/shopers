@@ -103,7 +103,7 @@ const Profile = ({ user }) => {
                             </FormControl>
                             <Typography sx={{ gridColumn: '1/-1', fontSize: "12px" }}>* ці дані використовуватимуться при оформленні замовлення</Typography>
                         </CardContent>
-                        <Button className='accountpage__button' color="success" variant="solid" endDecorator={<Edit />} type="submit" loading={loading ? true : false}>ЗБЕРЕГТИ ЗМІНИ</Button>
+                        <Button className='accountpage__button' color="success" variant="solid" endDecorator={<Edit />} type="submit" loading={loading}>ЗБЕРЕГТИ ЗМІНИ</Button>
                     </Form>
                 </Card>
 
@@ -117,7 +117,7 @@ const Profile = ({ user }) => {
             </Box>
 
 
-            <Button variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
+            <Button className='accountpage__button' variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
         </Box >
     )
 };

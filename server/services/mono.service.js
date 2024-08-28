@@ -21,7 +21,7 @@ module.exports = {
                     name: item.name,
                     qty: item.quantity,
                     sum: item.price * 100 * item.quantity,
-                    icon: "string",
+                    icon: item.img,
                     code: item.article,
                     // discounts: [
                     //     {
@@ -29,11 +29,11 @@ module.exports = {
                     //         "mode": "VALUE",
                     //         "value": bonusSum/orderItems.length
                     //     }
-                    // ]
+                    // ] 
                 }))
             },
             redirectUrl: `${CLIENT_URL}/order/${order.orderID}`,
-            webHookUrl: `${SERVER_URL}/api/mono/paymentStatus`,
+            webHookUrl: 'http://localhost:5000/webhook/paymentStatus',
         };
 
         try {

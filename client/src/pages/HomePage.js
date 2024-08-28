@@ -19,7 +19,7 @@ const WhiteButton = styled(Button)(({ theme }) => ({
     fontWeight: '800',
     fontSize: '20px',
     border: "1px solid black",
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
         color: 'white',
         border: "2px solid white",
         margin: '20px',

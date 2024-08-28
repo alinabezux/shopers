@@ -1,12 +1,18 @@
 /* mobile */
-@media (max-width: 900px) {
+@media (max-width: 767px) {
     .basket {
         width: 100vw;
     }
 }
 
+@media (min-width:768px) and (max-width: 1024px) {
+    .basket {
+        width: 50vw;
+    }
+}
+
 /* pc */
-@media (min-width: 900px) {
+@media (min-width: 1025px) {
     .basket {
         width: 30vw;
     }

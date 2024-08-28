@@ -58,7 +58,7 @@ const ProductPage = () => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
-    }, [dispatch, userId])
+    }, [dispatch, userId, favorite.length])
 
     useEffect(() => {
         if (favorite) {
@@ -201,11 +201,18 @@ const ProductPage = () => {
                         }
 
                         <br />
-                        <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{product?.info?.color}</Typography>
-                        <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{product?.info?.size}</Typography>
-                        <Typography className="product-page__material">
-                            {product?.info?.material ? <><b style={{ color: "black" }}>Матеріал: </b>{product.info.material}</> : null}
-                        </Typography>
+                        {product?.info?.color &&
+                            <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{product.info.color}</Typography>
+                        }
+                        {product?.info?.size &&
+                            <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{product.info.size}</Typography>
+                        }
+                        {product?.info?.material &&
+                            <Typography className="product-page__material">
+                                <b style={{ color: "black" }}>Матеріал: </b>
+                                {product.info.material}
+                            </Typography>
+                        }
                         <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{product?.info?.description}</Typography>
                     </Stack>
                 </Box>

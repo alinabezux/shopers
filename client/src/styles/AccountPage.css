@@ -9,8 +9,9 @@
 .accountpage__profile-cards {
     display: flex;
     gap: 20px;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    margin-bottom: 30px;
 }
 
 .accountpage__profile {
@@ -117,13 +118,14 @@ p.accountpage__wishlist-color {
     }
 
     button.accountpage__button {
-        font-size: 20px;
-        width: 70%;
+        font-size: 16px;
     }
+
     .accountpage__wishlist-container {
         /* width: 90%; */
-       
+
     }
+
     .accountpage__wishlist-card {
         width: 37%;
     }
@@ -161,13 +163,13 @@ p.accountpage__wishlist-color {
     }
 
     button.accountpage__button {
-        width: 50%;
         font-size: 20px;
     }
 
     div.accountpage__chip {
         font-size: 18px;
     }
+
     .accountpage__wishlist-card {
         width: 25%;
     }
@@ -198,13 +200,13 @@ p.accountpage__wishlist-color {
     }
 
     button.accountpage__button {
-        width: 30%;
         font-size: 16px;
 
     }
+
     .accountpage__wishlist-container {
         width: 80%;
-       
+
     }
 
     .accountpage__wishlist-card {

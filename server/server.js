@@ -10,6 +10,7 @@ require('dotenv').config();
 const ApiError = require('./errors/ApiError');
 const configs = require('./configs/configs');
 const router = require('./routes');
+const monoRouter = require('./routes/mono.router');
 
 
 let app = express();
@@ -23,11 +24,13 @@ app.use(cors({
     origin: configs.CLIENT_URL,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Token', 'X-Sign']
 }));
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use(fileUpload());
 app.use('/api', router)
+app.use('/webhook', monoRouter)
 
 
 app.get('/', (req, res) => {

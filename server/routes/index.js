@@ -17,7 +17,7 @@ router.use('/auth', authRouter);
 router.use('/favorite', favouriteRouter);
 router.use('/basket', basketRouter);
 router.use('/order', orderRouter);
-router.use('/mono', monoRouter)
+// router.use('/mono', monoRouter)
 
 module.exports = router;
 

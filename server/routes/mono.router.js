@@ -3,4 +3,4 @@ const monoConroller = require('../controllers/mono.controller')
 
 monoRouter.post('/paymentStatus', monoConroller.getStatusWebHook);
 
-module.exports= monoRouter;
+module.exports = monoRouter;

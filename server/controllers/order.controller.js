@@ -27,7 +27,7 @@ module.exports = {
                     article: productInBasket._product.article
                 };
             });
-            console.log(products);
+            // console.log(products);
 
             if (products.length === 0) {
                 return res.status(400).json({ message: "No products in basket" });
@@ -46,38 +46,19 @@ module.exports = {
 
 
             const invoice = await monoService.createInvoice(order)
-            console.log('invoice');
-            console.log(invoice);
+            // console.log('invoice');
+            // console.log(invoice);
 
             const status = await monoService.getInvoiceStatus(invoice.invoiceId)
-            console.log('status');
-            console.log(status);
+            // console.log('status');
+            // console.log(status);
 
             if (status.status === 'created') {
-                if (req.body.order.useBonus === true) {
-                    await User.findByIdAndUpdate(userId, { bonus: req.body.order.cashback }, { new: true });
-                } else {
-                    const newBonus = user.bonus + req.body.order.cashback;
-                    await User.findByIdAndUpdate(userId, { bonus: newBonus }, { new: true });
-                }
+                await ProductInBasket.deleteMany({ _user: userId });  //+
 
-                for (const item of products) {
-                    console.log('item._productId');
-                    console.log(item._productId);
+                const order = await Order.findOne({ 'orderID': status.reference }); // +
 
-                    await Product.findByIdAndUpdate(
-                        item._productId,
-                        { $inc: { quantity: -item.quantity } },
-                        { new: true }
-                    );
-                }
-                await ProductInBasket.deleteMany({ _user: userId });
-
-                const order = await Order.findOne({ 'orderID': status.reference });
-                console.log('order');
-                console.log(order);
-
-                if (order) {
+                if (order) {  //+
                     order.paymentStatus = status.status;
                     await order.save();
                 }

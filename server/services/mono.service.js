@@ -33,7 +33,7 @@ module.exports = {
                 }))
             },
             redirectUrl: `${CLIENT_URL}/order/${order.orderID}`,
-            webHookUrl: 'http://localhost:5000/webhook/paymentStatus',
+            webHookUrl: 'https://734e-213-5-193-12.ngrok-free.app/webhook/paymentStatus',
         };
 
         try {

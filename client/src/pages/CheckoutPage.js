@@ -115,17 +115,17 @@ const CheckoutPage = () => {
                     city: selectedCity ? {
                         ref: selectedCity.value,
                         description: selectedCity.label
-                    } : undefined,
+                    } : null,
                     warehouse: selectedWarehouse ? {
                         ref: selectedWarehouse.value,
                         description: selectedWarehouse.label,
                         index: selectedWarehouse.index,
                         number: selectedWarehouse.number,
-                    } : undefined,
+                    } : null,
 
-                    cityUKR: data.cityUKR || undefined,
-                    region: selectedRegion || undefined,
-                    index: data.index || undefined,
+                    cityUKR: data.cityUKR || null,
+                    region: selectedRegion || null,
+                    index: data.index || null,
 
                     paymentMethod: payment,
                     totalSum: totalPrice,
@@ -136,8 +136,6 @@ const CheckoutPage = () => {
             const res = await dispatch(orderActions.createOrder(orderData))
             if (res.meta.requestStatus === 'fulfilled') {
                 window.location.href = res.payload.invoice.pageUrl;
-
-
             }
         } catch (error) {
             console.error('Error creating order:', error);

@@ -25,6 +25,4 @@ orderRouter.delete('/:orderId',
     authMiddleware.checkRole,
     orderController.deleteOrderById);
 
-
-
 module.exports = orderRouter;

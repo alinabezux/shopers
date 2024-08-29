@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const Order = require('../db/models/Order');
 const User = require('../db/models/User');
 const Product = require('../db/models/Product');
+const WebSocket = require('ws')
 
 module.exports = {
     getStatusWebHook: async (req, res, next) => {
@@ -37,7 +38,7 @@ module.exports = {
             if (order) {
                 if (new Date(modifiedDate) > new Date(order.updatedAt)) {
                     order.paymentStatus = status;
-                    order.updatedAt = modifiedDate; // оновлюємо дату модифікації
+                    order.updatedAt = modifiedDate; 
                     await order.save();
                 }
 
@@ -62,12 +63,11 @@ module.exports = {
 
                     await Promise.all([bonusUpdate, ...productUpdates]);
                 }
-            }
-
-            if (!order) {
+            } else {
                 return res.status(404).json({ message: 'Order not found' });
             }
 
+        
             res.status(200).json({ message: 'Status updated successfully' });
         } catch (error) {
             console.error('Помилка в контролері:', error);

@@ -11,7 +11,7 @@ const orderSchema = new Schema({
     _user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     orderItems: [{ type: Object, required: true }],
     shipping: { type: String, default: NOVAPOST, required: true, },
-
+    instagram: { type: String },
     // deliveryInfo
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -42,7 +42,8 @@ const orderSchema = new Schema({
     cashback: { type: Number, required: true },
     useBonus: { type: Boolean, required: true },
     status: { type: String, required: true, default: "Нове" },
-    paymentStatus: { type: String }
+    paymentStatus: { type: String },
+    invoiceId: { type: String }
 },
     { timestamps: true }
 )

@@ -52,21 +52,10 @@ const getUserOrders = createAsyncThunk(
     }
 );
 
-const updateOrderStatus = createAsyncThunk(
-    'orderSlice/updateOrderStatus',
-    async ({ orderId, status }, { rejectWithValue }) => {
-        try {
-            const { data } = await orderService.updateOrderStatus(orderId, status);
-            return data
-        } catch (e) {
-            return rejectWithValue(e.response.data)
-        }
-    }
-);
 
 const deleteById = createAsyncThunk(
     'orderSlice/deleteById',
-    async (orderId , { rejectWithValue }) => {
+    async (orderId, { rejectWithValue }) => {
         try {
             await orderService.deleteById(orderId);
             return orderId;
@@ -86,6 +75,14 @@ const orderSlice = createSlice({
         },
         setCurrentPageOrders: (state, action) => {
             state.currentPageOrders = action.payload
+        },
+        updateOrderStatus: (state, action) => {
+            const { orderId, paymentStatus } = action.payload;
+
+            const index = state.orders.findIndex(order => order._id === orderId);
+            if (index !== -1) {
+                state.orders[index].paymentStatus = paymentStatus;
+            }
         }
     },
     extraReducers: builder =>
@@ -136,20 +133,6 @@ const orderSlice = createSlice({
             })
 
 
-            .addCase(updateOrderStatus.fulfilled, (state, action) => {
-                const findOrder = state.orders.find(value => value._id === action.payload._id);
-                Object.assign(findOrder, action.payload)
-                state.selectedOrder = null
-            })
-            .addCase(updateOrderStatus.pending, (state) => {
-                state.loadingOrder = true
-            })
-            .addCase(updateOrderStatus.rejected, (state, action) => {
-                state.errorOrder = action.payload
-                state.loadingOrder = false
-            })
-
-
             .addCase(deleteById.fulfilled, (state, action) => {
                 const deletedId = action.payload;
                 state.orders = state.orders.filter(item => item._id !== deletedId);
@@ -167,10 +150,10 @@ const orderSlice = createSlice({
             })
 });
 
-const { reducer: orderReducer, actions: { setSelectedOrder, setCurrentPageOrders } } = orderSlice;
+const { reducer: orderReducer, actions: { setSelectedOrder, setCurrentPageOrders, updateOrderStatus } } = orderSlice;
 
 const orderActions = {
-    createOrder, getAllOrders, setSelectedOrder, updateOrderStatus, setCurrentPageOrders, getUserOrders, deleteById
+    createOrder, getAllOrders, setSelectedOrder, setCurrentPageOrders, getUserOrders, deleteById, updateOrderStatus
 }
 
 export { orderReducer, orderActions }

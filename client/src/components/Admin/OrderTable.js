@@ -5,7 +5,6 @@ import {
     Chip,
     Divider,
     FormControl,
-    Link,
     Input,
     Select,
     Option,
@@ -13,10 +12,6 @@ import {
     Sheet,
     IconButton,
     Typography,
-    Menu,
-    MenuButton,
-    MenuItem,
-    Dropdown,
     Stack,
     Modal,
     ModalDialog,
@@ -25,7 +20,7 @@ import {
     DialogActions,
     Button,
     Card,
-    AspectRatio,
+    Tooltip,
 } from '@mui/joy';
 
 import {
@@ -40,11 +35,11 @@ import {
     MoreHorizRounded as MoreHorizRoundedIcon,
     CloseRounded,
     WarningRounded,
+    DeleteOutlineRounded,
 } from '@mui/icons-material';
 
 import { orderActions } from '../../redux';
 import { Pagination } from '@mui/material';
-import { TypographyInheritContext } from '@mui/joy/Typography/Typography';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -88,8 +83,31 @@ const OrderTable = () => {
     const { orders, selectedOrder, currentPageOrders, totalPagesOrders, count, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
-        dispatch(orderActions.getAllOrders({ page: currentPageOrders }));
-    }, [dispatch, currentPageOrders]);
+        dispatch(orderActions.getAllOrders());
+
+        const socket = new WebSocket('ws://localhost:8080');
+
+        socket.onopen = () => {
+            console.log('WebSocket connected');
+        };
+
+        socket.onmessage = (event) => {
+            const change = JSON.parse(event.data);
+            console.log('Зміна отримана з сервера:', change);
+
+            dispatch(orderActions.updateOrderStatus({ orderId: change.documentKey._id, paymentStatus: change.updateDescription.updatedFields.paymentStatus }));
+        };
+
+        socket.onclose = () => {
+            console.log('WebSocket disconnected');
+        };
+
+        return () => {
+            socket.close();
+        };
+    }, [dispatch]);
+
+
 
     const handleSetCurrentPageOrders = (event, value) => {
         dispatch(orderActions.setCurrentPageOrders(value));
@@ -117,25 +135,6 @@ const OrderTable = () => {
         )
     );
 
-
-
-    function RowMenu({ order }) {
-        return (
-            <Dropdown>
-                <MenuButton
-                    slots={{ root: IconButton }}
-                    slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
-                >
-                    <MoreHorizRoundedIcon />
-                </MenuButton>
-                <Menu size="sm" sx={{ minWidth: 140 }}>
-                    <MenuItem>Редагувати</MenuItem>
-                    <Divider />
-                    <MenuItem color="danger" onClick={() => handleDelete(order)}>Видалити</MenuItem>
-                </Menu>
-            </Dropdown>
-        );
-    }
 
     return (
         <Box>
@@ -307,7 +306,7 @@ const OrderTable = () => {
                                 </td>
                                 <td>
                                     {order?.orderItems.map((item, index) => (
-                                        <Card variant="soft" orientation="horizontal" sx={{ margin: "10px 0" }}>
+                                        <Card key={item._productId} variant="soft" orientation="horizontal" sx={{ margin: "10px 0" }}>
                                             {/* <AspectRatio ratio="1" sx={{ width: 50 }}>
                                                 <img
                                                     src={item.img}
@@ -330,14 +329,16 @@ const OrderTable = () => {
                                 </td>
                                 <td>
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                        <Typography level="body2">{order.email}</Typography>
+                                        {order.instagram && <Typography level="body2">Inst: {order.instagram}</Typography>}
                                         <Typography fontWeight="lg" level="body3">
-                                            ПІБ :   {order.firstName} {order.lastName}
+                                            {order.firstName} {order.lastName}
                                         </Typography>
-                                        <Typography level="body2">тел.: {order.phoneNumber}</Typography>
+                                        <Typography level="body2">{order.phoneNumber}</Typography>
 
                                         {order.city ?
                                             <>
-                                                <Typography>{order.city.description}</Typography>
+                                                <Typography>{order.city.description}, №{order.warehouse.number}</Typography>
                                                 <Typography>{order.warehouse.description}</Typography>
                                             </>
                                             :
@@ -348,7 +349,6 @@ const OrderTable = () => {
                                             </>
                                         }
 
-                                        <Typography level="body2">{order.email}</Typography>
                                         <Chip size="sm"
                                             variant="solid"
                                             color={
@@ -360,26 +360,33 @@ const OrderTable = () => {
                                     </Box>
                                 </td>
 
-                                <td>{order.paymentMethod}</td>
+                                <td>{order.paymentMethod}
+                                    {order.paymentMethod === 'Накладений платіж' &&
+                                        <Typography level="title-sm">{order.totalSum - 100} грн.</Typography>
+                                    }</td>
                                 <td>
-                                    <Chip
-                                        size="sm"
-                                        variant="soft"
-                                        color={order.paymentStatus === 'created' ? 'primary'
-                                            : order.paymentStatus === 'success' ? 'success'
-                                                : order.paymentStatus === 'failure' ? 'danger'
-                                                    : 'neutral'
-                                        }
-                                        startDecorator={
-                                            order.paymentStatus === 'success' ? <CheckRoundedIcon /> : null
-                                        }
-                                    >
-                                        {order.paymentStatus}
-                                    </Chip>
+                                    <Tooltip title={order.invoiceId} variant="soft">
+                                        <Chip
+                                            size="sm"
+                                            variant="soft"
+                                            color={order.paymentStatus === 'created' ? 'primary'
+                                                : order.paymentStatus === 'success' ? 'success'
+                                                    : order.paymentStatus === 'failure' ? 'danger'
+                                                        : 'neutral'
+                                            }
+                                            startDecorator={
+                                                order.paymentStatus === 'success' ? <CheckRoundedIcon /> : null
+                                            }
+                                        >
+                                            {order.paymentStatus}
+                                        </Chip>
+                                    </Tooltip>
                                 </td>
 
                                 <td style={{ textAlign: 'right' }}>
-                                    <RowMenu order={order} />
+                                    <IconButton onClick={() => handleDelete(order)}>
+                                        <DeleteOutlineRounded />
+                                    </IconButton>
                                 </td>
                             </tr>
                         ))}

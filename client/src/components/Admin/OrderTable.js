@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import io from 'socket.io-client';
 import { useDispatch, useSelector } from "react-redux";
 import {
     Box,
@@ -87,26 +88,25 @@ const OrderTable = () => {
     }, [dispatch, currentPageOrders]);
 
     useEffect(() => {
-        const socket = new WebSocket('ws://localhost:8080');
+        const socket = io('http://localhost:5000');
 
-        socket.onopen = () => {
-            console.log('WebSocket connected');
-        };
+        socket.on('connect', () => {
+            console.log('Socket connected');
+        });
 
-        socket.onmessage = (event) => {
-            const change = JSON.parse(event.data);
+        socket.on('update', (change) => {
             dispatch(orderActions.updateOrderStatus({
-                orderId: change.documentKey._id,
+                orderId: change.documentKey._id, 
                 paymentStatus: change.updateDescription.updatedFields.paymentStatus
             }));
-        };
+        });
 
-        socket.onclose = () => {
-            console.log('WebSocket disconnected');
-        };
+        socket.on('disconnect', () => {
+            console.log('Socket disconnected');
+        });
 
         return () => {
-            socket.close();
+            socket.disconnect(); 
         };
     }, [dispatch]);
 

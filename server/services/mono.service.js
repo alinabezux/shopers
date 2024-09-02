@@ -23,7 +23,7 @@ const createInvoice = async (order) => {
             }))
         },
         redirectUrl: `${CLIENT_URL}/order/${order.orderID}`,
-        webHookUrl: 'https://f9c2-213-5-193-12.ngrok-free.app/webhook/paymentStatus',
+        webHookUrl: 'https://shopersserver-8oq9sj6py-alinas-projects-45a8001e.vercel.app/webhook/paymentStatus',
     };
 
     try {

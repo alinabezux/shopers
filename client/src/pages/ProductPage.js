@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { toUrlFriendly } from '../utils'
 
 import { Typography, Box, Stack } from '@mui/material';
 import { Button, Chip, ButtonGroup, AspectRatio } from "@mui/joy";
 import { Container } from '@mui/joy';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -16,12 +14,14 @@ import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { basketActions, favoriteActions, productActions } from '../redux';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Snackbar from '@mui/joy/Snackbar';
-import { DrawerBasket } from '../components';
 import AccountCircleRounded from '@mui/icons-material/AccountCircleRounded';
+
+import { basketActions, favoriteActions, productActions } from '../redux';
+import { DrawerBasket } from '../components';
+import { toUrlFriendly } from '../utils'
 
 const ProductPage = () => {
     const [openBasket, setOpenBasket] = useState(false);

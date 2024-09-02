@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Container, Typography, Button } from "@mui/material";
+import React from 'react';
 import { Link } from 'react-router-dom';
-import fon2 from '../assets/fon2.jpg'
-import fon_pc from '../assets/SHOPERS_VI2.jpg'
-import { styled } from '@mui/material/styles';
+
 import { CategoriesMenu } from '../components';
+import fon_pc from '../assets/SHOPERS_VI2.jpg'
+import fon2 from '../assets/fon2.jpg'
+
+import { Box, Container, Typography, Button } from "@mui/material";
+import { styled } from '@mui/material/styles';
 
 const WhiteButton = styled(Button)(({ theme }) => ({
     color: 'black',

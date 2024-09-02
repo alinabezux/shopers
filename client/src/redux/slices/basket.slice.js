@@ -3,7 +3,6 @@ import { basketService } from "../../services";
 
 const initialState = {
     basket: [],
-
     loading: false,
     error: null
 }
@@ -76,7 +75,6 @@ const basketSlice = createSlice({
                 state.loading = false
             })
 
-
             .addCase(addToBasket.fulfilled, (state, action) => {
                 state.basket.push(action.payload)
                 state.loading = false
@@ -89,7 +87,6 @@ const basketSlice = createSlice({
                 state.error = action.payload
                 state.loading = false
             })
-
 
             .addCase(deleteFromBasket.fulfilled, (state, action) => {
                 const deletedId = action.payload;
@@ -105,7 +102,6 @@ const basketSlice = createSlice({
                 state.error = action.payload
                 state.loading = false
             })
-
 
             .addCase(updateProductInBasketQuantity.fulfilled, (state, action) => {
                 const findProduct = state.basket.find(item => item._id === action.payload._product);

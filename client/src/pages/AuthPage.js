@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, Link, useSearchParams } from 'react-router-dom'
+
+import image from '../assets/loginpage.jpg'
+
 import { Typography, Stack, Box } from "@mui/material";
 import { Tabs, TabList, Tab, TabPanel, Alert } from '@mui/joy';
-import { useLocation, Link, useSearchParams } from 'react-router-dom'
 import { tabClasses } from '@mui/joy/Tab'
-import image from '../assets/loginpage.jpg'
 import Snackbar from '@mui/joy/Snackbar';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import WarningIcon from '@mui/icons-material/Warning';

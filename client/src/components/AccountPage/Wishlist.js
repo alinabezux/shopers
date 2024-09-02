@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import Button2 from "@mui/material/Button";
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+
+import { favoriteActions } from '../../redux';
+import { ProductInFavorite } from '../ProductInFavorite';
+
+import Button2 from "@mui/material/Button";
 import {
     Box,
     Typography,
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useDispatch, useSelector } from "react-redux";
-import { favoriteActions } from '../../redux';
-import { ProductInFavorite } from '../ProductInFavorite';
 
 
 const BlackButton = styled(Button2)(() => ({

@@ -7,7 +7,6 @@ const authRouter = require('./auth.router');
 const basketRouter = require('./basket.router');
 const favouriteRouter = require('./favourite.router');
 const orderRouter = require('./order.router');
-const monoRouter = require('./mono.router');
 
 router.use('/products', productRouter)
 router.use('/categories', categoryRouter);
@@ -17,7 +16,6 @@ router.use('/auth', authRouter);
 router.use('/favorite', favouriteRouter);
 router.use('/basket', basketRouter);
 router.use('/order', orderRouter);
-// router.use('/mono', monoRouter)
 
 module.exports = router;
 

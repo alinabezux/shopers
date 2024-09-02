@@ -1,9 +1,11 @@
 import React, { useEffect, useCallback } from 'react';
-import { Box, Stack, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { typeActions } from "../redux";
 import { NavLink } from "react-router-dom";
+
+import { typeActions } from "../redux";
 import { toUrlFriendly } from '../utils'
+
+import { Box, Typography } from "@mui/material";
 
 const TypesMenu = () => {
     const { selectedCategory } = useSelector(state => state.categoryReducer);

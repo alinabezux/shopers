@@ -1,8 +1,7 @@
 import React from 'react';
-import { Catalogue } from '../components';
 import { useSelector } from "react-redux";
-import { useParams } from 'react-router-dom';
 
+import { Catalogue } from '../components';
 
 const TypePage = () => {
     const { selectedCategory } = useSelector(state => state.categoryReducer);

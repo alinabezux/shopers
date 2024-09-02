@@ -1,20 +1,21 @@
-
 import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { typeActions } from '../../redux';
+import { CreateTypeModal, DeleteTypeModal, EditTypeModal } from './AdminModals/TypeModals';
+
 import {
     Box,
     Button,
     Typography,
 } from '@mui/joy';
 import AddIcon from '@mui/icons-material/Add';
-import { typeActions } from '../../redux';
-import { useDispatch, useSelector } from 'react-redux';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 
-import { CreateTypeModal, DeleteTypeModal, EditTypeModal } from './AdminModals/TypeModals';
 
 const TypesTable = () => {
     const dispatch = useDispatch();

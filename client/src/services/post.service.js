@@ -14,6 +14,7 @@ const postService = {
 
         return axios.post(POST_URL, requestData)
     },
+    
     getWarehouses: (cityRef) => {
         const requestData = {
             apiKey: process.env.API_POST_KEY,

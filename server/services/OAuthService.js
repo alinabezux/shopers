@@ -1,13 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const ApiError = require("../errors/ApiError")
+
 const { ACCESS_SECRET, REFRESH_SECRET, CONFIRM_ACCOUNT_ACTION_TOKEN_SECRET, FORGOT_PASSWORD_ACTION_TOKEN_SECRET } = require("../configs/configs")
-const OAuth = require("../db/models/OAuth");
-const tokenTypes = require('../configs/tokenActions.enum')
 const { config } = require('dotenv');
+const OAuth = require("../db/models/OAuth");
+const ApiError = require("../errors/ApiError")
+const tokenTypes = require('../configs/tokenActions.enum')
 
 module.exports = {
     hashPassword: (password) => bcrypt.hash(password, 10),
+
     comparePasswords: async (password, hashPassword) => {
         const isPasswordsSame = await bcrypt.compare(password, hashPassword);
 
@@ -15,6 +17,7 @@ module.exports = {
             throw new ApiError(409, 'Неправильний email або пароль.');
         }
     },
+
     generateTokenPair: (dataToSign = {}) => {
         const accessToken = jwt.sign(dataToSign, ACCESS_SECRET, { expiresIn: '1d' });
         const refreshToken = jwt.sign(dataToSign, REFRESH_SECRET, { expiresIn: '30d' });
@@ -24,6 +27,7 @@ module.exports = {
             refreshToken
         }
     },
+
     saveTokens: async (userId, tokenPair) => {
         let info = await OAuth.findOne({ _user: userId })
 
@@ -69,6 +73,7 @@ module.exports = {
 
         return jwt.sign(dataToSign, secretWord, { expiresIn: '7d' })
     },
+
     checkActionToken: (token, actionType) => {
         try {
             let secretWord = '';

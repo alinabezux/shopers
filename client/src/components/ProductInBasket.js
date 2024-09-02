@@ -1,13 +1,16 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+
+import { Link, useNavigate } from 'react-router-dom';
+
+import { basketActions, productActions } from '../redux';
+import { toUrlFriendly } from '../utils';
+
 import Card from "@mui/joy/Card";
 import { AspectRatio, Button, CardContent, Chip, ButtonGroup } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
 import { ChipDelete } from '@mui/joy';
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
-import { basketActions, productActions } from '../redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { toUrlFriendly } from '../utils';
 
 const ProductInBasket = ({ product, setOpenBasket }) => {
     const dispatch = useDispatch();

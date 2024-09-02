@@ -13,6 +13,7 @@ module.exports = {
             next(e);
         }
     },
+
     getUserById: async (req, res, next) => {
         try {
             const user = req.user
@@ -23,6 +24,7 @@ module.exports = {
             next(e);
         }
     },
+
     updateUser: async (req, res, next) => {
         try {
             const newInfo = req.body.user;
@@ -53,6 +55,7 @@ module.exports = {
             next(e);
         }
     },
+
     getAllUsers: async (req, res, next) => {
         try {
             let { page } = req.query;
@@ -69,12 +72,9 @@ module.exports = {
                 totalPages: Math.ceil(count / limit),
                 currentPage: page
             });
-            // const users = await User.find({})
-            // return res.json(users)
-
         } catch (e) {
             next(e);
         }
-    },
+    }
 
 }

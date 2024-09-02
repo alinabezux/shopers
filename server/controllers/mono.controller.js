@@ -31,7 +31,7 @@ module.exports = {
 
             if (!isValidSignature) {
                 console.log('Invalid signature, fetching new public key');
-                cachedPublicKey = null; 
+                cachedPublicKey = null;
                 publicKeyBuf = Buffer.from(await monoService.getPublicKey(), 'base64');
                 isValidSignature = verify.verify(publicKeyBuf, signatureBuf);
             }
@@ -70,8 +70,6 @@ module.exports = {
             } else {
                 return res.status(404).json({ message: 'Order not found' });
             }
-
-
             res.status(200).json({ message: 'Status updated successfully' });
         } catch (error) {
             console.error('Помилка в контролері:', error);

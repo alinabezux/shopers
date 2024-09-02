@@ -1,16 +1,18 @@
-import { Box, Stack, Typography } from '@mui/material';
-import React, { useCallback, useEffect } from 'react';
-import { Card, CardContent, FormControl, FormLabel, Input, Divider, Button, Chip, FormHelperText } from '@mui/joy';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
-import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
-import Edit from '@mui/icons-material/Edit';
-import { authActions, userActions } from '../../redux';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { Form, useForm } from 'react-hook-form';
-import { InfoOutlined } from '@mui/icons-material';
+
 import { ChangePasswordForm } from './chagePasswordForm';
+import { authActions, userActions } from '../../redux';
+
+import Edit from '@mui/icons-material/Edit';
+import { Box, Typography } from '@mui/material';
+import { Card, CardContent, FormControl, FormLabel, Input, Divider, Button, FormHelperText } from '@mui/joy';
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { InfoOutlined } from '@mui/icons-material';
 
 
 const Profile = ({ user }) => {

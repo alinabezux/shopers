@@ -1,9 +1,9 @@
 const { CLIENT_URL } = require("../configs/configs");
 const { FORGOT_PASSWORD_ACTION_ENUM } = require("../configs/tokenActions.enum");
-const ActionToken = require("../db/models/ActionToken");
+const { FORGOT_PASSWORD } = require("../email-templates/email-actions.enum");
 const OAuth = require("../db/models/OAuth");
 const User = require("../db/models/User");
-const { FORGOT_PASSWORD } = require("../email-templates/email-actions.enum");
+const ActionToken = require("../db/models/ActionToken");
 const OAuthService = require("../services/OAuthService");
 const emailService = require('../services/email.service')
 
@@ -18,7 +18,6 @@ module.exports = {
 
             res.cookie('refreshToken', info.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000 })
             res.status(200).json(info);
-
         } catch (e) {
             next(e);
         }
@@ -62,7 +61,6 @@ module.exports = {
             await emailService.sendEmail(user.email, FORGOT_PASSWORD, { url: forgotPassFEUrl });
 
             res.status(200).json('Посилання для відновлення паролю надіслано на пошту.');
-
         } catch (e) {
             next(e);
         }

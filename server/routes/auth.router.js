@@ -17,10 +17,10 @@ authRouter.post('/logOut',
 
 authRouter.post('/password/forgot',
     userMiddleware.getUserByEmail,
-    authController.forgotPassword)
+    authController.forgotPassword);
 
 authRouter.put('/password/forgot',
     authMiddleware.checkActionToken,
-    authController.setNewPassword)
+    authController.setNewPassword);
 
 module.exports = authRouter;

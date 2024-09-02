@@ -12,11 +12,9 @@ const orderSchema = new Schema({
     orderItems: [{ type: Object, required: true }],
     shipping: { type: String, default: NOVAPOST, required: true, },
     instagram: { type: String },
-    // deliveryInfo
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     phoneNumber: { type: String, required: true },
-
     city: {
         ref: { type: String },
         description: { type: String },
@@ -27,15 +25,12 @@ const orderSchema = new Schema({
         number: { type: String },
         description: { type: String }
     },
-
     cityUKR: { type: String },
     index: { type: String },
     region: {
         value: { type: Number },
         label: { type: String }
     },
-    //
-
     email: { type: String, required: true },
     paymentMethod: { type: String, default: CARD, required: true },
     totalSum: { type: Number, required: true },

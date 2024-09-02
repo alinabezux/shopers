@@ -1,7 +1,6 @@
 import { urls } from "../configs/urls"
 import { $authHost } from "./axios.service"
 
-
 const basketService = {
     getBasket: (userId) => $authHost.get(`${urls.basket}/${userId}`),
     addToBasket: (userId, productId, quantity) => $authHost.post(`${urls.basket}/${userId}/${productId}`, { quantity }),

@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { NavLink, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { categoryActions, typeActions } from "../redux";
+import { toUrlFriendly } from '../utils'
+import instlogo from "../assets/inst logo.png";
+import inst from "../assets/inst.png";
+
 import {
     Accordion, AccordionDetails, AccordionSummary,
     Box,
@@ -7,17 +15,11 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import { NavLink, Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Drawer from "@mui/material/Drawer";
-import instlogo from "../assets/inst logo.png";
-import inst from "../assets/inst.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useDispatch, useSelector } from "react-redux";
-import { categoryActions, typeActions } from "../redux";
-import { toUrlFriendly } from '../utils'
 
 const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
     const dispatch = useDispatch();

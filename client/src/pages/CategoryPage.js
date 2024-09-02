@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Catalogue } from '../components';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from 'react-router-dom';
+import { Catalogue } from '../components';
+
 import { toUrlFriendly } from '../utils';
 import { categoryActions, typeActions } from '../redux';
-import { ShopPage } from './ShopPage';
 
 const CategoryPage = () => {
     const dispatch = useDispatch();
@@ -27,21 +27,11 @@ const CategoryPage = () => {
             dispatch(typeActions.setSelectedType(selectedTyp));
         } else dispatch(typeActions.clearSelectedType())
 
-        // if (isShop) {
-        //     dispatch(categoryActions.clearSelectedCategory());
-        //     dispatch(typeActions.clearSelectedType());
-        // }
-
     }, [categoryName, categories, dispatch, typeName, types]);
 
 
     return (
-        // <>
-        //     {isShop ?
-        //         <ShopPage /> :
-                <Catalogue name={selectedCategory.name} key={selectedCategory._id} />
-        //     }
-        // </>
+        <Catalogue name={selectedCategory.name} key={selectedCategory._id} />
     );
 };
 

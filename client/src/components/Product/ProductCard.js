@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+import { basketActions, favoriteActions, productActions } from "../../redux";
+import { toUrlFriendly } from '../../utils';
+import { DrawerBasket } from '../DrawerBasket';
+
 import Card from "@mui/joy/Card";
 import { AspectRatio, CardContent, CardOverflow, Chip } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
@@ -7,12 +13,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
-import { basketActions, favoriteActions, productActions } from "../../redux";
-import { toUrlFriendly } from '../../utils';
-import { Link } from "react-router-dom";
-import { DrawerBasket } from '../DrawerBasket';
 import Snackbar from '@mui/joy/Snackbar';
 
 const ProductCard = ({ product }) => {

@@ -1,5 +1,4 @@
 const Type = require('../db/models/Type');
-const Category = require("../db/models/Category");
 
 module.exports = {
     createType: async (req, res, next) => {
@@ -7,11 +6,11 @@ module.exports = {
             const type = await Type.create(req.body.type);
 
             return res.status(200).json(type);
-
         } catch (e) {
             return next(e)
         }
     },
+
     getAllTypes: async (req, res, next) => {
         try {
             const types = await Type.find({});
@@ -21,6 +20,7 @@ module.exports = {
             return next(e)
         }
     },
+    
     getTypesByCategoryId: async (req, res, next) => {
         try {
             const typesByCategory = await Type.find({_category: req.params.categoryId});
@@ -29,6 +29,7 @@ module.exports = {
             next(e);
         }
     },
+    
     updateType: async (req, res, next) => {
         try {
             const newInfo = req.body.type;
@@ -39,6 +40,7 @@ module.exports = {
             next(e);
         }
     },
+    
     deleteType: async (req, res, next) => {
         try {
             await Type.deleteOne({_id: req.params.typeId});

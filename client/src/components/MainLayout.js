@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { Header } from './Header';
-import { Footer } from './Footer';
 import { Outlet, useLocation } from 'react-router-dom';
 
-const MainLayout = () => {
+import { Header } from './Header';
+import { Footer } from './Footer';
 
+import { Box } from '@mui/material';
+
+const MainLayout = () => {
     const location = useLocation();
     const isAdminPage = location.pathname.includes('/admin');
 

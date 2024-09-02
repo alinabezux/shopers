@@ -4,7 +4,6 @@ import { categoryService } from "../../services";
 const initialState = {
     categories: [],
     selectedCategory: {},
-
     loading: false,
     error: null
 }
@@ -19,7 +18,7 @@ const getAll = createAsyncThunk(
             return rejectWithValue(e.response.data)
         }
     }
-)
+);
 
 const createCategory = createAsyncThunk(
     'categorySlice/createCategory',
@@ -70,95 +69,94 @@ const deleteById = createAsyncThunk(
 );
 
 
-const categorySlice = createSlice(
-    {
-        name: 'categorySlice',
-        initialState,
-        reducers: {
-            setSelectedCategory: (state, action) => {
-                state.selectedCategory = action.payload
-            },
-            clearSelectedCategory: (state) => {
-                state.selectedCategory = {};
-            }
+const categorySlice = createSlice({
+    name: 'categorySlice',
+    initialState,
+    reducers: {
+        setSelectedCategory: (state, action) => {
+            state.selectedCategory = action.payload
         },
-        extraReducers: builder =>
-            builder
-                .addCase(getAll.fulfilled, (state, action) => {
-                    state.categories = action.payload
-                    state.loading = false
-                    state.error = null
-                })
-                .addCase(getAll.pending, (state) => {
-                    state.loading = true
-                })
-                .addCase(getAll.rejected, (state, action) => {
-                    state.error = action.payload
-                    state.loading = false
-                })
+        clearSelectedCategory: (state) => {
+            state.selectedCategory = {};
+        }
+    },
+    extraReducers: builder =>
+        builder
+            .addCase(getAll.fulfilled, (state, action) => {
+                state.categories = action.payload
+                state.loading = false
+                state.error = null
+            })
+            .addCase(getAll.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(getAll.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
 
-                .addCase(createCategory.fulfilled, (state, action) => {
-                    state.categories.push(action.payload)
+            .addCase(createCategory.fulfilled, (state, action) => {
+                state.categories.push(action.payload)
 
-                    state.loading = false
-                    state.error = null
-                })
-                .addCase(createCategory.pending, (state) => {
-                    state.loading = true
-                    state.error = null
-                })
-                .addCase(createCategory.rejected, (state, action) => {
-                    state.error = action.payload
-                    state.loading = false
-                })
+                state.loading = false
+                state.error = null
+            })
+            .addCase(createCategory.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(createCategory.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
 
-                .addCase(updateCategory.fulfilled, (state, action) => {
-                    const findCategory = state.categories.find(value => value._id === action.payload._id);
-                    Object.assign(findCategory, action.payload)
-                    state.selectedCategory = {}
-                    state.loading = false
-                    state.error = null
-                })
-                .addCase(updateCategory.pending, (state) => {
-                    state.loading = true
-                    state.error = false
-                })
-                .addCase(updateCategory.rejected, (state, action) => {
-                    state.error = action.payload
-                    state.loading = false
-                })
+            .addCase(updateCategory.fulfilled, (state, action) => {
+                const findCategory = state.categories.find(value => value._id === action.payload._id);
+                Object.assign(findCategory, action.payload)
+                state.selectedCategory = {}
+                state.loading = false
+                state.error = null
+            })
+            .addCase(updateCategory.pending, (state) => {
+                state.loading = true
+                state.error = false
+            })
+            .addCase(updateCategory.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
 
-                .addCase(uploadPhoto.fulfilled, (state, action) => {
-                    const findCategory = state.categories.find(value => value._id === action.payload._id);
-                    Object.assign(findCategory, action.payload)
-                    state.selectedCategory = {}
-                    state.loading = false
-                    state.error = false
-                })
-                .addCase(uploadPhoto.pending, (state) => {
-                    state.loading = true
-                    state.error = false
-                })
-                .addCase(uploadPhoto.rejected, (state, action) => {
-                    state.error = action.payload
-                    state.loading = false
-                })
+            .addCase(uploadPhoto.fulfilled, (state, action) => {
+                const findCategory = state.categories.find(value => value._id === action.payload._id);
+                Object.assign(findCategory, action.payload)
+                state.selectedCategory = {}
+                state.loading = false
+                state.error = false
+            })
+            .addCase(uploadPhoto.pending, (state) => {
+                state.loading = true
+                state.error = false
+            })
+            .addCase(uploadPhoto.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
 
-                .addCase(deleteById.fulfilled, (state, action) => {
-                    const deletedId = action.payload;
-                    state.categories = state.categories.filter(item => item._id !== deletedId);
+            .addCase(deleteById.fulfilled, (state, action) => {
+                const deletedId = action.payload;
+                state.categories = state.categories.filter(item => item._id !== deletedId);
 
-                    state.loading = false
-                })
-                .addCase(deleteById.pending, (state) => {
-                    state.loading = true
-                    state.error = false
-                })
-                .addCase(deleteById.rejected, (state, action) => {
-                    state.error = action.payload
-                    state.loading = false
-                })
-    }
+                state.loading = false
+            })
+            .addCase(deleteById.pending, (state) => {
+                state.loading = true
+                state.error = false
+            })
+            .addCase(deleteById.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
+}
 );
 
 const { reducer: categoryReducer, actions: { setSelectedCategory, clearSelectedCategory } } = categorySlice;

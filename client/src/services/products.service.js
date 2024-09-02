@@ -11,7 +11,6 @@ const productsService = {
         }
     }),
     getById: (productId) => $host.get(`${urls.products}/${productId}`),
-
     createProduct: (product) => $authHost.post(urls.products, { product }),
     uploadPhoto: (productId, images) => $authHost.patch(`${urls.products}/${productId}`, images),
     updateProduct: (productId, product) => $authHost.patch(`${urls.products}/${productId}`, { product }),

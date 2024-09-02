@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, Stack, Typography, Box, Fab } from "@mui/material";
+import { useLocation } from "react-router-dom";
+
 import { CategoriesMenu } from "./CategoriesMenu";
 import { Products } from "./Product/Products";
 import { BackButton } from "./BackButton";
-import { useLocation } from "react-router-dom";
 import { TypesMenu } from './TypesMenu';
+
+import {Stack, Typography, Box, Fab } from "@mui/material";
 import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
 
 const Catalogue = ({ name }) => {

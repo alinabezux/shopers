@@ -1,16 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/joy/Card";
+import { Link } from "react-router-dom";
+
+import { basketActions, favoriteActions, productActions } from '../redux';
+import { DrawerBasket } from './DrawerBasket';
+import { toUrlFriendly } from '../utils';
+
 import { AspectRatio, CardContent, CardOverflow, Chip } from "@mui/joy";
 import { Stack, Typography } from "@mui/material";
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 
-import { Link } from "react-router-dom";
-import { basketActions, favoriteActions, productActions } from '../redux';
-import { DrawerBasket } from './DrawerBasket';
-import { toUrlFriendly } from '../utils';
 
 const ProductInFavorite = ({ product }) => {
     const dispatch = useDispatch();

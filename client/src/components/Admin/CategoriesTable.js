@@ -1,22 +1,22 @@
-
 import React, { useEffect } from 'react';
 import { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { categoryActions } from '../../redux';
+import { AddPhotoCategoryModal, CreateCategoryModal, DeleteCategoryModal, EditCategoryModal } from './AdminModals/CategoryModals';
+
 import {
     Box,
     Button,
     Typography,
 } from '@mui/joy';
-
 import AspectRatio from '@mui/joy/AspectRatio';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import { categoryActions } from '../../redux';
-import { useDispatch, useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
-import { AddPhotoCategoryModal, CreateCategoryModal, DeleteCategoryModal, EditCategoryModal } from './AdminModals/CategoryModals';
 import { styled } from '@mui/joy';
 
 

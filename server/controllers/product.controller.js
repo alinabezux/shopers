@@ -9,7 +9,6 @@ module.exports = {
             const product = await Product.create({ ...req.body.product, cashback });
 
             return res.status(201).json(product);
-
         } catch (e) {
             return next(e)
         }

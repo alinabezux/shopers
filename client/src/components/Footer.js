@@ -1,4 +1,9 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
+import instlogo from "../assets/inst logo.png";
+import inst from "../assets/inst.png";
+
 import {
     Accordion,
     AccordionDetails,
@@ -7,12 +12,9 @@ import {
     Container,
     Divider,
     Stack,
-    Typography, useMediaQuery, useTheme
+    Typography, useTheme
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import instlogo from "../assets/inst logo.png";
-import inst from "../assets/inst.png";
-import { Link } from "react-router-dom";
 
 
 const Footer = () => {

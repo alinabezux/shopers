@@ -5,7 +5,6 @@ const User = require("../db/models/User");
 const ApiError = require("../errors/ApiError");
 const monoService = require("../services/mono.service");
 
-
 module.exports = {
     createOrder: async (req, res, next) => {
         try {
@@ -55,7 +54,6 @@ module.exports = {
             }
 
             res.status(200).json({ order, invoice });
-
         } catch (e) {
             next(e);
         }

@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { NavLink } from "react-router-dom";
+
+import { categoryActions, typeActions } from "../redux";
+import { toUrlFriendly } from '../utils'
+
 import { Box, Typography } from "@mui/material";
 import { CardContent, CardCover } from "@mui/joy";
 import Card from "@mui/joy/Card";
-import { categoryActions, typeActions } from "../redux";
-import { NavLink } from "react-router-dom";
-import { toUrlFriendly } from '../utils'
 
 const CategoriesMenu = ({ width }) => {
     const { categories } = useSelector(state => state.categoryReducer);

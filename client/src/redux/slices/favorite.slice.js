@@ -3,7 +3,6 @@ import { favoriteService } from "../../services";
 
 const initialState = {
     favorite: [],
-
     loading: false,
     error: null
 }
@@ -43,9 +42,6 @@ const deleteFromFavorite = createAsyncThunk(
         }
     }
 );
-
-
-
 
 const favoriteSlice = createSlice({
     name: 'favoriteSlice',

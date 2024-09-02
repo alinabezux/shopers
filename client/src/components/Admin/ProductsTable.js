@@ -1,5 +1,11 @@
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from 'react-router-dom'
+
+import { toUrlFriendly } from '../../utils';
+import { AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
+import { categoryActions, productActions, typeActions } from '../../redux';
+
 import {
     Box,
     Button,
@@ -19,17 +25,12 @@ import {
     Option,
 } from '@mui/joy';
 import AddIcon from '@mui/icons-material/Add';
-import { useDispatch, useSelector } from "react-redux";
-import { categoryActions, productActions, typeActions } from '../../redux';
 import Table from '@mui/joy/Table';
 import { CloseRounded, MoreHorizRounded, Search } from '@mui/icons-material';
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
-import { AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
-import { Link } from 'react-router-dom'
-import { toUrlFriendly } from '../../utils';
 import { Pagination } from '@mui/material';
 import Link2 from '@mui/joy/Link'
 

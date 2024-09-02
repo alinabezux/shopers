@@ -1,5 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { unstable_HistoryRouter as BrowserRouter } from "react-router-dom"
+import { history } from "./services";
+
 import { MainLayout } from "./components";
 import {
     CategoryPage,
@@ -15,16 +17,13 @@ import {
     CheckoutPage,
     AccountPage,
     AdminPage,
-    CompleteOrderPage
-
+    CompleteOrderPage,
+    ForgotPasswordPage,
+    SetNewPasswordPage
 } from "./pages";
+import { CategoriesTable, OrderTable, PrivateRoute, ProductsTable, TypesTable } from "./components/Admin";
+
 import './styles';
-import UsersTable from "./components/Admin/UsersTable";
-import { CategoriesTable, OrderTable, ProductsTable, TypesTable } from "./components/Admin";
-import { history } from "./services";
-import PrivateRoute from "./components/Admin/PrivateRoute";
-import { SetNewPasswordPage } from "./pages/SetNewPasswordPage";
-import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 
 
 
@@ -62,7 +61,6 @@ function App() {
                             {/* <Route path="users" element={<UsersTable />} /> */}
                         </Route>
                     </Route>
-
                 </Route>
             </Routes>
         </BrowserRouter>

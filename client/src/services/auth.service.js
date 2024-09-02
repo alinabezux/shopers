@@ -1,14 +1,18 @@
-import { $authHost, $host } from "./axios.service";
-import { urls } from "../configs/urls";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie"
 
+import { $authHost, $host } from "./axios.service";
+import { urls } from "../configs/urls";
+
 const authService = {
     register: (user) => $host.post(urls.auth.registration, { user }),
+
     login: (user) => $host.post(urls.auth.logIn, { user }),
+
     refresh: () => $authHost.post(urls.auth.refresh),
 
     forgotPassword: (email) => $host.post(urls.auth.forgotPassword, { email }),
+
     setNewPassword: (token, newPassword) => $host.put(urls.auth.forgotPassword, { newPassword }, {
         headers: {
             'Authorization': token
@@ -16,14 +20,17 @@ const authService = {
     }),
 
     getAccessToken: () => localStorage.getItem('access'),
+
     getRefreshToken: () => Cookies.get('refreshToken'),
 
     logOut: () => $authHost.post(urls.auth.logOut),
+
     deleteInfo: () => {
         localStorage.removeItem('access')
         sessionStorage.removeItem('userId')
         Cookies.remove('refreshToken')
     },
+
     getUser: () => {
         const userId = sessionStorage.getItem('userId');
         if (userId) {
@@ -44,7 +51,6 @@ const authService = {
             return null;
         }
 
-    },
-
+    }
 }
 export { authService }

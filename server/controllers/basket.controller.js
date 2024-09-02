@@ -1,6 +1,4 @@
-const Product = require("../db/models/Product");
 const ProductInBasket = require("../db/models/ProductInBasket");
-const ApiError = require("../errors/ApiError");
 
 module.exports = {
     getUsersBasket: async (req, res, next) => {
@@ -17,7 +15,6 @@ module.exports = {
             next(e);
         }
     },
-
 
     addToBasket: async (req, res, next) => {
         try {
@@ -80,7 +77,6 @@ module.exports = {
                 res.status(404).json({ message: "Такого продукту не існує в даній корзині" });
             }
             res.status(200).json(updatedProductInBasket)
-
         } catch (e) {
             next(e)
         }

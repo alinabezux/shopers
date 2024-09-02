@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createBrowserHistory } from "history"
+
 import { baseURL, urls } from "../configs/urls";
 import { authService } from "./auth.service";
 
@@ -41,7 +42,5 @@ $authHost.interceptors.response.use((config) => {
     return Promise.reject(error)
 }
 )
-
-
 
 export { $host, $authHost, history };

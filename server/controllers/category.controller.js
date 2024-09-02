@@ -1,5 +1,4 @@
 const Category = require('../db/models/Category');
-const Product = require("../db/models/Product");
 const S3service = require("../services/S3.service");
 
 module.exports = {
@@ -13,6 +12,7 @@ module.exports = {
             return next(e)
         }
     },
+
     getAllCategories: async (req, res, next) => {
         try {
             const categories = await Category.find({});
@@ -22,6 +22,7 @@ module.exports = {
             return next(e)
         }
     },
+
     getCategoryById: async (req, res, next) => {
         try {
             const category = await Category.findById(req.params.categoryId);
@@ -31,6 +32,7 @@ module.exports = {
             next(e);
         }
     },
+
     updateCategory:
         async (req, res, next) => {
             try {

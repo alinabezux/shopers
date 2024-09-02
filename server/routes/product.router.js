@@ -3,8 +3,11 @@ const productController = require('../controllers/product.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const productMiddleware = require('../middlewares/product.middleware');
 
-productRouter.get('/', productController.getAllProducts);
-productRouter.get('/:productId', productController.getProductById);
+productRouter.get('/',
+    productController.getAllProducts);
+
+productRouter.get('/:productId',
+    productController.getProductById);
 
 productRouter.post('/',
     authMiddleware.checkAccessToken,

@@ -1,18 +1,20 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { Typography } from "@mui/material";
-import { FormControl, FormLabel, Input, Button, TabPanel, Card, CardContent } from '@mui/joy';
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi"
+
+import { authActions } from '../../redux';
+import { userValidator } from '../../validators/user.validator';
+
+import { Typography } from "@mui/material";
+import { FormControl, FormLabel, Input, Button, TabPanel, Card, CardContent } from '@mui/joy';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Alert from '@mui/joy/Alert';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
-import { authActions } from '../../redux';
-import { userValidator } from '../../validators/user.validator';
 
 const Register = ({ setOpenSnackbar }) => {
     const dispatch = useDispatch();

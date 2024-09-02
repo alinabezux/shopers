@@ -1,16 +1,16 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { Typography, Box } from "@mui/material";
-import { FormControl, FormLabel, Input, Button, Card, CardContent } from '@mui/joy';
-import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
-
+import React, { useCallback } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
+
+import { authActions } from '../../redux';
+
+import { Typography } from "@mui/material";
+import { FormControl, FormLabel, Input, Button, Card, CardContent } from '@mui/joy';
 import Alert from '@mui/joy/Alert';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
-import { authActions } from '../../redux';
-import Snackbar from '@mui/joy/Snackbar';
 
 const LogIn = ({ setOpenLoginSnackbar }) => {
     const dispatch = useDispatch();

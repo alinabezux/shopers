@@ -1,21 +1,18 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { Typography, Box, Divider } from "@mui/material";
-import { FormControl, FormLabel, Input, Button, Card, CardContent, Container } from '@mui/joy';
-import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
+import React, { useCallback, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
+
+import { Typography, Box } from "@mui/material";
+import { FormControl, FormLabel, Input, Button, Card, CardContent, Container } from '@mui/joy';
 import Alert from '@mui/joy/Alert';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
-import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
-import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import Snackbar from '@mui/joy/Snackbar';
 import { DoneRounded, EmailRounded, ErrorOutlineRounded } from '@mui/icons-material';
+
 import { authActions } from '../redux';
 
 const ForgotPasswordPage = () => {
     const dispatch = useDispatch();
-    const [query] = useSearchParams();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const { control, handleSubmit, register } = useForm();
 

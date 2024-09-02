@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from 'react-router-dom';
+
 import { productActions } from "../../redux";
 import ProductCard from "./ProductCard";
+
 import { Box, Pagination } from "@mui/material";
-import { useLocation } from 'react-router-dom';
 
 const Products = () => {
     const dispatch = useDispatch();

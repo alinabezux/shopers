@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Box, Stack } from '@mui/material';
-import { Tabs, TabList, Tab, TabPanel, Button, } from '@mui/joy';
-import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom'
-import { tabClasses } from '@mui/joy/Tab'
+import { useLocation } from 'react-router-dom'
+import { useSelector } from "react-redux";
+
 import { Orders, Profile, Wishlist } from '../components';
+
+import { Typography, Box } from '@mui/material';
+import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
+import { tabClasses } from '@mui/joy/Tab'
 import { Chip } from '@mui/joy';
-import { useSelector, useDispatch } from "react-redux";
-import { authActions } from '../redux';
 import RedeemRoundedIcon from '@mui/icons-material/RedeemRounded';
 import { useTheme, useMediaQuery } from '@mui/material';
 
 const AccountPage = () => {
     const location = useLocation();
- 
 
     const [activeTab, setActiveTab] = useState('profile');
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const { user } = useSelector(state => state.userReducer);
-    
+
     useEffect(() => {
         const hash = location.hash.replace('#', '');
         if (hash) {
@@ -27,7 +27,7 @@ const AccountPage = () => {
         }
     }, [location]);
 
-   
+
 
     return (
         <Box className='accountpage'>

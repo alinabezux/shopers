@@ -1,4 +1,11 @@
 import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { Link } from 'react-router-dom';
+
+import { ProductInBasket } from './ProductInBasket';
+import { basketActions } from '../redux/slices/basket.slice';
+
 import {
     Box,
     IconButton,
@@ -11,13 +18,8 @@ import Button from '@mui/joy/Button';
 import { Chip } from "@mui/joy";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
-import { ProductInBasket } from './ProductInBasket';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useMemo } from "react";
-import { basketActions } from '../redux/slices/basket.slice';
 
 const BlackButton = styled(Button2)(() => ({
     color: 'black',

@@ -1,23 +1,24 @@
-import { Box, Typography, Stack, Container } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel, Radio, RadioGroup, Option, Tooltip, FormHelperText } from '@mui/joy';
-import Checkbox from '@mui/joy/Checkbox';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm, Form, Controller } from "react-hook-form";
+import Select2 from 'react-select'
+import { useNavigate } from 'react-router-dom';
+
 import ukrpost from '../assets/ukrpost.png'
 import novapost from '../assets/novapost.png'
 import { ProductInBasket } from '../components';
+import { basketActions, orderActions } from '../redux';
+import { postService } from '../services';
+import platamono from '../assets/plata_light_bg@2x.png'
+
+import { Box, Typography, Stack, Container } from '@mui/material';
+import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel, Radio, RadioGroup, Option, Tooltip, FormHelperText } from '@mui/joy';
+import Checkbox from '@mui/joy/Checkbox';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
-import { basketActions, orderActions } from '../redux';
-import { useDispatch, useSelector } from 'react-redux';
-import { postService } from '../services';
-import Select2 from 'react-select'
-import { useForm, Form, Controller } from "react-hook-form";
-import { useNavigate } from 'react-router-dom';
 import { InfoOutlined } from '@mui/icons-material';
-import platamono from '../assets/plata_light_bg@2x.png'
-import { monoService } from '../services/mono.service';
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();

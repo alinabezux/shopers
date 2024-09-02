@@ -4,7 +4,6 @@ import { authService } from "../../services";
 const initialState = {
     users: [],
     userId: authService.getUser(),
-
     loading: false,
     logInError: null,
     registerError: null,
@@ -22,6 +21,7 @@ const register = createAsyncThunk(
         }
     }
 );
+
 const logIn = createAsyncThunk(
     'authSlice/logIn',
     async ({ user }, { rejectWithValue }) => {
@@ -47,6 +47,7 @@ const forgotPassword = createAsyncThunk(
         }
     }
 );
+
 const setNewPassword = createAsyncThunk(
     'authSlice/setNewPassword',
     async ({ token, newPassword }, { rejectWithValue }) => {
@@ -74,9 +75,7 @@ const logOut = createAsyncThunk(
 const authSlice = createSlice({
     name: 'authSlice',
     initialState,
-    reducers: {
-
-    },
+    reducers: {},
     extraReducers: builder =>
         builder
             .addCase(register.fulfilled, (state, action) => {

@@ -1,6 +1,6 @@
-
 import * as React from 'react';
 import { useState } from 'react';
+
 import {
     Avatar,
     Box,
@@ -26,8 +26,6 @@ import {
     MenuItem,
     Dropdown,
 } from '@mui/joy';
-
-
 
 export default function UsersTable() {
 

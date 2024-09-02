@@ -1,7 +1,9 @@
 import React from 'react';
-import Sidebar from '../components/Admin/Sidebar';
-import Box from '@mui/joy/Box';
 import { Outlet } from 'react-router-dom';
+
+import Sidebar from '../components/Admin/Sidebar';
+
+import Box from '@mui/joy/Box';
 
 const AdminPage = () => {
     return (

@@ -1,14 +1,16 @@
 import React, { useCallback } from 'react';
-import { Typography } from "@mui/material";
-import { FormControl, FormLabel, Input, Button, Card, CardContent, Container, Box } from '@mui/joy';
+import { useForm, Form } from "react-hook-form";
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm, Form } from "react-hook-form";
+
+import { authActions } from '../redux';
+
+import { Typography } from "@mui/material";
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Alert from '@mui/joy/Alert';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
-import { authActions } from '../redux';
+import { FormControl, FormLabel, Input, Button, Card, CardContent, Container, Box } from '@mui/joy';
 
 
 const SetNewPasswordPage = () => {

@@ -19,7 +19,7 @@ const WhiteButton = styled(Button)(({ theme }) => ({
     fontWeight: '800',
     fontSize: '20px',
     border: "1px solid black",
-    [theme.breakpoints.down('lg')]: {
+    [theme.breakpoints.down('laptop')]: {
         color: 'white',
         border: "2px solid white",
         margin: '20px',
@@ -49,13 +49,13 @@ const HomePage = () => {
                     <Typography className="homepage__quote">
                         Твій світ краси і естетичних товарів
                     </Typography>
-                    <WhiteButton variant="outlined" size="large">
+                    <Button variant="outlined" size="large" className="white-button">
                         <Link to="/shop"
                             style={{
                                 color: "inherit",
                                 textDecoration: "none"
                             }}>КАТАЛОГ</Link>
-                    </WhiteButton>
+                    </Button>
                 </Box>
                 <Box className="homepage__gradient-white" />
             </Box>
@@ -63,7 +63,7 @@ const HomePage = () => {
                 <Typography className="homepage__category-title">Категорії</Typography>
                 <CategoriesMenu width={"250px"} />
             </Container>
-            
+
         </Box>
     );
 

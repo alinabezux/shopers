@@ -1,7 +1,5 @@
 /* pc */
-@media (min-width: 900px) {
-    .header__icon {}
-
+@media (min-width: 1025px) {
     .header__icon.mb {
         display: none;
     }
@@ -21,7 +19,7 @@
 }
 
 /* mobile */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .header__icon.pc {
         display: none;
     }

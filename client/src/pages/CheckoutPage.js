@@ -465,25 +465,21 @@ const CheckoutPage = () => {
                                 ВАШЕ ЗАМОВЛЕННЯ
                             </Typography>
                             <Divider inset="none" />
-                            <CardContent
-                                sx={{
-
-                                }}
-                            >
-                                <Container className='basket__content'>
-                                    <Box className='basket__products'>
+                            <CardContent>
+                                <Container className='checkout__orderContent'>
+                                    <Box className='checkout__orderContent__products'>
                                         <Stack direction="column" spacing={2} alignItems="center">
                                             {basket.map(product => (
                                                 <ProductInBasket key={product._id} product={product} />
                                             ))}
                                         </Stack>
                                     </Box>
-                                    <Stack direction="column" className='basket__order' >
+                                    <Stack direction="column" className='checkout__orderContent__order' >
                                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                                             <Typography className="basket__price">Разом :</Typography>
                                             <Typography className="basket__price">{totalPrice} грн.</Typography>
                                         </Stack>
-                                        <Chip className="basket__cashback" size="sm" variant="soft" color="success" alignItems="flex-end" sx={{ mt: 1 }}>
+                                        <Chip className="basket__cashback" size="sm" variant="soft" color="success" sx={{ mt: 1 }}>
                                             Кешбек з покупки : {totalCashback} грн.
                                         </Chip>
                                         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: "20px" }} spacing={2}>
@@ -501,11 +497,11 @@ const CheckoutPage = () => {
                                             </Tooltip>
                                         </Stack>
 
-                                        <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="accountpage__button" endDecorator={<DoneRoundedIcon />}>
+                                        <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="mainbutton" endDecorator={<DoneRoundedIcon />}>
                                             ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
                                         </Button>
                                         <Typography sx={{
-                                            p: 2,
+                                            padding: "10px 20px",
                                             color: "grey",
                                             fontSize: "14px",
                                             textAlign: "center"

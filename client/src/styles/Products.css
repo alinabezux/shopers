@@ -1,23 +1,18 @@
 /* pc */
-@media (min-width: 1200px) {
+@media (min-width: 1025px) {
     .products {
         width: 80%;
     }
 }
 
 /* tablet */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .products {
         width: 100%;
     }
 
 }
 
-/* .products {
-    display: flex;
-    justify-content: center;
- 
-} */
 
 .products__container {
     display: flex;

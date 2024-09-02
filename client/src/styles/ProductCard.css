@@ -1,15 +1,21 @@
-/* tablet */
+/* mobile */
 @media (max-width: 900px) {
     .product-card {
         width: 35%;
     }
 }
 
+/* tablet */
+@media (min-width:641px) and (max-width: 1024px) {
+    .product-card {
+        width: 25%;
+    }
+}
+
 /* pc */
-@media (min-width: 900px) {
+@media (min-width: 1025px) {
     .product-card {
         width: 20%;
-
     }
 }
 
@@ -35,10 +41,3 @@ div.product-card__card-cashback {
     font-weight: 400;
 
 }
-
-/* 
-.product-card {
-    &:hover {
-        box-shadow: mi;
-    }
-} */

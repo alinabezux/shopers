@@ -1,40 +1,69 @@
-/* tablet */
-@media (max-width: 900px) {
+/* mobile */
+@media (max-width: 640px) {
 
-    .product-page {
-        width: 100vw;
+    nav.product-page__breadrumbs,
+    .product-page__breadrumbs p {
+        font-size: 14px;
+    }
+
+    h5.product-page__name,
+    h5.product-page__price {
+        font-size: x-large;
+        font-weight: 500;
     }
 
     .product-page__content {
         flex-direction: column;
+        width: 100%;
         gap: 5px;
     }
 
-    .product-page__gallery {
-        width: 100%;
+    button.product-page__button {
+        width: -webkit-fill-available;
+        font-size: small;
     }
+}
+
+
+/* tablet  mobile*/
+@media (max-width: 1024px) {
+    .product-page {
+        width: 100vw;
+    }
+
 
     button.product-page__quantity {
         font-size: 15px;
         font-weight: 600;
     }
 
-    button.product-page__button {
-        font-size: 12px;
-        font-weight: 700;
-        width: 60%;
+    h5.product-page__name,
+    h5.product-page__price {
+        font-size: x-large;
+        font-weight: 500;
     }
 
+}
+
+/* tablet */
+@media (min-width:641px) and (max-width: 1024px) {
+    .product-page__content {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .product-page__gallery {
+        width: 50%;
+    }
 
     nav.product-page__breadrumbs,
     .product-page__breadrumbs p {
         font-size: 24px;
     }
-
 }
 
 /* pc */
-@media (min-width: 900px) {
+@media (min-width: 1025px) {
     .product-page {
         width: 80vw;
     }
@@ -48,7 +77,7 @@
         width: 40%;
     }
 
-    .product-page__button {
+    button.product-page__button {
         width: 300px;
     }
 
@@ -64,10 +93,13 @@
     }
 
     h4.product-page__name {
-        
+        /* font-weight: 600;
+        font-size: larger; */
     }
+   
 
 }
+
 
 
 .product-page__content {
@@ -88,10 +120,10 @@ nav.product-page__breadrumbs {
 
 
 
-.product-page__content h5,
+/* .product-page__content h5,
 .product-page__content h3 {
     font-weight: 500;
-}
+} */
 
 
 .product-page__content p {

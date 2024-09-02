@@ -169,7 +169,7 @@ const ProductPage = () => {
                 <Box>
                     <Stack direction="column" spacing={1} className="product-page__info">
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="h4" className="product-page__name">{product.name}</Typography>
+                            <Typography variant="h5" className="product-page__name">{product.name}</Typography>
                             {
                                 favourite ? <FavoriteIcon className="product-page__heart-icon" sx={{ color: '#730000', fontSize: "35px" }} onClick={() => handleDeleteProductFromFavorite(product)} /> :
                                     <FavoriteBorderIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" onClick={() => handleAddProductToFavourite(product)} />
@@ -189,7 +189,7 @@ const ProductPage = () => {
                                 <Button className="product-page__quantity">{quantity}</Button>
                                 <Button className="product-page__quantity" onClick={increaseQuantity}>+</Button>
                             </ButtonGroup>
-                            <Button disabled={product.quantity <= 0} variant="solid" color="neutral" className="product-page__button" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
+                            <Button disabled={product.quantity <= 0} variant="solid" color="neutral" className="product-page__button mainbutton" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
                         {product.quantity > 0 ?
                             <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>

@@ -16,6 +16,12 @@ div.checkout__info {
     gap: 1.5;
 }
 
+div.checkout__orderContent {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
 
 
 /* pc */
@@ -39,7 +45,7 @@ div.checkout__info {
 }
 
 /* mobile */
-@media (max-width: 900px) {
+@media (max-width: 640px) {
     .checkout__main {
         flex-direction: column;
         align-items: center;
@@ -65,7 +71,7 @@ div.checkout__info {
     }
 }
 
-@media (min-width:768px) and (max-width: 1024px) {
+@media (min-width:641px) and (max-width: 1024px) {
     .checkout__main {
         flex-direction: column;
         align-items: center;
@@ -83,6 +89,7 @@ div.checkout__info {
     .checkout__post {
         height: 30px;
     }
+
     .checkout__post {
         height: 50px;
     }

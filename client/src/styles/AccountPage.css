@@ -85,7 +85,7 @@ p.accountpage__wishlist-color {
 
 
 /* mobile */
-@media (max-width: 767px) {
+@media (max-width: 640px) {
     div.accountpage__tablist {
         width: 90vw;
         font-size: 18px;
@@ -122,12 +122,11 @@ p.accountpage__wishlist-color {
     }
 
     .accountpage__wishlist-container {
-        /* width: 90%; */
-
+        width: 100%;
     }
 
     .accountpage__wishlist-card {
-        width: 37%;
+        width: 35%;
     }
 
 
@@ -136,9 +135,13 @@ p.accountpage__wishlist-color {
 }
 
 /* tablet */
-@media (min-width:768px) and (max-width: 1024px) {
+@media (min-width:641px) and (max-width: 1024px) {
     .accountpage__profile-cards {
         flex-direction: column;
+    }
+
+    .accountpage__wishlist-container {
+        width: 100%;
     }
 
     .accountpage__card {

@@ -45,7 +45,6 @@ const ProductInBasket = ({ product, setOpenBasket }) => {
     }
     const handleShowDetails = useCallback((product) => {
         dispatch(productActions.setSelectedProduct(product));
-        setOpenBasket(false)
     }, [dispatch, product]);
 
 
@@ -61,27 +60,29 @@ const ProductInBasket = ({ product, setOpenBasket }) => {
                 </AspectRatio>
             </Link>
             <CardContent className="product-in-basket__card-content">
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Link to={`/product/${toUrlFriendly(product?.name || product?._product?.name)}`} className="link" onClick={() => handleShowDetails(product)}>
                         <Typography className="product-in-basket__card-name">{product.name}</Typography>
                     </Link>
-                    <ChipDelete onClick={() => handleDeleteProductInBasket(product)} />
+                    <ChipDelete sx={{ minHeight: "0px" }} onClick={() => handleDeleteProductInBasket(product)} />
                 </Stack>
-                {product?.info?.color ?
+                {product?.info?.color &&
                     <Typography className="product-in-basket__card-color">Колір: {product?.info?.color}</Typography>
-                    : null
                 }
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography className="product-in-basket__card-price">{product.price} грн.</Typography>
-                    <Chip className="product-in-basket__card-cashback" size="sm" variant="soft" color="success">
-                        {product.cashback} грн. кешбек
-                    </Chip>
-                </Stack>
+                {product?.info?.size &&
+                    <Typography className="product-in-basket__card-color">Розмір: {product.info.size}</Typography>
+                }
                 <ButtonGroup className="product-in-basket__card-counter" size="small" variant='outlined' aria-label="outlined button group">
                     <Button className="product-in-basket__card-quantity" onClick={decreaseQuantity}> - </Button>
                     <Button className="product-in-basket__card-quantity">{product.quantity}</Button>
                     <Button className="product-in-basket__card-quantity" onClick={increaseQuantity}>+</Button>
                 </ButtonGroup>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }}>
+                    <Typography className="product-in-basket__card-price">{product.quantity * product.price} грн.</Typography>
+                    <Chip className="product-in-basket__card-cashback" size="sm" variant="soft" color="success">
+                        {product.cashback} грн. кешбек
+                    </Chip>
+                </Stack>
             </CardContent>
         </Card>
     );

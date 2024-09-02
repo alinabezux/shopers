@@ -1,0 +1,16 @@
+/* pc */
+@media (min-width: 1025px) {}
+
+/* tablet */
+@media (min-width:641px) and (max-width: 1024px) {
+    .drawerMenu {
+        width: 50vw;
+    }
+}
+
+/* mobile */
+@media (max-width: 640px) {
+    .drawerMenu {
+        width: 80vw;
+    }
+}

@@ -13,8 +13,6 @@ module.exports = {
 
             const productsInBasket = await ProductInBasket.find({ _user: userId }).populate('_product');
 
-            // const products = productsInBasket.map(productInBasket => productInBasket._id);
-
             if (productsInBasket.length === 0) {
                 return res.status(400).json({ message: "No products in basket" });
             }
@@ -44,11 +42,11 @@ module.exports = {
             const status = await monoService.getInvoiceStatus(invoice.invoiceId)
 
             if (status.status === 'created') {
-                await ProductInBasket.deleteMany({ _user: userId });  //+
+                await ProductInBasket.deleteMany({ _user: userId });
 
-                const updatedOrder = await Order.findOne({ 'orderID': status.reference }); // +
+                const updatedOrder = await Order.findOne({ 'orderID': status.reference });
 
-                if (updatedOrder) {  //+
+                if (updatedOrder) {
                     updatedOrder.paymentStatus = status.status;
                     updatedOrder.invoiceId = invoice.invoiceId;
 
@@ -72,10 +70,6 @@ module.exports = {
             const orders = await Order.find({}).limit(limit).skip((page - 1) * limit);
 
             count = await Order.countDocuments();
-
-            // console.log('-------------');
-            // const lastOrder = orders[orders.length - 1];
-            // console.log(lastOrder);
 
             res.status(200).json({
                 orders,

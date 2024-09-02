@@ -83,8 +83,10 @@ const OrderTable = () => {
     const { orders, selectedOrder, currentPageOrders, totalPagesOrders, count, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
-        dispatch(orderActions.getAllOrders());
+        dispatch(orderActions.getAllOrders({ page: currentPageOrders }));
+    }, [dispatch, currentPageOrders]);
 
+    useEffect(() => {
         const socket = new WebSocket('ws://localhost:8080');
 
         socket.onopen = () => {
@@ -93,9 +95,10 @@ const OrderTable = () => {
 
         socket.onmessage = (event) => {
             const change = JSON.parse(event.data);
-            console.log('Зміна отримана з сервера:', change);
-
-            dispatch(orderActions.updateOrderStatus({ orderId: change.documentKey._id, paymentStatus: change.updateDescription.updatedFields.paymentStatus }));
+            dispatch(orderActions.updateOrderStatus({
+                orderId: change.documentKey._id,
+                paymentStatus: change.updateDescription.updatedFields.paymentStatus
+            }));
         };
 
         socket.onclose = () => {

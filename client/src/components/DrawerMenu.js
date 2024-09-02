@@ -48,7 +48,7 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
 
     return (
         <Drawer open={open} >
-            <Box sx={{ width: "80vw" }}>
+            <Box className='drawerMenu'>
                 <Box
                     sx={{ backgroundColor: "black", color: "white" }}>
                     <IconButton

@@ -1,14 +1,46 @@
 /* mobile */
-@media (max-width: 767px) {
+@media (max-width: 640px) {
     .basket {
         width: 100vw;
     }
+
+    div.product-in-basket__card-image {
+        width: 80px;
+    }
+
+    p.product-in-basket__card-name,
+    p.product-in-basket__card-price,
+    p.basket__price {
+        font-size: 14px;
+    }
+
+    p.product-in-basket__card-color {
+        font-size: 12px;
+    }
+
 }
 
-@media (min-width:768px) and (max-width: 1024px) {
+/* tablet */
+@media (min-width:641px) and (max-width: 1024px) {
     .basket {
         width: 50vw;
     }
+
+    div.product-in-basket__card-image {
+        width: 150px;
+    }
+
+    p.product-in-basket__card-name,
+    p.product-in-basket__card-price,
+    p.basket__price {
+        font-size: 24px;
+    }
+
+    p.product-in-basket__card-color {
+        font-size: 18px;
+    }
+
+
 }
 
 /* pc */
@@ -17,7 +49,23 @@
         width: 30vw;
     }
 
+    div.product-in-basket__card-image {
+        width: 100px;
+    }
 
+    p.product-in-basket__card-name,
+    p.product-in-basket__card-price,
+    p.basket__price {
+        font-size: 16px;
+    }
+
+    p.product-in-basket__card-color {
+        font-size: 14px;
+    }
+}
+
+div.product-in-basket__card-image {
+    margin: 5px 0;
 }
 
 .basket__header {
@@ -39,19 +87,23 @@ h4.basket__title {
 
 .basket__products {}
 
-.basket__order {}
+.basket__order {
+    margin: 50px 0;
+    /* position: absolute; */
+    /* bottom: 0; */
+}
 
 .product-in-basket {
     width: 100%;
     display: flex;
     align-items: center;
+    align-items: flex-start;
 }
 
-
-div.product-in-basket__card-image {
-    width: 100px;
-    margin: 5px;
+div.product-in-basket {
+    gap: 15px;
 }
+
 
 .basket {
     height: 100vh;
@@ -59,7 +111,7 @@ div.product-in-basket__card-image {
 
 div.basket__content {
     margin: 10px 0;
-    height: 85%;
+    /* height: 85%; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -72,18 +124,15 @@ div.basket__cashback {
 
 
 button.basket__button {
-    font-weight: 700;
-    margin-top: 20px;
+    /* font-weight: 700; */
+    /* margin-top: 20px; */
     width: 100%;
 }
 
-p.product-in-basket__card-name {
-    font-weight: 600;
-}
+
 
 p.product-in-basket__card-color {
     color: grey;
-    font-size: 14px;
 }
 
 p.product-in-basket__card-price {
@@ -91,7 +140,7 @@ p.product-in-basket__card-price {
 }
 
 p.basket__price {
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     /* font-size: 24px; */
 }
@@ -104,4 +153,8 @@ button.product-in-basket__card-quantity {
 div.product-in-basket__card-counter {
     --ButtonGroup-separatorColor: none;
     margin: 5px 0 0 0;
+}
+
+p.product-in-basket__card-name {
+    font-weight: 600;
 }

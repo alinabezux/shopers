@@ -40,3 +40,30 @@ h4.title {
     margin: 15px 0;
     text-align: center;
 }
+
+button.mainbutton {
+    margin: 25px 0;
+}
+
+/* mobile */
+@media (max-width: 640px) {
+    button.mainbutton {
+        width: inherit;
+    }
+}
+
+/* tablet */
+@media (min-width:641px) and (max-width: 1024px) {
+    button.mainbutton {
+        font-size: larger;
+        width: inherit;
+    }
+}
+
+/* pc */
+@media (min-width: 1025px) {
+    button.mainbutton {
+        font-size: medium;
+        width: inherit;
+    }
+}

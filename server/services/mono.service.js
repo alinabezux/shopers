@@ -24,7 +24,7 @@ const createInvoice = async (order) => {
             }))
         },
         redirectUrl: `${CLIENT_URL}/order/${order.orderID}`,
-        webHookUrl: `https://7ef6-213-5-193-155.ngrok-free.app/webhook/paymentStatus`,
+        webHookUrl: `${SERVER_URL}/webhook/paymentStatus`,
     };
 
     try {
@@ -80,7 +80,7 @@ const getPublicKey = async () => {
             throw new ApiError(error.response.status, 'Failed to fetch public key from Monobank API');
         }
     }
-  
+
     return cachedPublicKey.key;
 }
 

@@ -27,7 +27,7 @@ const sendEmail = async (receiverMail, emailAction, locals = {}) => {
     });
 
 
-    Object.assign(locals || {}, { frontendURL: 'http://localhost:3000' });
+    Object.assign(locals || {}, { frontendURL: CLIENT_URL });
 
     const html = await templateRenderer.render(templateInfo.templateName, locals);
 

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { createBrowserHistory } from "history"
 
-import { baseURL, urls } from "../configs/urls";
+import { devURL, prodURL } from "../configs/urls";
 import { authService } from "./auth.service";
 
-// const baseURL = process.env.NODE_ENV === "production" ? prodURL : devURL;
+const baseURL = process.env.NODE_ENV === "production" ? prodURL : devURL;
 
 const $host = axios.create({ withCredentials: true, baseURL })
 

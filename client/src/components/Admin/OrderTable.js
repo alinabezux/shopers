@@ -88,7 +88,7 @@ const OrderTable = () => {
     }, [dispatch, currentPageOrders]);
 
     useEffect(() => {
-        const socket = io('http://localhost:5000');
+        const socket = io('https://shopersserver-q35xewgsh-alinas-projects-45a8001e.vercel.app/');
 
         socket.on('connect', () => {
             console.log('Socket connected');

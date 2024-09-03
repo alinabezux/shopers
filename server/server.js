@@ -46,55 +46,55 @@ app.use((err, req, res, next) => {
     }
 });
 
-// // Create HTTP server
-// const server = http.createServer(app);
+// Create HTTP server
+const server = http.createServer(app);
 
-// // Create Socket.IO server
-// const io = socketIo(server, {
-//     cors: {
-//         origin: configs.CLIENT_URL,
-//         methods: ["GET", "POST"]
-//     }
-// });
+// Create Socket.IO server
+const io = socketIo(server, {
+    cors: {
+        origin: configs.CLIENT_URL,
+        methods: ["GET", "POST"]
+    }
+});
 
-// // Watch MongoDB for changes
-// const pipeline = [
-//     {
-//         $match: {
-//             'updateDescription.updatedFields.paymentStatus': { $exists: true }
-//         }
-//     }
-// ];
+// Watch MongoDB for changes
+const pipeline = [
+    {
+        $match: {
+            'updateDescription.updatedFields.paymentStatus': { $exists: true }
+        }
+    }
+];
 
-// const changeStream = Order.watch(pipeline);
+const changeStream = Order.watch(pipeline);
 
-// changeStream.on('change', (change) => {
-//     console.log('Change:', change);
-//     io.emit('update', change); // Emit to all connected clients
-// });
+changeStream.on('change', (change) => {
+    console.log('Change:', change);
+    io.emit('update', change); // Emit to all connected clients
+});
 
-// // Handle Socket.IO connections
-// io.on('connection', (socket) => {
-//     console.log('Client connected');
+// Handle Socket.IO connections
+io.on('connection', (socket) => {
+    console.log('Client connected');
 
-//     socket.on('disconnect', () => {
-//         console.log('Client disconnected');
-//     });
-// });
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
 
-// // Start the server
-// server.listen(configs.PORT, configs.HOST, async () => {
-//     await mongoose.connect(configs.MONGO_URL, {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//     });
-//     console.log(`Backend server is running on port ${configs.PORT} !`);
-// });
-
-app.listen(configs.PORT, configs.HOST, async () => {
+// Start the server
+server.listen(configs.PORT, configs.HOST, async () => {
     await mongoose.connect(configs.MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
     console.log(`Backend server is running on port ${configs.PORT} !`);
 });
+
+// app.listen(configs.PORT, configs.HOST, async () => {
+//     await mongoose.connect(configs.MONGO_URL, {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true,
+//     });
+//     console.log(`Backend server is running on port ${configs.PORT} !`);
+// });

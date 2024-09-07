@@ -24,7 +24,7 @@ const Profile = ({ user }) => {
         navigate('/')
     };
     const { userId } = useSelector(state => state.authReducer);
-    const { loading } = useSelector(state => state.userReducer);
+    const { loading, dataLoading } = useSelector(state => state.userReducer);
 
     const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();
 
@@ -105,7 +105,7 @@ const Profile = ({ user }) => {
                             </FormControl>
                             <Typography sx={{ gridColumn: '1/-1', fontSize: "12px" }}>* ці дані використовуватимуться при оформленні замовлення</Typography>
                         </CardContent>
-                        <Button className='accountpage__button' color="success" variant="solid" endDecorator={<Edit />} type="submit" loading={loading}>ЗБЕРЕГТИ ЗМІНИ</Button>
+                        <Button className='accountpage__button' color="success" variant="solid" endDecorator={<Edit />} type="submit" loading={dataLoading}>ЗБЕРЕГТИ ЗМІНИ</Button>
                     </Form>
                 </Card>
 
@@ -117,8 +117,6 @@ const Profile = ({ user }) => {
                     </CardContent>
                 </Card>
             </Box>
-
-
             <Button className='accountpage__button' variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
         </Box >
     )

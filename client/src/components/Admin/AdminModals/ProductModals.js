@@ -1,9 +1,9 @@
-import { Alert, AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Stack, Typography } from "@mui/joy";
-import { useCallback, useEffect, useState } from "react";
+import { AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Stack, Typography } from "@mui/joy";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../../../redux";
 import { useForm, Form, Controller } from "react-hook-form";
-import { ErrorOutlineRounded, FileUploadRounded, InfoOutlined, WarningRounded } from "@mui/icons-material";
+import { FileUploadRounded, InfoOutlined, WarningRounded } from "@mui/icons-material";
 import { FileUpload } from "./FileUpload";
 import { styled } from '@mui/joy';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
@@ -65,7 +65,7 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
             console.error("Помилка:", error);
         }
 
-    }, [category, type, dispatch, reset])
+    }, [category, type, dispatch, reset, setOpenCreate])
 
     return (
         <Modal open={openCreate} onClose={() => setOpenCreate(false)} >
@@ -204,7 +204,7 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
                             }
                         </FormControl>
 
-                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
+                        <Button type="submit" loading={loading}>Зберегти</Button>
                     </Box>
                 </Form>
             </ModalDialog>
@@ -219,33 +219,16 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
     const { categories } = useSelector(state => state.categoryReducer);
     const { selectedProduct, error, loading } = useSelector(state => state.productReducer);
 
-    const { control, handleSubmit, register, reset, setValue } = useForm();
+    const { control, handleSubmit, register, reset } = useForm();
 
 
     const [category, setCategory] = useState('')
     const [type, setType] = useState('')
 
-    // useEffect(() => {
-    //     if (selectedProduct) {
-    //         setValue('article', selectedProduct.article)
-    //         setValue('name', selectedProduct.name)
-    //         setValue('quantity', selectedProduct.quantity)
-    //         setValue('price', selectedProduct.price)
-
-    //         setValue('color', selectedProduct?.info?.color)
-    //         setValue('size', selectedProduct?.info?.size)
-    //         setValue('material', selectedProduct?.info?.material)
-    //         setValue('description', selectedProduct?.info?.description)
-
-    //         setCategory(selectedProduct._category);
-    //         setType(selectedProduct._type)
-    //     }
-    // }, [selectedProduct, setValue])
-
 
     const handleEditType = useCallback(async (data) => {
         let productProperties = {
-            // info: {}
+            info: {}
         };
 
         if (data.article) {
@@ -283,7 +266,6 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 
 
         const res = await dispatch(productActions.updateProduct({ productId: selectedProduct._id, product: productProperties }));
-        console.log(res)
         if (res.meta.requestStatus === 'fulfilled') {
             setOpenEdit(false);
             reset();
@@ -367,7 +349,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
                             <Input placeholder={selectedProduct.price} {...register('price')} />
                         </FormControl>
 
-                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
+                        <Button type="submit" loading={loading}>Зберегти</Button>
                     </Box>
                 </Form>
             </ModalDialog>
@@ -381,8 +363,12 @@ const DeleteProductModal = ({ openDelete, setOpenDelete }) => {
     const { selectedProduct, error, loading } = useSelector(state => state.productReducer);
 
     const handleDeleteProduct = useCallback(async () => {
-        await dispatch(productActions.deleteById({ productId: selectedProduct._id }));
-        setOpenDelete(false)
+        try {
+            await dispatch(productActions.deleteById({ productId: selectedProduct._id }));
+            setOpenDelete(false);
+        } catch (err) {
+            console.error("Помилка під час видалення продукту:", err);
+        }
     }, [dispatch, selectedProduct, setOpenDelete]);
 
     return (
@@ -397,7 +383,7 @@ const DeleteProductModal = ({ openDelete, setOpenDelete }) => {
                     Ви впевнені, що хочете видалити продукт {selectedProduct.name}?
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="solid" color="danger" onClick={handleDeleteProduct} loading={loading ? true : false}>
+                    <Button variant="solid" color="danger" onClick={handleDeleteProduct} loading={loading}>
                         Видалити
                     </Button>
                     <Button variant="plain" color="neutral" onClick={() => setOpenDelete(false)}>
@@ -514,7 +500,7 @@ const AddPhotoProductModal = ({ openAddPhoto, setOpenAddPhoto }) => {
                                     </Stack>
                                 )}</Box>
 
-                            <Button type="submit" disabled={files.length === 0} loading={loading ? true : false}>Зберегти</Button>
+                            <Button type="submit" disabled={files.length === 0} loading={loading}>Зберегти</Button>
                         </Stack>
                     </FormControl>
                 </Form>
@@ -528,7 +514,11 @@ const ImagesModal = ({ openImages, setOpenImages }) => {
     const { selectedProduct, error, loading } = useSelector(state => state.productReducer);
 
     const handleDeleteImage = useCallback(async (img) => {
-        await dispatch(productActions.deleteImage({ productId: selectedProduct._id, imageUrl: img }));
+        try {
+            await dispatch(productActions.deleteImage({ productId: selectedProduct._id, imageUrl: img }));
+        } catch (err) {
+            console.error("Помилка під час видалення зображення:", err);
+        }
     }, [dispatch, selectedProduct._id]);
 
     return (

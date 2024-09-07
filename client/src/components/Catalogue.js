@@ -6,7 +6,7 @@ import { Products } from "./Product/Products";
 import { BackButton } from "./BackButton";
 import { TypesMenu } from './TypesMenu';
 
-import {Stack, Typography, Box, Fab } from "@mui/material";
+import { Stack, Typography, Box, Fab } from "@mui/material";
 import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
 
 const Catalogue = ({ name }) => {
@@ -27,7 +27,7 @@ const Catalogue = ({ name }) => {
 
     const handleScroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        setShowButton(scrollTop > 700); // Показувати кнопку після прокручування на 200 пікселів
+        setShowButton(scrollTop > 700);
     };
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);

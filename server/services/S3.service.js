@@ -26,11 +26,19 @@ async function uploadPublicFile(fileToUpload, itemType, itemId) {
 }
 
 async function deleteImage(itemType, itemId, imageUrl) {
-    const imageName = imageUrl.split('/').pop();
-    return s3Bucket.deleteObject({
-        Bucket: S3_BUCKET_NAME,
-        Key: `${itemType}/${itemId}/${imageName}`
-    }).promise()
+    try {
+        const imageName = imageUrl.split('/').pop();
+        console.log('imageName', imageName);
+
+        await s3Bucket.deleteObject({
+            Bucket: S3_BUCKET_NAME,
+            Key: `${itemType}/${itemId}/${imageName}`
+        }).promise();
+
+        console.log('Image deleted successfully');
+    } catch (err) {
+        console.error('Error deleting image:', err);
+    }
 }
 
 module.exports = { uploadPublicFile, deleteImage };

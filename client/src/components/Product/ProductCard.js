@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, memo } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import Snackbar from '@mui/joy/Snackbar';
 
-const ProductCard = ({ product }) => {
+const ProductCard = memo(({ product }) => {
     const dispatch = useDispatch();
 
     const [openBasket, setOpenBasket] = useState(false);
@@ -33,7 +33,7 @@ const ProductCard = ({ product }) => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
-    }, [dispatch, userId, favorite.length])
+    }, [dispatch, userId])
 
     useEffect(() => {
         if (favorite) {
@@ -48,9 +48,13 @@ const ProductCard = ({ product }) => {
 
     const handleAddProductToFavourite = useCallback(async (product) => {
         if (userId) {
-            await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
-            setSnackbarMessage(`${product.name} додано у список бажань.`);
-            setOpenSnackbar(true)
+            const res = await dispatch(favoriteActions.addToFavorite({ userId, productId: product._id }));
+
+            if (res.meta.requestStatus === 'fulfilled') {
+                setSnackbarMessage(`${product.name} додано у список бажань.`);
+                setOpenSnackbar(true)
+                setFavourite(true)
+            }
         } else {
             setOpenErrorSnackbar(true)
         }
@@ -92,7 +96,12 @@ const ProductCard = ({ product }) => {
                     <Stack direction="column" spacing={1}>
                         <Typography variant="h3" className="product-card__card-name">
                             {product.name}</Typography>
-                        <Typography sx={{ fontSize: "16px" }}>Колір: {product?.info?.color}</Typography>
+                        {product?.info?.color &&
+                            <Typography sx={{ fontSize: "14px" }}>{product.info.color}</Typography>
+                        }
+                        {product?.info?.size &&
+                            <Typography sx={{ fontSize: "12px" }}>{product.info.size}</Typography>
+                        }
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography className="product-card__card-price">{product.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
@@ -156,6 +165,6 @@ const ProductCard = ({ product }) => {
             </Snackbar>
         </>
     );
-};
+});
 
 export default ProductCard;

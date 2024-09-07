@@ -84,7 +84,7 @@ const ChangePasswordForm = () => {
                         </FormHelperText>
                     }
                 </FormControl>
-                <Button className='accountpage__button' color="success" variant="solid" type="submit" loading={pswrdLoading ? true : false}>ЗМІНИТИ ПАРОЛЬ</Button>
+                <Button className='accountpage__button' color="success" variant="solid" type="submit" loading={pswrdLoading}>ЗМІНИТИ ПАРОЛЬ</Button>
             </Form>
             <Snackbar
                 startDecorator={<DoneRounded />}

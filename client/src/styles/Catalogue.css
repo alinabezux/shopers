@@ -3,16 +3,29 @@ h3.catalogue__title {
     font-weight: 500
 }
 
+/* mobile */
+@media (max-width: 640px) {
+    a.link.typeItem {
+        font-size: 24px;
+    }
+
+    h3.catalogue__title {
+        font-size: 42px;
+    }
+}
+
 /* pc */
-@media (min-width: 900px) {}
+@media (min-width: 1025px) {}
 
 /* tablet */
-@media (max-width: 900px) {
+@media (min-width:641px) and (max-width: 1024px) {
     h3.catalogue__title {
         font-size: 44px;
     }
 
-
+    a.link.typeItem {
+        font-size: 32px;
+    }
 }
 
 .catalogue {

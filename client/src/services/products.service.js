@@ -12,7 +12,7 @@ const productsService = {
     }),
     getById: (productId) => $host.get(`${urls.products}/${productId}`),
     createProduct: (product) => $authHost.post(urls.products, { product }),
-    uploadPhoto: (productId, images) => $authHost.patch(`${urls.products}/${productId}`, images),
+    uploadPhoto: (productId, images) => $authHost.patch(`${urls.products}/${productId}/images`, images),
     updateProduct: (productId, product) => $authHost.patch(`${urls.products}/${productId}`, { product }),
     deleteById: (productId) => $authHost.delete(`${urls.products}/${productId}`),
     deleteImage: (productId, imageUrl) => $authHost.delete(`${urls.products}/${productId}/images`, { data: { imageUrl } }),

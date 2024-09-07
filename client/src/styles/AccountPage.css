@@ -50,11 +50,7 @@ div.accountpage__menu {
     flex-direction: column;
 }
 
-div.info {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(80px, 1fr));
-    gap: 1.5;
-}
+
 
 button.accountpage__button {
     margin-top: 25px;
@@ -128,7 +124,10 @@ p.accountpage__wishlist-color {
     .accountpage__wishlist-card {
         width: 35%;
     }
-
+    .accountpage__wishlist.white-button{
+        
+    }
+   
 
 
 
@@ -176,6 +175,11 @@ p.accountpage__wishlist-color {
     .accountpage__wishlist-card {
         width: 25%;
     }
+    div.info {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(80px, 1fr));
+        gap: 1.5;
+    }
 }
 
 /* pc */
@@ -215,7 +219,11 @@ p.accountpage__wishlist-color {
     .accountpage__wishlist-card {
         width: 20%;
     }
-
+    div.info {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(80px, 1fr));
+        gap: 1.5;
+    }
 
 
 }

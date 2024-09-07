@@ -34,7 +34,7 @@ const VisuallyHiddenInput = styled('input')`
 
 const CategoriesTable = () => {
     const dispatch = useDispatch();
-    const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
+    const { categories } = useSelector(state => state.categoryReducer);
 
     const [openCreate, setOpenCreate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -93,7 +93,7 @@ const CategoriesTable = () => {
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: "column", mt: 4, gap: 2, width: "100%", boxSizing: "border-box" }}>
-                {categories.map((category) =>
+                {categories.length > 0 ? categories.map((category) => (
                     <Card
                         key={category._id}
                         variant="outlined"
@@ -140,6 +140,8 @@ const CategoriesTable = () => {
                             </Box>
                         </CardContent>
                     </Card>
+                )) : (
+                    <Typography>Немає категорій для відображення</Typography>
                 )}
             </Box>
         </Box >

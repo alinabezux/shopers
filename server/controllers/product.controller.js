@@ -1,5 +1,5 @@
-const Product = require('../db/models/Product');
-const S3service = require("../services/S3.service");
+const Product = require("../db/models/Product");
+const S3service = require('../services/S3.service');
 
 module.exports = {
     createProduct: async (req, res, next) => {
@@ -150,15 +150,22 @@ module.exports = {
     deleteProduct: async (req, res, next) => {
         try {
             const { productId } = req.params;
+            console.log('productId')
+            console.log(productId)
 
             const product = await Product.findById(productId);
+            console.log('product')
+            console.log(product)
+
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
-            const imageDeletionPromises = product.images.map((imageUrl) =>
-                S3service.deleteImage('products', productId, imageUrl)
-            );
-            await Promise.all(imageDeletionPromises);
+            if (product.images && product.images.length > 0) {
+                const imageDeletionPromises = product.images.map((imageUrl) =>
+                    S3service.deleteImage('products', productId, imageUrl)
+                );
+                await Promise.all(imageDeletionPromises);
+            }
 
             await Product.deleteOne({ _id: productId })
 

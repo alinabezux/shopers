@@ -42,3 +42,21 @@
         font-size: 30px;
     }
 }
+
+.accountpage__wishlist button.white-button,
+.orders button.white-button {
+    color: black;
+    background-color: transparent;
+    border: 1px solid black;
+    margin: 15px;
+    font-weight: 800;
+    font-size: 20px;
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.accountpage__wishlist button.white-button:hover,
+.orders button.white-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 1px solid white;
+}

@@ -50,7 +50,7 @@ const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
                                 </FormHelperText>
                             }
                         </FormControl>
-                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
+                        <Button type="submit" loading={loading}>Зберегти</Button>
                     </Stack>
                 </Form>
             </ModalDialog>
@@ -61,7 +61,7 @@ const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
 const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
     const dispatch = useDispatch();
 
-    const { categories, selectedCategory, loading, error } = useSelector(state => state.categoryReducer);
+    const { selectedCategory, loading, error } = useSelector(state => state.categoryReducer);
 
     const { control, handleSubmit, register, reset, setValue } = useForm();
 
@@ -96,7 +96,7 @@ const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
                                 </FormHelperText>
                             }
                         </FormControl>
-                        <Button type="submit" loading={loading ? true : false}>Зберегти</Button>
+                        <Button type="submit" loading={loading}>Зберегти</Button>
                     </Stack>
                 </Form>
             </ModalDialog>
@@ -113,7 +113,6 @@ const AddPhotoCategoryModal = ({ openAddPhoto, setOpenAddPhoto }) => {
 
     const [file, setFile] = useState(null)
 
-
     const handleAddPhoto = useCallback(async () => {
         if (!file) return;
 
@@ -122,12 +121,15 @@ const AddPhotoCategoryModal = ({ openAddPhoto, setOpenAddPhoto }) => {
             formData.append("image", file);
             formData.append("prevImage", selectedCategory.image);
 
-            await dispatch(categoryActions.uploadPhoto({
+            const res = await dispatch(categoryActions.uploadPhoto({
                 categoryId: selectedCategory._id,
                 formData,
             }));
-            setOpenAddPhoto(false);
-            setFile(null)
+
+            if (res.meta.requestStatus === 'fulfilled') {
+                setOpenAddPhoto(false);
+                setFile(null);
+            }
         } catch (error) {
             console.error("Помилка під час завантаження файлу ", error);
         }
@@ -144,7 +146,7 @@ const AddPhotoCategoryModal = ({ openAddPhoto, setOpenAddPhoto }) => {
                             <DropZone setFile={setFile} />
                             {file && <Box>  <FileUpload file={file} /></Box>}
 
-                            <Button type="submit" disabled={!file} loading={loading ? true : false}>Зберегти</Button>
+                            <Button type="submit" disabled={!file} loading={loading}>Зберегти</Button>
                         </Stack>
                     </FormControl>
                 </Form>
@@ -176,7 +178,7 @@ const DeleteCategoryModal = ({ openDelete, setOpenDelete }) => {
                     Ви впевнені, що хочете видалити категорію {handleDeleteCategory.name}?
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="solid" loading={loading ? true : false} color="danger" onClick={handleDeleteCategory}>
+                    <Button variant="solid" loading={loading} color="danger" onClick={handleDeleteCategory}>
                         Видалити
                     </Button>
                     <Button variant="plain" color="neutral" onClick={() => setOpenDelete(false)}>

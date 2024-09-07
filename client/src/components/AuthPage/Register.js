@@ -139,7 +139,7 @@ const Register = ({ setOpenSnackbar }) => {
                         }
                     </FormControl>
                 </CardContent>
-                <Button variant="soft" color="primary" type='submit' sx={{ mt: 1 }} className='authpage__button'
+                <Button variant="soft" color="primary" type='submit' sx={{ mt: 1 }} loading={loading} className='authpage__button'
                 >ЗАРЕЄСТРУВАТИСЬ</Button>
             </Card>
         </Form>

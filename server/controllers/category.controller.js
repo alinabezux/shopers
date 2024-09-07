@@ -74,6 +74,9 @@ module.exports = {
                 const { imageUrl } = req.body;
                 const { categoryId } = req.params;
 
+                console.log('categoryId', categoryId);
+                console.log('imageUrl', imageUrl);
+                
                 if (imageUrl) {
                     await S3service.deleteImage('categories', categoryId, imageUrl);
                 }

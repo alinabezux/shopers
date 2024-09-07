@@ -104,6 +104,7 @@ const Header = () => {
 
     const handleLogOut = async () => {
         await dispatch(authActions.logOut())
+        navigate('/')
     };
 
     return (

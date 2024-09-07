@@ -20,19 +20,19 @@ productRouter.patch('/:productId',
     authMiddleware.checkRole,
     productController.updateProduct);
 
-productRouter.patch('/:productId',
+productRouter.patch('/:productId/images',
     authMiddleware.checkAccessToken,
     authMiddleware.checkRole,
     productController.uploadImage);
-
-productRouter.delete('/:productId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.checkRole,
-    productController.deleteProduct);
 
 productRouter.delete('/:productId/images',
     authMiddleware.checkAccessToken,
     authMiddleware.checkRole,
     productController.deleteImage);
+
+productRouter.delete('/:productId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.checkRole,
+    productController.deleteProduct);
 
 module.exports = productRouter;

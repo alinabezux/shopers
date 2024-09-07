@@ -4,36 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { orderActions } from '../../redux';
 
-import Button2 from "@mui/material/Button";
 import {
     Box,
-    Container,
+    Button,
+    CircularProgress,
     Typography,
 } from "@mui/material";
-import { styled } from '@mui/material/styles';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import { AspectRatio, Card, CardContent, Chip, Stack } from '@mui/joy';
 import NoPhotographyOutlined from '@mui/icons-material/NoPhotographyOutlined';
 
-
-const BlackButton = styled(Button2)(() => ({
-    color: 'black',
-    backgroundColor: "transparent",
-    '&:hover': {
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        color: "white",
-        border: "1px solid white"
-    },
-    margin: '15px',
-    fontFamily: 'Geologica, sans-serif',
-    fontWeight: '800',
-    fontSize: '20px',
-    border: "1px solid black",
-
-}));
 const Orders = () => {
     const dispatch = useDispatch();
-    const { userOrders } = useSelector(state => state.orderReducer)
+    const { userOrders, loadingOrder } = useSelector(state => state.orderReducer)
     const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {
@@ -42,8 +25,16 @@ const Orders = () => {
         }
     }, [dispatch, userId, userOrders.length]);
 
+    if (loadingOrder) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                <CircularProgress color="inherit" />
+            </Box>
+        );
+    }
+
     return (
-        <Box sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <Box className="orders" sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             {userOrders.length ?
                 <Box sx={{ width: "100%" }}>
                     <Stack direction="column" spacing={2} >
@@ -89,21 +80,18 @@ const Orders = () => {
                     </Stack>
                 </Box>
                 :
-                <Box>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                     <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
-                    <Typography variant="h5" sx={{ fontSize: "28px" }}>У вас ще не було замовлень.</Typography>
-                    <BlackButton variant="outlined" size="large">
+                    <Typography variant="h5" sx={{ fontSize: "28px", textAlign: "center" }}>У вас ще не було замовлень.</Typography>
+                    <Button variant="outlined" size="large" className="white-button">
                         <Link to="/shop"
                             style={{
                                 color: "inherit",
                                 textDecoration: "none"
                             }}>КАТАЛОГ</Link>
-                    </BlackButton>
+                    </Button>
                 </Box>
             }
-
-
-
         </Box>
     );
 };

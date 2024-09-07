@@ -5,7 +5,7 @@
     }
 }
 
-/* tablet */
+/* mobile + tablet */
 @media (max-width: 1024px) {
     .products {
         width: 100%;

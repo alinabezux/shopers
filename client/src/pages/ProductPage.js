@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
-import { Typography, Box, Stack } from '@mui/material';
+import { Typography, Box, Stack, CircularProgress } from '@mui/material';
 import { Button, Chip, ButtonGroup, AspectRatio } from "@mui/joy";
 import { Container } from '@mui/joy';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
@@ -22,6 +22,7 @@ import AccountCircleRounded from '@mui/icons-material/AccountCircleRounded';
 import { basketActions, favoriteActions, productActions } from '../redux';
 import { DrawerBasket } from '../components';
 import { toUrlFriendly } from '../utils'
+import { ErrorPage } from './ErrorPage';
 
 const ProductPage = () => {
     const [openBasket, setOpenBasket] = useState(false);
@@ -36,16 +37,17 @@ const ProductPage = () => {
     const dispatch = useDispatch();
 
     const { userId } = useSelector(state => state.authReducer);
-    const { selectedProduct } = useSelector(state => state.productReducer);
+    const { selectedProduct, loading, error } = useSelector(state => state.productReducer);
     const { categories } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
-    const { favorite, loading, error } = useSelector(state => state.favoriteReducer);
+    const { favorite } = useSelector(state => state.favoriteReducer);
 
-    const category = categories.find(category => category._id === product._category);
-    const type = types.find(type => type._id === product._type);
+    const category = useMemo(() => categories.find(category => category._id === product._category), [categories, product._category]);
+    const type = useMemo(() => types.find(type => type._id === product._type), [types, product._type]);
 
     useEffect(() => {
         const savedProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+
         if (savedProduct && Object.keys(selectedProduct).length === 0) {
             setProduct(savedProduct);
             dispatch(productActions.setSelectedProduct(savedProduct));
@@ -54,18 +56,19 @@ const ProductPage = () => {
         }
     }, [dispatch, selectedProduct]);
 
+
+
     useEffect(() => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
     }, [dispatch, userId, favorite.length])
 
+
     useEffect(() => {
-        if (favorite) {
-            const isFavourite = favorite.some(item => item._id === product._id);
-            setFavourite(isFavourite);
-        }
+        setFavourite(favorite.some(item => item._id === product._id));
     }, [favorite, product._id]);
+
 
     const increaseQuantity = () => {
         if (quantity < product.quantity) {
@@ -103,6 +106,18 @@ const ProductPage = () => {
         setOpenBasket(true);
     }, [userId, dispatch, quantity]);
 
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                <CircularProgress color="inherit" />
+            </Box>
+        );
+    }
+
+    if (error) {
+        return <ErrorPage message={error.message || 'Щось пішло не так...'} />;
+    }
+
     return (
         <Container className="product-page">
             {category && type ?
@@ -127,7 +142,7 @@ const ProductPage = () => {
             <Box className="product-page__content">
                 <Box className="product-page__gallery">
                     <AspectRatio ratio="1" >
-                        <Swiper
+                        <Swiper lazy
                             spaceBetween={10}
                             thumbs={{ swiper: thumbsSwiper }}
                             modules={[FreeMode, Navigation, Thumbs]}

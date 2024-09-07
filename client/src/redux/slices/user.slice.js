@@ -7,6 +7,7 @@ const initialState = {
 
     loading: false,
     pswrdLoading: false,
+    dataLoading: false,
     error: null,
     pswrdError: null
 };
@@ -72,16 +73,16 @@ const userSlice = createSlice({
 
             .addCase(updateUser.fulfilled, (state, action) => {
                 Object.assign(state.user, action.payload)
-                state.loading = false
+                state.dataLoading = false
                 state.error = null
             })
             .addCase(updateUser.pending, (state) => {
-                state.loading = true
+                state.dataLoading = true
                 state.error = null
             })
             .addCase(updateUser.rejected, (state, action) => {
                 state.error = action.payload
-                state.loading = false
+                state.dataLoading = false
             })
 
 

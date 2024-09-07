@@ -35,14 +35,11 @@ const TypesMenu = () => {
                     <Typography variant="h5" key={type._id}
                         onClick={() => handleTypeClick(type)}
                         sx={{
-                            fontFamily: 'Geologica, sans-serif',
-                            fontSize: '28px',
                             textTransform: 'lowercase',
                             fontWeight: 300,
-                            mx: "7px",
-                            transition: 'color 0.3s ease'
+                            mx: "5px",
                         }}>
-                        <NavLink to={`/${(toUrlFriendly(selectedCategory.name))}/${(toUrlFriendly(type.name))}`} className="link">
+                        <NavLink to={`/${(toUrlFriendly(selectedCategory.name))}/${(toUrlFriendly(type.name))}`} className="link typeItem">
                             {type.name}
                         </NavLink>
                     </Typography>

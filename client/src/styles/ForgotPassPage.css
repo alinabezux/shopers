@@ -1,6 +1,5 @@
 /* mobile */
-
-@media (max-width: 767px) {
+@media (max-width: 640px) {
     .forgotPage__main {
         width: 80vw;
 
@@ -19,7 +18,7 @@
 }
 
 /* tablet */
-@media (min-width:768px) and (max-width: 1024px) {
+@media (min-width:641px) and (max-width: 1024px) {
     .forgotPage__main {
         width: 80vw;
     }

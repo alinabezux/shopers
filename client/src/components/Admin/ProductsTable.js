@@ -75,22 +75,22 @@ const ProductsTable = () => {
         product.article.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleDeleteProduct = useCallback(async(product) => {
+    const handleDeleteProduct = useCallback(async (product) => {
         await dispatch(productActions.setSelectedProduct(product));
         setOpenDelete(true)
     }, [dispatch]);
 
-    const handleEditProduct = useCallback(async(product) => {
+    const handleEditProduct = useCallback(async (product) => {
         await dispatch(productActions.setSelectedProduct(product));
         setOpenEdit(true)
     }, [dispatch]);
 
-    const handleAddPhotoProduct = useCallback(async(product) => {
+    const handleAddPhotoProduct = useCallback(async (product) => {
         await dispatch(productActions.setSelectedProduct(product));
         setOpenAddPhoto(true);
     }, [dispatch]);
 
-    const handleOpenImages = useCallback(async(product) => {
+    const handleOpenImages = useCallback(async (product) => {
         await dispatch(productActions.setSelectedProduct(product));
         setOpenImages(true);
     }, [dispatch]);
@@ -99,7 +99,7 @@ const ProductsTable = () => {
         dispatch(productActions.setSelectedProduct(product));
     }, [dispatch]);
 
-    const handleSetCurrentPageProducts = (event, value) => {            //?
+    const handleSetCurrentPageProducts = (event, value) => {
         dispatch(productActions.setCurrentPageProducts(value));
     }
 
@@ -212,7 +212,6 @@ const ProductsTable = () => {
                 </FormControl>
 
                 <FormControl sx={{ width: "25%" }} size="sm">
-                    {/* <FormLabel>Тип</FormLabel> */}
                     <Select onChange={(event, newValue) => setType(newValue)}
                         placeholder="Тип"
                         value={type}
@@ -290,10 +289,23 @@ const ProductsTable = () => {
                                     </Link2>
                                 </td>
                                 <td>
-                                    <Stack description="column" spacing={1}>
-                                        <Chip color='primary'>{(categories.find(item => item._id === product._category)).name}</Chip>
-                                        <Chip>{(types.find(item => item._id === product._type))?.name}</Chip>
+                                    <Stack direction="column" spacing={1}>
+                                        {categories.find(item => item._id === product._category) ? (
+                                            <Chip color='primary'>
+                                                {(categories.find(item => item._id === product._category)).name}
+                                            </Chip>
+                                        ) : (
+                                            <Chip color='danger'>Невідома категорія</Chip>
+                                        )}
+                                        {types.find(item => item._id === product._type) ? (
+                                            <Chip>
+                                                {(types.find(item => item._id === product._type))?.name}
+                                            </Chip>
+                                        ) : (
+                                            <Chip color='danger'>Невідомий тип</Chip>
+                                        )}
                                     </Stack>
+
                                 </td>
                                 <td><h3>{product.price} грн.</h3></td>
                                 <td>
@@ -311,6 +323,7 @@ const ProductsTable = () => {
                             </tr>
                         )}
                     </tbody>
+
                     <tfoot>
                         <tr>
                             <td colSpan={8}>

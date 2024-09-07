@@ -6,7 +6,6 @@ import CardContent from '@mui/joy/CardContent';
 
 import Typography from '@mui/joy/Typography';
 
-import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 
 
 const FileUpload = ({ file }) => {
@@ -27,7 +26,6 @@ const FileUpload = ({ file }) => {
                 }}
             >
                 <img src={url} alt={file.name} />
-                {/* <div><InsertDriveFileRoundedIcon /></div> */}
             </AspectRatio>
             <CardContent>
                 <Typography fontSize="sm">{file.name}</Typography>

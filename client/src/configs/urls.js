@@ -1,6 +1,6 @@
 // const baseURL = 'http://localhost:5000/api'
 const devURL = 'http://localhost:5000/api'
-const prodURL = 'https://shopersserver-alinas-projects-45a8001e.vercel.app/api'
+// const prodURL = 'https://shopersserver-alinas-projects-45a8001e.vercel.app/api'
 
 const POST_URL = 'https://api.novaposhta.ua/v2.0/json/';
 
@@ -23,5 +23,5 @@ const urls = {
 }
 
 export {
-    urls, POST_URL, devURL, prodURL
+    urls, POST_URL, devURL
 }

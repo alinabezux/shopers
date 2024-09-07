@@ -1,6 +1,4 @@
-const Product = require("../db/models/Product");
 const ProductInFavourite = require("../db/models/ProductInFavourite");
-const ApiError = require("../errors/ApiError");
 
 module.exports = {
     getUsersFavourite: async (req, res, next) => {
@@ -9,6 +7,8 @@ module.exports = {
             const productsData = productsInFavourite.map(productInFavourite => ({
                 ...productInFavourite._product._doc,
             }));
+            console.log('productsData')
+            console.log(productsData)
 
             res.status(200).json(productsData);
 
@@ -25,6 +25,8 @@ module.exports = {
             });
 
             productInFavourite = await ProductInFavourite.findById(productInFavourite._id).populate('_product');
+            console.log('productInFavourite')
+            console.log(productInFavourite)
 
             res.status(200).json(productInFavourite)
         } catch (e) {

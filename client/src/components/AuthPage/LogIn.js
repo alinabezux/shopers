@@ -38,7 +38,6 @@ const LogIn = ({ setOpenLoginSnackbar }) => {
                 }
 
             }
-            // else if (res.meta.requestStatus === 'fulfilled' && isAdmin) window.location.reload();
         } catch (e) {
             console.log("catch e: ", e);
         }
@@ -80,7 +79,7 @@ const LogIn = ({ setOpenLoginSnackbar }) => {
                         />
                     </FormControl>
                 </CardContent>
-                <Button variant="soft" color="primary" sx={{ mt: 1 }} type='submit' className='authpage__button'>УВІЙТИ</Button>
+                <Button variant="soft" color="primary" sx={{ mt: 1 }} type='submit' className='authpage__button' loading={loading}>УВІЙТИ</Button>
                 <Link to='/password/forgot' className='link  fgp_pswrd'>Забули пароль?</Link>
             </Card>
         </Form >

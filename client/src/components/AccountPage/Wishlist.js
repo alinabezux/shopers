@@ -8,6 +8,7 @@ import { ProductInFavorite } from '../ProductInFavorite';
 import Button2 from "@mui/material/Button";
 import {
     Box,
+    Button,
     Typography,
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
@@ -48,17 +49,17 @@ const Wishlist = () => {
                     {favorite.map(product => (<ProductInFavorite key={product._id} product={product} />))}
                 </Box>
                 :
-                <>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                     <FavoriteBorderIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
-                    <Typography variant="h5" sx={{ fontSize: "28px" }}>Цей список бажань порожній.</Typography>
-                    <BlackButton variant="outlined" size="large">
+                    <Typography variant="h5" sx={{ fontSize: "28px", textAlign: "center" }}>Цей список бажань порожній.</Typography>
+                    <Button variant="outlined" size="large" className="white-button">
                         <Link to="/shop"
                             style={{
                                 color: "inherit",
                                 textDecoration: "none"
                             }}>КАТАЛОГ</Link>
-                    </BlackButton>
-                </>
+                    </Button>
+                </Box>
             }
 
         </Box >

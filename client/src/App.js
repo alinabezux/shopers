@@ -19,7 +19,8 @@ import {
     AdminPage,
     CompleteOrderPage,
     ForgotPasswordPage,
-    SetNewPasswordPage
+    SetNewPasswordPage,
+    ErrorPage
 } from "./pages";
 import { CategoriesTable, OrderTable, PrivateRoute, ProductsTable, TypesTable } from "./components/Admin";
 
@@ -61,6 +62,8 @@ function App() {
                             {/* <Route path="users" element={<UsersTable />} /> */}
                         </Route>
                     </Route>
+
+                    <Route path='/error' element={<ErrorPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>

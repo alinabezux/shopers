@@ -9,7 +9,6 @@ import { categoryActions, typeActions } from '../redux';
 const CategoryPage = () => {
     const dispatch = useDispatch();
     const { categoryName, typeName } = useParams();
-    const location = useLocation();
 
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);

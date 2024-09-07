@@ -10,7 +10,6 @@ import { DoneRounded, ErrorOutlineRounded, InfoOutlined } from '@mui/icons-mater
 
 const ChangePasswordForm = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const { userId } = useSelector(state => state.authReducer);

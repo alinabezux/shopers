@@ -182,7 +182,7 @@ const DeleteTypeModal = ({ openDelete, setOpenDelete }) => {
         await dispatch(typeActions.deleteById({ typeId: selectedType._id }));
         setOpenDelete(false)
 
-    }, [dispatch, selectedType]);
+    }, [dispatch, selectedType, setOpenDelete]);
 
 
     return (

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 import { basketActions, productActions } from '../redux';
 import { toUrlFriendly } from '../utils';

@@ -142,7 +142,7 @@ const CheckoutPage = () => {
             console.error('Error creating order:', error);
         }
 
-    }, [dispatch, userId, reset, navigate, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion, checked, totalCashback]);
+    }, [dispatch, userId, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion, checked, totalCashback]);
 
     const handleInputChange = async (value) => {
         setSearchString(value);

@@ -26,7 +26,7 @@ const Profile = ({ user }) => {
     const { userId } = useSelector(state => state.authReducer);
     const { dataLoading } = useSelector(state => state.userReducer);
 
-    const { control, handleSubmit, register, reset, formState: { errors } } = useForm();
+    const { control, handleSubmit, register, formState: { errors } } = useForm();
 
 
     const handleEditUser = useCallback(async (data) => {

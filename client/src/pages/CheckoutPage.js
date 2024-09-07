@@ -22,7 +22,6 @@ import { InfoOutlined } from '@mui/icons-material';
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [post, setPost] = useState('Нова пошта');
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
@@ -39,7 +38,7 @@ const CheckoutPage = () => {
     const { userId } = useSelector(state => state.authReducer);
     const { loadingOrder } = useSelector(state => state.orderReducer);
 
-    const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();
+    const { control, handleSubmit, register, formState: { errors }, setValue } = useForm();
 
     const regions = [
         { value: 1, label: "Вінницька область" },

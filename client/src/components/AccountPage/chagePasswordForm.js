@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Form, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import { userActions } from '../../redux';
 

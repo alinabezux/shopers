@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form, Controller } from "react-hook-form";
 import Select2 from 'react-select'
-import { useNavigate } from 'react-router-dom';
 
 import ukrpost from '../assets/ukrpost.png'
 import novapost from '../assets/novapost.png'

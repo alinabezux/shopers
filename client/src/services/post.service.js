@@ -4,7 +4,7 @@ import { POST_URL } from "../configs/urls";
 const postService = {
     getCities: (searchString) => {
         const requestData = {
-            apiKey: process.env.API_POST_KEY,
+            apiKey: process.env.REACT_APP_API_POST_KEY,
             modelName: 'Address',
             calledMethod: 'getCities',
             methodProperties: {

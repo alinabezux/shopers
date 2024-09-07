@@ -65,7 +65,7 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
             console.error("Помилка:", error);
         }
 
-    }, [category, type, dispatch, reset, setOpenCreate])
+    }, [category, type, dispatch, reset, setOpenCreate, setValue])
 
     return (
         <Modal open={openCreate} onClose={() => setOpenCreate(false)} >
@@ -273,7 +273,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
             setType('');
         }
 
-    }, [category, type, dispatch, selectedProduct, reset])
+    }, [category, type, dispatch, selectedProduct, reset, setOpenEdit])
 
     return (
         <Modal open={openEdit} onClose={() => setOpenEdit(false)} >
@@ -360,7 +360,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 const DeleteProductModal = ({ openDelete, setOpenDelete }) => {
     const dispatch = useDispatch();
 
-    const { selectedProduct, error, loading } = useSelector(state => state.productReducer);
+    const { selectedProduct, loading } = useSelector(state => state.productReducer);
 
     const handleDeleteProduct = useCallback(async () => {
         try {
@@ -397,7 +397,7 @@ const DeleteProductModal = ({ openDelete, setOpenDelete }) => {
 
 const AddPhotoProductModal = ({ openAddPhoto, setOpenAddPhoto }) => {
     const dispatch = useDispatch();
-    const { selectedProduct, error, loading } = useSelector(state => state.productReducer);
+    const { selectedProduct, loading } = useSelector(state => state.productReducer);
 
     const { control, handleSubmit } = useForm();
 
@@ -511,7 +511,7 @@ const AddPhotoProductModal = ({ openAddPhoto, setOpenAddPhoto }) => {
 
 const ImagesModal = ({ openImages, setOpenImages }) => {
     const dispatch = useDispatch();
-    const { selectedProduct, error, loading } = useSelector(state => state.productReducer);
+    const { selectedProduct } = useSelector(state => state.productReducer);
 
     const handleDeleteImage = useCallback(async (img) => {
         try {

@@ -1,5 +1,5 @@
 import { InfoOutlined, WarningRounded } from "@mui/icons-material";
-import { Box, Button, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, Input, Modal, ModalDialog, Stack, Typography } from "@mui/joy";
+import { Box, Button, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, Input, Modal, ModalDialog, Stack } from "@mui/joy";
 import { useCallback, useEffect, useState, } from "react";
 import { Form, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const CreateCategoryModal = ({ openCreate, setOpenCreate }) => {
             console.error("Помилка:", error);
         }
 
-    }, [dispatch, reset])
+    }, [dispatch, reset, setOpenCreate])
 
     return (
         <Modal open={openCreate} onClose={() => setOpenCreate(false)} >
@@ -69,7 +69,7 @@ const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
         if (selectedCategory) {
             setValue('name', selectedCategory.name)
         }
-    }, [selectedCategory])
+    }, [selectedCategory, setValue])
 
 
     const handleEditCategory = useCallback(async (data) => {
@@ -78,7 +78,7 @@ const EditCategoryModal = ({ openEdit, setOpenEdit }) => {
             setOpenEdit(false);
             reset();
         }
-    }, [dispatch, selectedCategory, reset])
+    }, [dispatch, selectedCategory, reset, setOpenEdit])
 
     return (
         <Modal open={openEdit} onClose={() => setOpenEdit(false)} >
@@ -163,7 +163,7 @@ const DeleteCategoryModal = ({ openDelete, setOpenDelete }) => {
     const handleDeleteCategory = useCallback(async () => {
         await dispatch(categoryActions.deleteById({ categoryId: selectedCategory._id, imageUrl: selectedCategory.image }));
         setOpenDelete(false)
-    }, [dispatch, selectedCategory]);
+    }, [dispatch, selectedCategory, setOpenDelete]);
 
 
     return (

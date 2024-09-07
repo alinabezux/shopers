@@ -8,8 +8,8 @@ import { InfoOutlined, WarningRounded } from "@mui/icons-material";
 const CreateTypeModal = ({ open, setOpenCreate }) => {
     const dispatch = useDispatch();
 
-    const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
-    const { selectedType, error, loading } = useSelector(state => state.typeReducer);
+    const { categories } = useSelector(state => state.categoryReducer);
+    const { error, loading } = useSelector(state => state.typeReducer);
 
     const { control, handleSubmit, register, formState: { errors }, reset, setValue } = useForm();
 
@@ -38,7 +38,7 @@ const CreateTypeModal = ({ open, setOpenCreate }) => {
             console.error("Помилка:", error);
         }
 
-    }, [category, dispatch, reset])
+    }, [category, dispatch, reset, setOpenCreate, setValue])
 
     return (
         <Modal open={open} onClose={() => setOpenCreate(false)} >
@@ -139,7 +139,7 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
             setCategory(null);
         }
 
-    }, [category, dispatch, selectedType, reset])
+    }, [category, dispatch, selectedType, reset, setOpenEdit])
 
     return (
         <Modal open={openEdit} onClose={() => setOpenEdit(false)} >
@@ -176,7 +176,7 @@ const EditTypeModal = ({ openEdit, setOpenEdit }) => {
 const DeleteTypeModal = ({ openDelete, setOpenDelete }) => {
     const dispatch = useDispatch();
 
-    const { selectedType, error, loading } = useSelector(state => state.typeReducer);
+    const { selectedType, loading } = useSelector(state => state.typeReducer);
 
     const handleDeleteType = useCallback(async () => {
         await dispatch(typeActions.deleteById({ typeId: selectedType._id }));

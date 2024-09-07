@@ -24,9 +24,9 @@ const Profile = ({ user }) => {
         navigate('/')
     };
     const { userId } = useSelector(state => state.authReducer);
-    const { loading, dataLoading } = useSelector(state => state.userReducer);
+    const { dataLoading } = useSelector(state => state.userReducer);
 
-    const { control, handleSubmit, register, reset, formState: { errors }, setValue } = useForm();
+    const { control, handleSubmit, register, reset, formState: { errors } } = useForm();
 
 
     const handleEditUser = useCallback(async (data) => {
@@ -54,7 +54,7 @@ const Profile = ({ user }) => {
             console.error('Error editing user:', error);
         }
 
-    }, [dispatch, userId, reset, navigate]);
+    }, [dispatch, userId]);
 
 
     return (

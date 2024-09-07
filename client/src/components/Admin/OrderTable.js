@@ -27,15 +27,9 @@ import {
     Tooltip,
 } from '@mui/joy';
 import {
-    FilterAlt as FilterAltIcon,
     Search as SearchIcon,
     ArrowDropDown as ArrowDropDownIcon,
     CheckRounded as CheckRoundedIcon,
-    Block as BlockIcon,
-    AutorenewRounded as AutorenewRoundedIcon,
-    KeyboardArrowRight as KeyboardArrowRightIcon,
-    KeyboardArrowLeft as KeyboardArrowLeftIcon,
-    MoreHorizRounded as MoreHorizRoundedIcon,
     CloseRounded,
     WarningRounded,
     DeleteOutlineRounded,
@@ -81,7 +75,7 @@ const OrderTable = () => {
     const action = useRef(null);
 
     const dispatch = useDispatch();
-    const { orders, selectedOrder, currentPageOrders, totalPagesOrders, count, loadingOrder } = useSelector(state => state.orderReducer);
+    const { orders, selectedOrder, currentPageOrders, totalPagesOrders, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
         dispatch(orderActions.getAllOrders({ page: currentPageOrders }));
@@ -96,7 +90,7 @@ const OrderTable = () => {
 
         socket.on('update', (change) => {
             dispatch(orderActions.updateOrderStatus({
-                orderId: change.documentKey._id, 
+                orderId: change.documentKey._id,
                 paymentStatus: change.updateDescription.updatedFields.paymentStatus
             }));
         });
@@ -106,7 +100,7 @@ const OrderTable = () => {
         });
 
         return () => {
-            socket.disconnect(); 
+            socket.disconnect();
         };
     }, [dispatch]);
 

@@ -19,29 +19,11 @@ import { Chip } from "@mui/joy";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-import { styled } from '@mui/material/styles';
-
-const BlackButton = styled(Button2)(() => ({
-    color: 'black',
-    backgroundColor: "transparent",
-    '&:hover': {
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        color: "white",
-        border: "1px solid white"
-    },
-    margin: '15px',
-    fontFamily: 'Geologica, sans-serif',
-    fontWeight: '800',
-    fontSize: '20px',
-    border: "1px solid black",
-
-}));
-
 
 
 const DrawerBasket = ({ open, onClose }) => {
     const dispatch = useDispatch();
-    const { basket, loading, error } = useSelector(state => state.basketReducer);
+    const { basket } = useSelector(state => state.basketReducer);
     const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {
@@ -107,13 +89,13 @@ const DrawerBasket = ({ open, onClose }) => {
                             <Container sx={{ height: "80%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                                 <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                                 <Typography variant="h5" sx={{ fontSize: "28px" }}>Цей кошик порожній.</Typography>
-                                <BlackButton variant="outlined" size="large" onClick={onClose}>
+                                <Button2 variant="outlined" size="large" onClick={onClose} className='white-button'>
                                     <Link to="/shop"
                                         style={{
                                             color: "inherit",
                                             textDecoration: "none"
                                         }}>КАТАЛОГ</Link>
-                                </BlackButton>
+                                </Button2>
                             </Container>
                         }
                     </>
@@ -131,4 +113,4 @@ const DrawerBasket = ({ open, onClose }) => {
     );
 };
 
-export { DrawerBasket, BlackButton };
+export { DrawerBasket };

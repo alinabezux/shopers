@@ -12,7 +12,7 @@ import { postService } from '../services';
 import platamono from '../assets/plata_light_bg@2x.png'
 
 import { Box, Typography, Stack, Container } from '@mui/material';
-import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel, Radio, RadioGroup, Option, Tooltip, FormHelperText } from '@mui/joy';
+import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel, Radio, RadioGroup, Tooltip, FormHelperText } from '@mui/joy';
 import Checkbox from '@mui/joy/Checkbox';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
@@ -34,7 +34,7 @@ const CheckoutPage = () => {
     const [options, setOptions] = useState([]);
     const [warehouses, setWarehouses] = useState([]);
 
-    const { basket, loading, error } = useSelector(state => state.basketReducer);
+    const { basket } = useSelector(state => state.basketReducer);
     const { user } = useSelector(state => state.userReducer);
     const { userId } = useSelector(state => state.authReducer);
     const { loadingOrder } = useSelector(state => state.orderReducer);
@@ -92,7 +92,7 @@ const CheckoutPage = () => {
                 return total + productInBasket.price * productInBasket.quantity;
             }, -user.bonus);
         }
-    }, [basket, checked]);
+    }, [basket, checked, user.bonus]);
 
 
     const totalCashback = useMemo(() => {
@@ -142,7 +142,7 @@ const CheckoutPage = () => {
             console.error('Error creating order:', error);
         }
 
-    }, [dispatch, userId, reset, navigate, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion]);
+    }, [dispatch, userId, reset, navigate, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion, checked, totalCashback]);
 
     const handleInputChange = async (value) => {
         setSearchString(value);
@@ -288,7 +288,7 @@ const CheckoutPage = () => {
                                                 onChange={handleChangePost}
                                                 value='Нова пошта'
                                                 color="neutral" />
-                                            <img src={novapost} />
+                                            <img src={novapost} alt='novapost' />
                                         </Stack>
                                         <Stack direction="row" spacing={2} className='checkout__post'>
                                             <Radio
@@ -296,7 +296,7 @@ const CheckoutPage = () => {
                                                 onChange={handleChangePost}
                                                 value='Укр пошта'
                                                 color="neutral" />
-                                            <img src={ukrpost} />
+                                            <img src={ukrpost} alt='ukrpost' />
                                         </Stack>
                                     </Stack>
                                 </RadioGroup>
@@ -433,7 +433,7 @@ const CheckoutPage = () => {
                                                 {/* <img src={visa} style={{ height: "10px" }} />
                                                 <img src={mc} style={{ height: "10px" }} /> */}
                                             </Stack>
-                                            <img src={platamono} style={{ height: "20px" }} />
+                                            <img src={platamono} alt='platamono' style={{ height: "20px" }} />
                                         </Stack>
 
                                         {post === 'Нова пошта' &&

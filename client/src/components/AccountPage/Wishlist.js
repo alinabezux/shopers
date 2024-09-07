@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
 import { favoriteActions } from '../../redux';
 import { ProductInFavorite } from '../ProductInFavorite';
 
-import Button2 from "@mui/material/Button";
 import {
     Box,
     Button,
     Typography,
 } from "@mui/material";
-import { styled } from '@mui/material/styles';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
-const BlackButton = styled(Button2)(() => ({
-    color: 'black',
-    backgroundColor: "transparent",
-    '&:hover': {
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        color: "white",
-        border: "1px solid white"
-    },
-    margin: '15px',
-    fontFamily: 'Geologica, sans-serif',
-    fontWeight: '800',
-    fontSize: '20px',
-    border: "1px solid black",
-
-}));
-
 const Wishlist = () => {
     const dispatch = useDispatch();
-    const { favorite, loading, error } = useSelector(state => state.favoriteReducer);
+    const { favorite } = useSelector(state => state.favoriteReducer);
     const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {

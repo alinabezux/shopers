@@ -40,7 +40,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
+    const { categories } = useSelector(state => state.categoryReducer);
     const { types, selectedType } = useSelector(state => state.typeReducer);
     const { user } = useSelector(state => state.userReducer);
     const { userId } = useSelector(state => state.authReducer);
@@ -59,13 +59,13 @@ const Header = () => {
     const handleHoverMenu = useCallback((event, category) => {
         setAnchorMenu(event.currentTarget);
         setSelCat(category);
-    }, [dispatch]);
+    }, []);
 
 
     const handleCloseMenu = useCallback(() => {
         setAnchorMenu(null);
         setSelCat(null);
-    }, [dispatch]);
+    }, []);
 
 
     useEffect(() => {
@@ -85,7 +85,7 @@ const Header = () => {
         dispatch(categoryActions.setSelectedCategory(category));
         dispatch(typeActions.setSelectedType(type));
         handleCloseMenu();
-    }, [dispatch]);
+    }, [dispatch, handleCloseMenu]);
 
 
     const [scrollPosition, setScrollPosition] = useState(0);

@@ -10,7 +10,6 @@ const CategoryPage = () => {
     const dispatch = useDispatch();
     const { categoryName, typeName } = useParams();
     const location = useLocation();
-    const isShop = location.pathname.includes('/shop');
 
     const { categories, selectedCategory } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);

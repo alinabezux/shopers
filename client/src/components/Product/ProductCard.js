@@ -26,7 +26,7 @@ const ProductCard = memo(({ product }) => {
     const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    const { favorite, error } = useSelector(state => state.favoriteReducer);
+    const { favorite } = useSelector(state => state.favoriteReducer);
     const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const ProductCard = memo(({ product }) => {
 
     const handleShowDetails = useCallback((product) => {
         dispatch(productActions.setSelectedProduct(product));
-    }, [dispatch, product]);
+    }, [dispatch]);
 
     const handleAddProductToFavourite = useCallback(async (product) => {
         if (userId) {

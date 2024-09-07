@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi"
@@ -8,7 +8,7 @@ import { authActions } from '../../redux';
 import { userValidator } from '../../validators/user.validator';
 
 import { Typography } from "@mui/material";
-import { FormControl, FormLabel, Input, Button, TabPanel, Card, CardContent } from '@mui/joy';
+import { FormControl, FormLabel, Input, Button, Card, CardContent } from '@mui/joy';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Alert from '@mui/joy/Alert';
@@ -19,7 +19,6 @@ import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 const Register = ({ setOpenSnackbar }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { control, handleSubmit, register, formState: { errors } } = useForm({
         resolver: joiResolver(userValidator.newUserValidator),
@@ -28,7 +27,6 @@ const Register = ({ setOpenSnackbar }) => {
 
     const { loading, registerError } = useSelector(state => state.authReducer);
     const [passwordError, setPasswordError] = useState(null);
-    const [activeTab, setActiveTab] = useState('logIn');
 
 
     const submit = useCallback(async (data) => {

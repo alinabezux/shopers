@@ -24,7 +24,6 @@ const AdminPage = () => {
                     height: '100vh',
                     position: "absolute",
                     gap: 1,
-                    position: "absolute",
                     left: "var(--Sidebar-width)",
                     right: 0
                 }}

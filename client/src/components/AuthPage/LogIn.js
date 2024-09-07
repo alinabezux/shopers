@@ -12,7 +12,7 @@ import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 
-const LogIn = ({ setOpenLoginSnackbar }) => {
+const LogIn = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [query] = useSearchParams();
@@ -41,7 +41,7 @@ const LogIn = ({ setOpenLoginSnackbar }) => {
         } catch (e) {
             console.log("catch e: ", e);
         }
-    }, [dispatch, navigate])
+    }, [dispatch, navigate, query])
 
 
     return (

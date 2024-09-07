@@ -12,9 +12,8 @@ import { Stack, Typography } from "@mui/material";
 import { ChipDelete } from '@mui/joy';
 import NoPhotographyOutlinedIcon from '@mui/icons-material/NoPhotographyOutlined';
 
-const ProductInBasket = ({ product, setOpenBasket }) => {
+const ProductInBasket = ({ product }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [quantity, setQuantity] = useState(product.quantity);
     const { userId } = useSelector(state => state.authReducer);
 
@@ -48,7 +47,7 @@ const ProductInBasket = ({ product, setOpenBasket }) => {
     }
     const handleShowDetails = useCallback((product) => {
         dispatch(productActions.setSelectedProduct(product));
-    }, [dispatch, product]);
+    }, [dispatch]);
 
 
     return (

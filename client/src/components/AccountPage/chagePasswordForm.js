@@ -32,7 +32,7 @@ const ChangePasswordForm = () => {
         } catch (error) {
             console.error('Error changing password:', error);
         }
-    }, [dispatch, userId, reset, navigate]);
+    }, [dispatch, userId, reset]);
 
     return (
         <>

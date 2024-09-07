@@ -40,7 +40,7 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
         dispatch(categoryActions.setSelectedCategory(category));
         dispatch(typeActions.setSelectedType(type));
         onClose();
-    }, [dispatch]);
+    }, [dispatch, onClose]);
 
     const handleClickWislist = () => {
         onClose();
@@ -193,7 +193,7 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                         }}>SHOPERS_VI
                         </Typography>
                     </Stack>
-                    <img src={inst} alt="inst image" height={40} />
+                    <img src={inst} alt="instimage" height={40} />
                 </Stack>
             </Box>
         </Drawer >

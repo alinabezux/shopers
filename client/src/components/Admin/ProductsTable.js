@@ -48,9 +48,9 @@ const ProductsTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
 
-    const { products, error, totalPagesProducts, currentPageProducts, count } = useSelector(state => state.productReducer);
-    const { selectedCategory, categories } = useSelector(state => state.categoryReducer);
-    const { selectedType, types } = useSelector(state => state.typeReducer);
+    const { products, totalPagesProducts, currentPageProducts } = useSelector(state => state.productReducer);
+    const { categories } = useSelector(state => state.categoryReducer);
+    const { types } = useSelector(state => state.typeReducer);
     const action = useRef(null);
 
     useEffect(() => {

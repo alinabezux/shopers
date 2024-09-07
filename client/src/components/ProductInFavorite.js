@@ -18,14 +18,13 @@ const ProductInFavorite = ({ product }) => {
     const dispatch = useDispatch();
 
     const [openBasket, setOpenBasket] = useState(false);
-    const [favourite, setFavourite] = useState(false);
 
     const { userId } = useSelector(state => state.authReducer);
 
 
     const handleShowDetails = useCallback((product) => {
         dispatch(productActions.setSelectedProduct(product));
-    }, [dispatch, product]);
+    }, [dispatch]);
 
     const handleAddProductToBasket = useCallback(async (product) => {
         if (userId) {

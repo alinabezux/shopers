@@ -10,9 +10,8 @@ import {
     AccordionSummary,
     Box,
     Container,
-    Divider,
     Stack,
-    Typography, useTheme
+    Typography
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -62,7 +61,7 @@ const Footer = () => {
                                         </Typography>
                                     </Link>
                                 </Stack>
-                                <img src={inst} alt="inst image" height={40} />
+                                <img src={inst} alt="instimage" height={40} />
                             </Stack>
                         </Stack>
                     </AccordionDetails>

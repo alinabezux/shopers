@@ -27,7 +27,7 @@ const Products = () => {
             page: currentPageProducts,
             isGettingAll: false
         }))
-    }, [dispatch, selectedCategory, selectedType, currentPageProducts]);
+    }, [dispatch, selectedCategory, selectedType, currentPageProducts, categoryId, typeId]);
 
     const handleSetCurrentPageProducts = async (event, value) => {
         dispatch(productActions.setCurrentPageProducts(value));
@@ -36,7 +36,7 @@ const Products = () => {
     if (loading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-                <CircularProgress color="inherit"/>
+                <CircularProgress color="inherit" />
             </Box>
         );
     }

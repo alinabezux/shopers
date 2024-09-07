@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
 });
 
 // Start the server
-server.listen(configs.PORT, configs.HOST, async () => {
+server.listen(configs.PORT || 5000, configs.HOST, async () => {
     await mongoose.connect(configs.MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -91,10 +91,3 @@ server.listen(configs.PORT, configs.HOST, async () => {
     console.log(`Backend server is running on port ${configs.PORT} !`);
 });
 
-// app.listen(configs.PORT, configs.HOST, async () => {
-//     await mongoose.connect(configs.MONGO_URL, {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//     });
-//     console.log(`Backend server is running on port ${configs.PORT} !`);
-// });

@@ -27,7 +27,7 @@ const Products = () => {
             page: currentPageProducts,
             isGettingAll: false
         }))
-    }, [dispatch, selectedCategory, selectedType, currentPageProducts, categoryId, typeId]);
+    }, [dispatch, currentPageProducts, categoryId, typeId]);
 
     const handleSetCurrentPageProducts = async (event, value) => {
         dispatch(productActions.setCurrentPageProducts(value));

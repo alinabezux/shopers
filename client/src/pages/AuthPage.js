@@ -15,7 +15,7 @@ import { LogIn, Register } from '../components';
 const AuthPage = () => {
     const [query] = useSearchParams();
     const location = useLocation();
-    
+
     const [activeTab, setActiveTab] = useState('logIn');
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -37,7 +37,7 @@ const AuthPage = () => {
                     />
                 </Box>
                 <Box className='authpage__main' >
-                    <Typography variant="h4" className='title' >МІЙ КАБІНЕТ</Typography>
+                    <Typography variant="h5" className='title' >МІЙ КАБІНЕТ</Typography>
                     <Tabs className='tabs' aria-label="tabs" defaultValue="logIn" value={activeTab} onChange={(e, value) => setActiveTab(value)} >
                         <TabList className='authpage__tablist'
                             disableUnderline
@@ -92,6 +92,7 @@ const AuthPage = () => {
             </Stack >
             <Snackbar
                 startDecorator={<DoneRoundedIcon />}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 color="success" size="lg" variant="soft"
                 autoHideDuration={3000}
                 open={openSnackbar}

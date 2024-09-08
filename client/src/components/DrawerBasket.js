@@ -96,9 +96,9 @@ const DrawerBasket = ({ open, onClose }) => {
                         <Container sx={{ height: "80%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 2 }}>
                             <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                             <Link className='header_accout-icon link' to='/auth#logIn'>
-                                <Button onClick={onClose} variant="solid" color="neutral" sx={{ mt: 1, width: "300px" }} type='submit'>УВІЙДІТЬ</Button>
+                                <Button onClick={onClose} variant="soft" color="primary" sx={{ mt: 1, width: "200px" }} type='submit' className='authpage__button'>УВІЙДІТЬ</Button>
                             </Link>
-                            <Typography >щоб переглянути ваші продукти в корзині.</Typography>
+                            <Typography sx={{ textAlign: "center" }}>щоб переглянути <br />ваші продукти в корзині.</Typography>
                         </Container>
                     )
                 }

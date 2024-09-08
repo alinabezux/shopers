@@ -31,7 +31,7 @@ const AccountPage = () => {
 
     return (
         <Box className='accountpage'>
-            <Typography variant="h4" className='title' > МІЙ КАБІНЕТ </Typography>
+            <Typography variant="h5" className='title' > МІЙ КАБІНЕТ </Typography>
             <Box className='accountpage__greeting' sx={{ my: 1 }}>
                 <Typography variant='h5'>Привіт, {user.name}! </Typography>
                 <Chip size='lg' className='accountpage__chip' variant="soft" color="success" startDecorator={<RedeemRoundedIcon />}>

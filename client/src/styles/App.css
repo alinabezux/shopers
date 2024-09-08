@@ -53,8 +53,10 @@ button.mainbutton {
         width: inherit;
     }
 
-    h5.title {
-        /* font-size: 24px; */
+    .authpage__main h5.title,
+    .accountpage h5.title {
+        font-size: 30px;
+        font-weight: 600;
     }
 
     h5.subtitle {
@@ -70,7 +72,12 @@ button.mainbutton {
     }
 
     h5.title {
-        font-size: 24px;
+        font-size: 34px;
+    }
+
+    .authpage__main h5.title,
+    .accountpage h5.title {
+        font-weight: 600;
     }
 }
 
@@ -83,5 +90,10 @@ button.mainbutton {
 
     h5.title {
         font-size: 32px;
+    }
+
+    .authpage__main h5.title,
+    .accountpage h5.title {
+        font-weight: 600;
     }
 }

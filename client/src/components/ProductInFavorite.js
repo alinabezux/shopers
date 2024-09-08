@@ -57,12 +57,11 @@ const ProductInFavorite = ({ product }) => {
                 <CardContent>
                     <Stack direction="column" spacing={1}>
                         <Typography className="accountpage__wishlist-title" variant="h5" >{product?.name}</Typography>
-                        <Typography className="accountpage__wishlist-color">Колір: {product?.info?.color}</Typography>
+                        {product?.info?.color && <Typography className="accountpage__wishlist-color">Колір: {product.info.color}</Typography>}
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography className="accountpage__wishlist-price">{product?.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
                                 <FavoriteIcon sx={{ color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} />
-
                                 {product.quantity > 0 &&
                                     <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
                                 }

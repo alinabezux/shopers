@@ -82,7 +82,7 @@ const OrderTable = () => {
     }, [dispatch, currentPageOrders]);
 
     useEffect(() => {
-        const socket = io('https://shopersvi-d6c7c2418328.herokuapp.com');
+        const socket = io('https://shopersvi-d6c7c2418328.herokuapp.com' || 'https://localhost:5000');
 
         socket.on('connect', () => {
             console.log('Socket connected');

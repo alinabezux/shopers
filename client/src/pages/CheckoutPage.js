@@ -26,11 +26,13 @@ const CheckoutPage = () => {
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [payment, setPayment] = useState('Передоплата');
-
     const [checked, setChecked] = useState(false);
     const [searchString, setSearchString] = useState('');
     const [options, setOptions] = useState([]);
     const [warehouses, setWarehouses] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
+
 
     const { basket } = useSelector(state => state.basketReducer);
     const { user } = useSelector(state => state.userReducer);
@@ -68,6 +70,22 @@ const CheckoutPage = () => {
         { value: 26, label: "Чернігівська область" },
         { value: 28, label: "Чернівецька область" }
     ]
+
+    const handleClick = () => {
+        setOpen(prev => !prev);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleClick2 = () => {
+        setOpen2(prev2 => !prev2);
+    };
+
+    const handleClose2 = () => {
+        setOpen2(false);
+    };
 
 
     useEffect(() => {
@@ -440,14 +458,22 @@ const CheckoutPage = () => {
                                                     <Radio value="Накладений платіж" color="neutral" onChange={handleChangePayment} />
                                                     <Typography sx={{ maxWidth: "70%" }}>Накладений платіж по передоплаті 100 грн. (тільки Нова пошта)</Typography>
                                                 </Stack>
-                                                <Tooltip arrow placement="right" variant="outlined" title={
-                                                    <Typography sx={{ maxWidth: 320, p: 1, }}>
-                                                        <b> УВАГА! </b>Враховуйте, що замовляючи цим способом оплати, при отриманні
-                                                        Вам потрібно буде сплатити комісію за послуги НП:
-                                                        20 грн + 2% від суми замовлення.
-                                                    </Typography>
-
-                                                }>
+                                                <Tooltip
+                                                    placement="right"
+                                                    arrow
+                                                    variant="outlined"
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    onClick={handleClick}
+                                                    disableFocusListener
+                                                    disableHoverListener
+                                                    disableTouchListener={false}
+                                                    title={
+                                                        <Typography sx={{ maxWidth: 250, p: 1 }}>
+                                                            <b>УВАГА!</b> Враховуйте, що замовляючи цим способом оплати, при отриманні
+                                                            Вам потрібно буде сплатити комісію за послуги НП: 20 грн + 2% від суми замовлення.
+                                                        </Typography>
+                                                    }>
                                                     <InfoOutlinedIcon />
                                                 </Tooltip>
                                             </Stack>
@@ -483,15 +509,25 @@ const CheckoutPage = () => {
                                         </Chip>
                                         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: "20px" }} spacing={2}>
                                             <Checkbox label="Оплатити за допомогою бонусів" color="success" variant="soft" checked={checked} onChange={handleCheckboxChange} />
-                                            <Tooltip arrow variant="outlined" placement="bottom-end" title={
-                                                <Typography sx={{
-                                                    maxWidth: 400,
-                                                    p: 1,
-                                                }}>
-                                                    З вашого бонусого рахунку буде списано {user.bonus} грн.
-                                                </Typography>
+                                            <Tooltip
+                                                placement="right"
+                                                arrow
+                                                variant="outlined"
+                                                open={open2}
+                                                onClose={handleClose2}
+                                                onClick={handleClick2}
+                                                disableFocusListener
+                                                disableHoverListener
+                                                disableTouchListener={false}
+                                                title={
+                                                    <Typography sx={{
+                                                        maxWidth: 250,
+                                                        p: 1,
+                                                    }}>
+                                                        З вашого бонусого рахунку буде списано {user.bonus} грн.
+                                                    </Typography>
 
-                                            }>
+                                                }>
                                                 <InfoOutlinedIcon />
                                             </Tooltip>
                                         </Stack>

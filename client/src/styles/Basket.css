@@ -4,6 +4,10 @@
         width: 100vw;
     }
 
+    .basket__header {
+        height: 56px;
+    }
+
     div.product-in-basket__card-image {
         width: 80px;
     }

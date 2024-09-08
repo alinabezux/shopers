@@ -26,11 +26,7 @@ const HomePage = () => {
                         Твій світ краси і естетичних товарів
                     </Typography>
                     <Button variant="outlined" size="large" className="white-button">
-                        <Link to="/shop"
-                            style={{
-                                color: "inherit",
-                                textDecoration: "none"
-                            }}>КАТАЛОГ</Link>
+                        <Link to="/shop" className='link'>КАТАЛОГ</Link>
                     </Button>
                 </Box>
                 <Box className="homepage__gradient-white" />

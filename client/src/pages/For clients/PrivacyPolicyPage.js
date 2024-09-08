@@ -5,12 +5,7 @@ import { Container, Typography } from "@mui/material";
 const PrivacyPolicyPage = () => {
     return (
         <Container sx={{ my: "30px" }}>
-            <Typography variant="h4" className='title'> ПОЛІТИКА КОНФІДЕНЦІЙНОСТІ </Typography>
-            <Typography variant="h4"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "400" }}>
-                ПОЛІТИКА КОНФІДЕНЦІЙНОСТІ «SHOPERS_VI»
-            </Typography>
-
+            <Typography variant="h5" className='title'> ПОЛІТИКА КОНФІДЕНЦІЙНОСТІ </Typography>
             <p>
                 Дана угода про конфіденційність розроблено відповідно до вимог Закону України «Про захист
                 персональних
@@ -38,8 +33,7 @@ const PrivacyPolicyPage = () => {
                 як для Користувача сайту.
             </p>
 
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 1. ВИЗНАЧЕННЯ ТЕРМІНІВ
             </Typography>
 
@@ -74,8 +68,7 @@ const PrivacyPolicyPage = () => {
             протоколом
             IP.<br />
 
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 2.ПРЕДМЕТ ПОЛІТИКИ КОНФІДЕНЦІЙНОСТІ
             </Typography>
 
@@ -121,8 +114,7 @@ const PrivacyPolicyPage = () => {
 
             2.4.5. місце проживання Користувача.<br />
 
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 3.МЕТА ЗБОРУ ТА ОБРОБКИ ПЕРСОНАЛЬНИХ ДАНИХ
             </Typography>
 
@@ -154,8 +146,7 @@ const PrivacyPolicyPage = () => {
             споживачами товарів (послуг);<br />
 
             3.1.7. проведення статистичних та інших досліджень на основі знеособлених даних.<br />
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 4.КАТЕГОРІІ ЗІБРАНИХ ДАНИХ
             </Typography>
 
@@ -177,8 +168,7 @@ const PrivacyPolicyPage = () => {
             4.3. Користувачі несуть відповідальність за Персональні дані третіх осіб, які вони отримують,
             публікують або надають іншим особам, використовуючи сайт, і підтверджують, що у них є згода третьої особи на
             надання Даних Власнику.<br />
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 5. СПОСОБИ І ТЕРМІНИ ОБРОБКИ ПЕРСОНАЛЬНИХ ДАНИХ
             </Typography>
 
@@ -196,8 +186,7 @@ const PrivacyPolicyPage = () => {
             включаючи
             доставку Товару.<br />
 
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 6. ПРАВА КОРИСТУВАЧІВ
             </Typography>
 
@@ -220,8 +209,7 @@ const PrivacyPolicyPage = () => {
 
             6.2. Відповідні запити слід направляти адміністрації сайту за адресою, вказаною в контактних
             відомостях на сайті.<br />
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 7. ПОЛІТИКА ЩОДО ФАЙЛІВ COOKIE
             </Typography>
 
@@ -245,8 +233,7 @@ const PrivacyPolicyPage = () => {
             основі вже наявного досвіду взаємодії користувача з сайтом і його перевагами. З плином часу ця
             інформація
             дозволяє поліпшити досвід.<br />
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 8. БЕЗПЕКА ПЕРСОНАЛЬНИХ ДАНИХ
             </Typography>
 
@@ -272,8 +259,7 @@ const PrivacyPolicyPage = () => {
             вимогу
             органів державної влади.<br />
 
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 9. ДОДАТКОВА ІНФОРМАЦІЯ ПРО ПЕРСОНАЛЬНІ ДАНІ КОРИСТУВАЧА
             </Typography>
 
@@ -288,8 +274,7 @@ const PrivacyPolicyPage = () => {
             можуть вести файли, в яких реєструється взаємодія сайту з Користувачами (системні журнали), або
             використовувати з цією метою інші Персональні дані (зокрема, IP-адреса).<br />
 
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 10. ДОДАТКОВІ УМОВИ
             </Typography>
 

@@ -5,9 +5,8 @@ import { Container, Typography } from "@mui/material";
 const ObminPage = () => {
     return (
         <Container sx={{ my: "30px" }}>
-            <Typography variant="h4" className='title'> ОБМІН ТА ПОВЕРНЕННЯ</Typography>
-
-            <Typography variant="h5" sx={{ fontFamily: "Geologica" }}>
+            <Typography variant="h5" className='title'> ОБМІН ТА ПОВЕРНЕННЯ</Typography>
+            <Typography variant="h5" className='subtitle' >
                 ЯК ЗДІЙСНИТИ ОБМІН
             </Typography>
             Щоб обміняти товар необхідно повідомити про це менеджера, написавши нам у Instagram @shopers_vi, щоб
@@ -21,7 +20,7 @@ const ObminPage = () => {
             Прізвище Ім'я<br />
             +380...<br />
             <br />
-            <Typography variant="h5" sx={{ fontFamily: "Geologica" }}>
+            <Typography variant="h5" className='subtitle'>
                 ЯК ЗДІЙСНИТИ ПОВЕРНЕННЯ
             </Typography>
             Ви можете повернути товар протягом 14 днів з моменту отримання посилки (враховуючи кілька днів на зворотню

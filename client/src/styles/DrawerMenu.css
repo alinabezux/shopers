@@ -6,6 +6,10 @@
     .drawerMenu {
         width: 50vw;
     }
+
+    h2.drawerMenu__category {}
+
+    h3.drawerMenu__type {}
 }
 
 /* mobile */
@@ -13,4 +17,29 @@
     .drawerMenu {
         width: 80vw;
     }
+
+    h2.drawerMenu__category {
+        font-size: large;
+    }
+
+    h3.drawerMenu__type {
+        /* font-size: medium; */
+    }
+
+}
+
+/* mobile + tablet */
+@media (max-width: 1024px) {
+
+    h2.drawerMenu__category {
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    h3.drawerMenu__type {
+        text-transform: lowercase;
+        margin: 0 0 15px 0;
+
+    }
+
 }

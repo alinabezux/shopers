@@ -32,12 +32,15 @@ body::-webkit-scrollbar {
     }
 }
 
-
-
-h4.title {
-    font-weight: 600;
+h5.title {
     margin: 15px 0;
     text-align: center;
+    font-weight: 700;
+}
+
+h5.subtitle {
+    font-weight: 500;
+    margin: 15px 0;
 }
 
 button.mainbutton {
@@ -49,6 +52,14 @@ button.mainbutton {
     button.mainbutton {
         width: inherit;
     }
+
+    h5.title {
+        /* font-size: 24px; */
+    }
+
+    h5.subtitle {
+        font-size: 20px;
+    }
 }
 
 /* tablet */
@@ -56,6 +67,10 @@ button.mainbutton {
     button.mainbutton {
         font-size: larger;
         width: inherit;
+    }
+
+    h5.title {
+        font-size: 24px;
     }
 }
 
@@ -65,5 +80,8 @@ button.mainbutton {
         font-size: medium;
         width: inherit;
     }
-}
 
+    h5.title {
+        font-size: 32px;
+    }
+}

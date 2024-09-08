@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,13 +28,17 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
     const { userId } = useSelector(state => state.authReducer);
     const { types } = useSelector(state => state.typeReducer);
 
+    const filteredTypes = useMemo(() => types.filter(type => type._category === selectedCategory?._id), [types, selectedCategory]);
+
     const handleMenu = useCallback((category) => {
         dispatch(categoryActions.setSelectedCategory(category));
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(typeActions.getAll())
-    }, [dispatch, selectedCategory])
+        if (selectedCategory) {
+            dispatch(typeActions.getAll());
+        }
+    }, [dispatch, selectedCategory]);
 
     const handleTypeClick = useCallback((category, type) => {
         dispatch(categoryActions.setSelectedCategory(category));
@@ -42,17 +46,17 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
         onClose();
     }, [dispatch, onClose]);
 
-    const handleClickWislist = () => {
+
+    const handleClickWislist = useCallback(() => {
         onClose();
         setOpenSnackbar(true);
-    };
-
+    }, [onClose, setOpenSnackbar]);
 
     return (
         <Drawer open={open} >
             <Box className='drawerMenu'>
                 <Box
-                    sx={{ backgroundColor: "black", color: "white" }}>
+                    sx={{ backgroundColor: "black", color: "white", height: "56px" }}>
                     <IconButton
                         size="large"
                         color="inherit"
@@ -74,22 +78,14 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                         }
                     }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />} onClick={() => handleMenu(category)}>
-                            <h2 style={{
-                                margin: "0",
-                                textTransform: 'uppercase'
-                            }}>{category.name}</h2>
+                            <h2 className='drawerMenu__category' >{category.name}</h2>
                         </AccordionSummary>
 
                         <AccordionDetails sx={{ color: "grey", margin: "0 0 0 30px" }}>
                             {
-                                types.filter(type => type._category === category._id).map(type =>
-                                (<h3 key={type._id}
-                                    onClick={() => handleTypeClick(category, type)}
-                                    style={{
-                                        margin: "0 0 15px 0",
-                                        fontSize: "25px",
-                                        textTransform: 'lowercase'
-                                    }}>
+                                filteredTypes.map(type =>
+                                (<h3 className='drawerMenu__type' key={type._id}
+                                    onClick={() => handleTypeClick(category, type)}>
                                     <NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className="link" >
                                         {type.name}
                                     </NavLink>
@@ -99,89 +95,56 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                     </Accordion>
                 )}
 
-                <Divider variant="middle" />
-                {userId !== null ?
-                    <Link to="/account#profile" className='link' onClick={onClose}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                            <IconButton
-                                size="large"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
-                                <AccountCircleRoundedIcon fontSize="inherit" />
-                            </IconButton>
-                            <h3>МІЙ КАБІНЕТ</h3>
-                        </Stack>
-                    </Link> :
-                    <Link to="/auth#logIn" className='link' onClick={onClose}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                            <IconButton
-                                size="large"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
-                                <AccountCircleRoundedIcon fontSize="inherit" />
-                            </IconButton>
-                            <h3>ОСОБИСТИЙ КАБІНЕТ</h3>
-                        </Stack>
-                    </Link>
-
-                }
-                {userId !== null ?
-                    <Link to="/account#wishlist" className='link' onClick={onClose}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                            <IconButton
-                                size="large"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
-                                <FavoriteBorderIcon fontSize="inherit" />
-                            </IconButton>
-                            <h3>СПИСОК БАЖАНЬ</h3>
-                        </Stack>
-                    </Link>
-                    :
-                    <Stack direction="row" spacing={1} alignItems="center" onClick={handleClickWislist}>
-                        <IconButton
-                            size="large"
-                            color="inherit"
-                            aria-label="open drawer"
-                            sx={{ mr: 2 }}
-                        >
-                            <FavoriteBorderIcon fontSize="inherit" />
-                        </IconButton>
-                        <h3>СПИСОК БАЖАНЬ</h3>
-                    </Stack>
-                }
-
-                <Divider variant="middle" />
-                <Stack direction="column" spacing={2} sx={{ margin: "15px" }}>
-                    <h3>
-                        <Link to="/obmin-ta-povernennya"
-                            style={{
-                                color: "black",
-                                textDecoration: "none",
-                                '&:hover': {
-                                    color: "#9e9e9e",
-                                }
-                            }}>
-                            ОБМІН ТА ПОВЕРНЕННЯ
+                <Box>
+                    <Divider variant="middle" />
+                    {
+                        <Link to={userId ? "/account#profile" : "/auth#logIn"} className='link' onClick={onClose}>
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <IconButton
+                                    size="large"
+                                    color="inherit"
+                                    aria-label="open drawer"
+                                    sx={{ mr: 2 }}
+                                >
+                                    <AccountCircleRoundedIcon fontSize="inherit" />
+                                </IconButton>
+                                <h2 className='drawerMenu__category'>МІЙ КАБІНЕТ</h2>
+                            </Stack>
                         </Link>
-                    </h3>
-                    <h3>
-                        <Link to="/oplata-ta-dostavka" underline="none" style={{
-                            color: "black",
-                            textDecoration: "none",
-                            '&:hover': {
-                                color: "#9e9e9e",
-                            }
+                    }
+                    {
+                        <Link to={userId ? "/account#wishlist" : "#"} className='link' onClick={userId ? onClose : handleClickWislist}>
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <IconButton
+                                    size="large"
+                                    color="inherit"
+                                    aria-label="open drawer"
+                                    sx={{ mr: 2 }}
+                                >
+                                    <FavoriteBorderIcon fontSize="inherit" />
+                                </IconButton>
+                                <h2 className='drawerMenu__category'>СПИСОК БАЖАНЬ</h2>
+                            </Stack>
+                        </Link>
+                    }
+                    <Divider variant="middle" />
+                </Box>
+
+                <Stack direction="column" spacing={2} sx={{ margin: "50px 15px 15px 15px" }}>
+                    <Link to="/obmin-ta-povernennya" onClick={onClose}
+                        style={{
+                            color: "grey",
+                            textDecoration: "none"
                         }}>
-                            ОПЛАТА ТА ДОСТАВКА
-                        </Link>
-                    </h3>
+                        <h2 className='drawerMenu__category'>ОБМІН ТА ПОВЕРНЕННЯ</h2>
+                    </Link>
+
+                    <Link to="/oplata-ta-dostavka" underline="none" onClick={onClose} style={{
+                        color: "grey",
+                        textDecoration: "none"
+                    }}>
+                        <h2 className='drawerMenu__category'>ОПЛАТА ТА ДОСТАВКА</h2>
+                    </Link>
                 </Stack>
                 <Stack direction="row" spacing={12} alignItems="center"
                     sx={{ padding: "15px" }}>
@@ -189,7 +152,6 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                         <img src={instlogo} alt="inst logo" height={20} />
                         <Typography sx={{
                             fontWeight: "800",
-                            fontFamily: "Geologica, sans-serif",
                         }}>SHOPERS_VI
                         </Typography>
                     </Stack>

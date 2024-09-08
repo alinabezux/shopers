@@ -5,14 +5,14 @@ import { Container, Typography } from "@mui/material";
 const OplataDostvkaPage = () => {
     return (
         <Container sx={{ my: "30px" }}>
-            <Typography variant="h4" className='title'>ОПЛАТА ТА ДОСТАВКА </Typography>
-            <Typography variant="h5" sx={{ fontFamily: "Geologica" }}>
+            <Typography variant="h5" className='title'>ОПЛАТА ТА ДОСТАВКА </Typography>
+            <Typography variant="h5" className='subtitle'>
                 СПОСОБИ ОПЛАТИ
             </Typography>
             <ul>
                 <li>
                     <b>Онлайн оплата на сайті</b><br />
-                    Зручно оплатити покупку на сайті можна за допомогою сервісу безпечних платежів LiqPay. Ви
+                    Зручно оплатити покупку на сайті можна за допомогою сервісу безпечних платежів Plata by Mono. Ви
                     можете
                     здійснити повну оплату ввівши всі необхідні дані вашої картки та підтвердивши платіж.
                 </li>
@@ -23,7 +23,7 @@ const OplataDostvkaPage = () => {
                 </li>
             </ul>
 
-            <Typography variant="h5" sx={{ fontFamily: "Geologica" }}>
+            <Typography variant="h5" className='subtitle'>
                 СПОСОБИ ДОСТАВКИ
             </Typography>
             <ul>

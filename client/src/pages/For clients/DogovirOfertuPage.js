@@ -5,9 +5,8 @@ import { Container, Typography } from "@mui/material";
 const DogovirOfertuPage = () => {
     return (
         <Container sx={{ my: "30px" }}>
-            <Typography variant="h4" className='title'>ДОГОВІР ОФЕРТИ</Typography>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='title'>ДОГОВІР ОФЕРТИ</Typography>
+            <Typography variant="h5" className='subtitle'>
                 1. Загальні положення
             </Typography>
             <ul>
@@ -21,8 +20,7 @@ const DogovirOfertuPage = () => {
                     цього Договору, у строки та за цінами, вказаними на Інтернет-сайті Продавця.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 2. Поняття та визначення
             </Typography>
             <ul>
@@ -39,8 +37,7 @@ const DogovirOfertuPage = () => {
                 </li>
             </ul>
 
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 3. Предмет договору
             </Typography>
             <ul>
@@ -54,8 +51,7 @@ const DogovirOfertuPage = () => {
                     – обробка та доставка замовлення Покупцеві у власність умовах цього Договору.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 4. Порядок оформлення замовлення
             </Typography>
             <ul>
@@ -70,8 +66,7 @@ const DogovirOfertuPage = () => {
                     від цього товару, анулювати замовлення.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 5. Порядок оплати замовлення
             </Typography>
             <ul>
@@ -82,8 +77,7 @@ const DogovirOfertuPage = () => {
                 </li>
                 <li>5.2. При не надходженні коштів Інтернет-магазин залишає за собою право анулювати замовлення.</li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 6. Умови доставки замовлення
             </Typography>
             <ul>
@@ -91,8 +85,7 @@ const DogovirOfertuPage = () => {
                     де і провадиться видача замовлень.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 7. Права та обов’язки сторін:
             </Typography>
             <ul>
@@ -109,8 +102,7 @@ const DogovirOfertuPage = () => {
                     – вимагати від Продавця виконання умов цього Договору.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 8. Відповідальність сторін
             </Typography>
             <ul>
@@ -148,8 +140,7 @@ const DogovirOfertuPage = () => {
                     переговорів.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 9. Інші умови
             </Typography>
             <ul>
@@ -179,8 +170,7 @@ const DogovirOfertuPage = () => {
                     здійснення взаєморозрахунків та ін.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 10. Порядок повернення товару належної якості
             </Typography>
             <ul>
@@ -194,8 +184,7 @@ const DogovirOfertuPage = () => {
                     10.2. Повернення товару до Інтернет-магазину здійснюється за рахунок Покупця.
                 </li>
             </ul>
-            <Typography variant="h5"
-                sx={{ textAlign: "center", fontFamily: "Geologica", fontWeight: "500" }}>
+            <Typography variant="h5" className='subtitle'>
                 11. Строк дії договору
             </Typography>
             <ul>

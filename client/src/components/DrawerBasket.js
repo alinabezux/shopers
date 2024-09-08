@@ -33,17 +33,12 @@ const DrawerBasket = ({ open, onClose }) => {
     }, [dispatch, userId, basket.length]);
 
 
-
     const totalPrice = useMemo(() => {
-        return basket.reduce((total, productInBasket) => {
-            return total + productInBasket.price * productInBasket.quantity;
-        }, 0);
+        return basket.reduce((total, productInBasket) => total + productInBasket.price * productInBasket.quantity, 0);
     }, [basket]);
 
     const totalCashback = useMemo(() => {
-        return basket.reduce((total, productInBasket) => {
-            return total + productInBasket.cashback;
-        }, 0);
+        return basket.reduce((total, productInBasket) => total + productInBasket.cashback, 0);
     }, [basket]);
 
     return (
@@ -61,9 +56,10 @@ const DrawerBasket = ({ open, onClose }) => {
                         <CloseIcon fontSize="large" />
                     </IconButton>
                 </Box>
-                {userId !== null ?
-                    <>
-                        {basket.length !== 0 ?
+
+                {userId ?
+                    (basket.length > 0 ?
+                        (
                             <Container className='basket__content'>
                                 <Box className='basket__products'>
                                     <Stack direction="column" spacing={2} alignItems="center">
@@ -85,28 +81,26 @@ const DrawerBasket = ({ open, onClose }) => {
                                     </Link>
                                 </Stack>
                             </Container>
-                            :
+                        ) :
+                        (
                             <Container sx={{ height: "80%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                                 <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                                 <Typography variant="h5" sx={{ fontSize: "28px" }}>Цей кошик порожній.</Typography>
                                 <Button2 variant="outlined" size="large" onClick={onClose} className='white-button'>
-                                    <Link to="/shop"
-                                        style={{
-                                            color: "inherit",
-                                            textDecoration: "none"
-                                        }}>КАТАЛОГ</Link>
+                                    <Link to="/shop" className='link'>КАТАЛОГ</Link>
                                 </Button2>
                             </Container>
-                        }
-                    </>
-                    :
-                    <Container sx={{ height: "80%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 2 }}>
-                        <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
-                        <Link className='header_accout-icon link' to='/auth#logIn'>
-                            <Button onClick={onClose} variant="solid" color="neutral" sx={{ mt: 1, width: "300px" }} type='submit'>УВІЙДІТЬ</Button>
-                        </Link>
-                        <Typography >щоб переглянути ваші продукти в корзині.</Typography>
-                    </Container>
+                        )
+                    ) :
+                    (
+                        <Container sx={{ height: "80%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 2 }}>
+                            <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
+                            <Link className='header_accout-icon link' to='/auth#logIn'>
+                                <Button onClick={onClose} variant="solid" color="neutral" sx={{ mt: 1, width: "300px" }} type='submit'>УВІЙДІТЬ</Button>
+                            </Link>
+                            <Typography >щоб переглянути ваші продукти в корзині.</Typography>
+                        </Container>
+                    )
                 }
             </Box>
         </Drawer >

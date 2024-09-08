@@ -1,4 +1,4 @@
-/* mobile */
+/* mobile + tablet */
 @media (max-width: 1024px) {
     .header__icon.pc {
         display: none;
@@ -13,6 +13,13 @@
         height: 60px;
         margin-left: 65px;
         font-weight: 800;
+    }
+}
+
+/* mobile */
+@media (max-width: 640px) {
+    h5.header__logo {
+        font-size: 22px;
     }
 }
 
@@ -51,5 +58,4 @@ h5.header__logo {
     align-items: center;
     position: absolute;
     z-index: 998;
-
 }

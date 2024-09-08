@@ -1,5 +1,4 @@
 /* mobile */
-
 @media (max-width: 640px){
     div.authpage__content {
         flex-direction: column;

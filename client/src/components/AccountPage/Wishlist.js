@@ -25,7 +25,7 @@ const Wishlist = () => {
         }
         console.log('favorite')
         console.log(favorite)
-    }, [dispatch, userId, favorite.length])
+    }, [dispatch, userId, favorite])
 
     return (
         <Box className='accountpage__wishlist' >

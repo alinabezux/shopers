@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
 
 import { Orders, Profile, Wishlist } from '../components';
@@ -13,12 +13,13 @@ import { useTheme, useMediaQuery } from '@mui/material';
 
 const AccountPage = () => {
     const location = useLocation();
-
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('profile');
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const { user } = useSelector(state => state.userReducer);
+    const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {
         const hash = location.hash.replace('#', '');
@@ -27,7 +28,11 @@ const AccountPage = () => {
         }
     }, [location]);
 
-
+    useEffect(() => {
+        if (!userId) {
+            navigate('/auth?expSession=true')
+        }
+    }, [userId])
 
     return (
         <Box className='accountpage'>

@@ -51,9 +51,11 @@ const Header = () => {
     }, [dispatch])
 
     useEffect(() => {
-        if (userId !== null) {
+        if (userId) {
             dispatch(userActions.getUserById(userId));
         }
+        console.log(`userId - ${userId}`)
+        console.log(user)
     }, [dispatch, userId])
 
     const handleHoverMenu = useCallback((event, category) => {
@@ -185,9 +187,9 @@ const Header = () => {
                 </Stack>
 
                 <Stack direction="row" alignItems="center" justifySelf="flex-end" sx={{ zIndex: "999" }}>
-                    {userId !== null ? <Link to="/account#wishlist" className='header_account-icon link'><FavoriteBorderIcon className='header__icon pc' /></Link> : <FavoriteBorderIcon className='header__icon pc' onClick={() => setOpenSnackbar(true)} />}
+                    {userId ? <Link to="/account#wishlist" className='header_account-icon link'><FavoriteBorderIcon className='header__icon pc' /></Link> : <FavoriteBorderIcon className='header__icon pc' onClick={() => setOpenSnackbar(true)} />}
 
-                    {userId !== null ?
+                    {userId ?
                         <Dropdown>
                             <MenuButton sx={{
                                 border: "none", m: 0, p: 0, '&:hover': {

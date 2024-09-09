@@ -30,8 +30,10 @@ $authHost.interceptors.response.use((config) => {
         isRefreshing = true;
         try {
             const { data } = await authService.refresh();
+            console.log('data')
+            console.log(data)
             localStorage.setItem('access', data.accessToken)
-
+            sessionStorage.setItem('userId', data._user);
         } catch (e) {
             authService.deleteInfo()
             history.replace('/auth?expSession=true')
@@ -39,6 +41,11 @@ $authHost.interceptors.response.use((config) => {
         isRefreshing = false;
         return $authHost(error.config)
     }
+    if (error.response?.status === 401) {
+        // Якщо помилка 401 і не вдається оновити токен, видалити інформацію
+        authService.deleteInfo(); // Видаляємо доступ і користувача
+    }
+
     return Promise.reject(error)
 }
 )

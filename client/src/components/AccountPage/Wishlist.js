@@ -8,6 +8,7 @@ import { ProductInFavorite } from '../ProductInFavorite';
 import {
     Box,
     Button,
+    CircularProgress,
     Typography,
 } from "@mui/material";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -15,7 +16,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const Wishlist = () => {
     const dispatch = useDispatch();
-    const { favorite } = useSelector(state => state.favoriteReducer);
+    const { favorite, loading } = useSelector(state => state.favoriteReducer);
     const { userId } = useSelector(state => state.authReducer);
 
 
@@ -25,7 +26,16 @@ const Wishlist = () => {
         }
         console.log('favorite')
         console.log(favorite)
-    }, [dispatch, userId, favorite])
+    }, [dispatch, userId, favorite.length])
+
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                <CircularProgress color="inherit" />
+            </Box>
+        );
+    }
 
     return (
         <Box className='accountpage__wishlist' >

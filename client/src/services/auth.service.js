@@ -48,6 +48,7 @@ const authService = {
             return decodedToken.id;
         } catch (error) {
             localStorage.removeItem('access');
+            sessionStorage.removeItem('userId');
             return null;
         }
 

@@ -56,7 +56,7 @@ const Header = () => {
         }
         console.log(`userId - ${userId}`)
         console.log(user)
-    }, [dispatch, userId])
+    }, [dispatch, userId, user])
 
     const handleHoverMenu = useCallback((event, category) => {
         setAnchorMenu(event.currentTarget);

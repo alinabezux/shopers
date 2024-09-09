@@ -32,7 +32,7 @@ const AccountPage = () => {
         if (!userId) {
             navigate('/auth?expSession=true')
         }
-    }, [userId])
+    }, [userId, navigate])
 
     return (
         <Box className='accountpage'>

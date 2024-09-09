@@ -54,9 +54,9 @@ const Header = () => {
         if (userId) {
             dispatch(userActions.getUserById(userId));
         }
-        console.log(`userId - ${userId}`)
-        console.log(user)
-    }, [dispatch, userId, user])
+        // console.log(`userId - ${userId}`)
+        // console.log(user)
+    }, [dispatch, userId])
 
     const handleHoverMenu = useCallback((event, category) => {
         setAnchorMenu(event.currentTarget);

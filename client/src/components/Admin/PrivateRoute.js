@@ -15,7 +15,7 @@ const PrivateRoute = () => {
         }
     }, [dispatch, userId])
 
-    if (!userId && !user.isAdmin) {
+    if (!userId || !user.isAdmin) {
         return <Navigate to="/auth?admin" />;
     }
     return <Outlet />

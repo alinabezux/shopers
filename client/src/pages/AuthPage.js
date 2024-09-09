@@ -64,7 +64,6 @@ const AuthPage = () => {
                             <Alert
                                 startDecorator={<WarningIcon />}
                                 color="danger"
-                                // size="sm"
                                 variant="soft"
                                 sx={{ width: "300px", mt: 2 }}
                             >
@@ -75,7 +74,6 @@ const AuthPage = () => {
                             <Alert
                                 startDecorator={<WarningIcon />}
                                 color="danger"
-                                // size="sm"
                                 variant="soft"
                                 sx={{ width: "300px", mt: 2 }}
                             >

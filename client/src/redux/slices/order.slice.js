@@ -9,7 +9,7 @@ const initialState = {
     currentPageOrders: 1,
     totalPagesOrders: null,
     count: null,
-
+    loading: false,
     loadingOrder: false,
     errorOrder: null,
     error: null
@@ -120,16 +120,16 @@ const orderSlice = createSlice({
 
             .addCase(getUserOrders.fulfilled, (state, action) => {
                 state.userOrders = action.payload
-                state.loadingOrder = false
+                state.loading = false
                 state.error = null
             })
             .addCase(getUserOrders.pending, (state) => {
-                state.loadingOrder = true
+                state.loading = true
                 state.error = null
             })
             .addCase(getUserOrders.rejected, (state, action) => {
                 state.errorOrder = action.payload
-                state.error = false
+                state.loading = false
             })
 
 

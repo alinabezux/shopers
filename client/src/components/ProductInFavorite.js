@@ -21,7 +21,6 @@ const ProductInFavorite = ({ product }) => {
 
     const { userId } = useSelector(state => state.authReducer);
 
-
     const handleShowDetails = useCallback((product) => {
         dispatch(productActions.setSelectedProduct(product));
     }, [dispatch]);
@@ -39,9 +38,15 @@ const ProductInFavorite = ({ product }) => {
         }
     }, [userId, dispatch])
 
+    const stopPropagation = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+
     return (
         <>
-            <Card className="accountpage__wishlist-card" sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
+            <Card className="product-card" sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
                 onClick={() => handleShowDetails(product)}>
                 <Link className='link' to={`/product/${(toUrlFriendly(product?.name))}`} key={product._id} sx={{ zIndex: "1", }}>
                     <AspectRatio ratio="1">
@@ -54,16 +59,22 @@ const ProductInFavorite = ({ product }) => {
                         </CardOverflow>
                     </AspectRatio>
                 </Link>
-                <CardContent>
+                <CardContent className="product-card__card-content">
                     <Stack direction="column" spacing={1}>
-                        <Typography className="accountpage__wishlist-title" variant="h5" >{product?.name}</Typography>
-                        {product?.info?.color && <Typography className="accountpage__wishlist-color">Колір: {product.info.color}</Typography>}
+                        <Typography variant="h3" className="product-card__card-name" >{product?.name}</Typography>
+                        {product?.info?.color &&
+                            <Typography className="product-card__card-color">{product.info.color}</Typography>
+                        }
+                        {product?.info?.size &&
+                            <Typography className="product-card__card-color" sx={{ fontSize: "12px" }}>{product.info.size}</Typography>
+                        }
+
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography className="accountpage__wishlist-price">{product?.price} ₴</Typography>
+                            <Typography className="product-card__card-price">{product.price} ₴</Typography>
                             <Stack direction="row" spacing={1}>
-                                <FavoriteIcon sx={{ color: '#730000' }} onClick={() => handleDeleteProductFromFavorite(product)} />
+                                <FavoriteIcon sx={{ color: '#730000' }} onClick={stopPropagation} onClickCapture={() => handleDeleteProductFromFavorite(product)} />
                                 {product.quantity > 0 &&
-                                    <LocalMallOutlinedIcon onClick={() => handleAddProductToBasket(product)} />
+                                    <LocalMallOutlinedIcon onClick={stopPropagation} onClickCapture={() => handleAddProductToBasket(product)} />
                                 }
                             </Stack>
                         </Stack>

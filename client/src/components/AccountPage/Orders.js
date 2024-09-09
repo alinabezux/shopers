@@ -16,16 +16,16 @@ import NoPhotographyOutlined from '@mui/icons-material/NoPhotographyOutlined';
 
 const Orders = () => {
     const dispatch = useDispatch();
-    const { userOrders, loadingOrder } = useSelector(state => state.orderReducer)
+    const { userOrders, loading } = useSelector(state => state.orderReducer)
     const { userId } = useSelector(state => state.authReducer);
 
     useEffect(() => {
         if (userId) {
             dispatch(orderActions.getUserOrders(userId));
         }
-    }, [dispatch, userId, userOrders.length]);
+    }, [dispatch, userId]);
 
-    if (loadingOrder) {
+    if (loading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
                 <CircularProgress color="inherit" />

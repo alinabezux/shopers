@@ -33,7 +33,7 @@ const ProductCard = memo(({ product }) => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
-    }, [dispatch, userId])
+    }, [dispatch, userId, favorite.length])
 
     useEffect(() => {
         if (favorite) {
@@ -63,9 +63,9 @@ const ProductCard = memo(({ product }) => {
 
 
     const handleDeleteProductFromFavorite = useCallback(async (product) => {
-        await dispatch(favoriteActions.deleteFromFavorite({ userId, productId: product._id }))
+        await dispatch(favoriteActions.deleteFromFavorite({ userId: userId, productId: product._id }))
         setSnackbarMessage(`${product.name} видалено зі списку бажань.`);
-
+        setFavourite(false)
         setOpenSnackbar(true)
     }, [userId, dispatch])
 
@@ -98,14 +98,13 @@ const ProductCard = memo(({ product }) => {
                     </AspectRatio>
                     <CardContent className="product-card__card-content">
                         <Stack direction="column" spacing={1}>
-                            <Typography variant="h3" className="product-card__card-name">
-                                {product.name}</Typography>
+                            <Typography variant="h3" className="product-card__card-name">{product.name}</Typography>
                             {product?.info?.color &&
-                                <Typography sx={{ fontSize: "14px" }}>{product.info.color}</Typography>
+                                <Typography className="product-card__card-color">{product.info.color}</Typography>
                             }
-                            {product?.info?.size &&
+                            {/* {product?.info?.size &&
                                 <Typography sx={{ fontSize: "12px" }}>{product.info.size}</Typography>
-                            }
+                            } */}
 
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Typography className="product-card__card-price">{product.price} ₴</Typography>

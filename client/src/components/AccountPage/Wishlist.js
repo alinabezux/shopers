@@ -18,10 +18,13 @@ const Wishlist = () => {
     const { favorite } = useSelector(state => state.favoriteReducer);
     const { userId } = useSelector(state => state.authReducer);
 
+
     useEffect(() => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
+        console.log('favorite')
+        console.log(favorite)
     }, [dispatch, userId, favorite.length])
 
     return (

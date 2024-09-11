@@ -25,7 +25,7 @@ $authHost.interceptors.response.use((config) => {
     return config;
 }, async (error) => {
     const refreshToken = authService.getRefreshToken();
-
+    console.log(`refreshToken = ${refreshToken}`)
     if (error.response?.status === 401) {
         if (!refreshToken) {
             authService.deleteInfo();
@@ -36,6 +36,7 @@ $authHost.interceptors.response.use((config) => {
             isRefreshing = true;
             try {
                 const { data } = await authService.refresh();
+                console.log(`data = ${data}`)
                 localStorage.setItem('access', data.accessToken)
                 sessionStorage.removeItem('userId')
             } catch (e) {

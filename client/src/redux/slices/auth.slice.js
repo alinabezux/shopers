@@ -4,7 +4,7 @@ import { authService } from "../../services";
 const initialState = {
     users: [],
     userId: authService.getUser(),
-    
+
     loading: false,
     logInError: null,
     registerError: null,
@@ -28,11 +28,12 @@ const logIn = createAsyncThunk(
     async ({ user }, { rejectWithValue }) => {
         try {
             const { data } = await authService.login(user);
-
+            console.log('data')
+            console.log(data)
             localStorage.setItem('access', data.accessToken)
             localStorage.setItem('refresh', data.refreshToken)
             localStorage.setItem('userId', data._user);
-            
+
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -81,7 +82,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setUserId: (state, action) => {
-            state.userId = action.payload; 
+            state.userId = action.payload;
         }
     },
     extraReducers: builder =>

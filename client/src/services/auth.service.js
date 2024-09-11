@@ -1,5 +1,4 @@
 import { jwtDecode } from "jwt-decode";
-// import Cookies from "js-cookie"
 
 import { $authHost, $host } from "./axios.service";
 import { urls } from "../configs/urls";

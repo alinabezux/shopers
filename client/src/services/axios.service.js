@@ -26,15 +26,23 @@ $authHost.interceptors.response.use((config) => {
 }, async (error) => {
     const refreshToken = authService.getRefreshToken();
 
-    if (error.response?.status === 401 && refreshToken && !isRefreshing) {
-        isRefreshing = true;
-        try {
-            const { data } = await authService.refresh();
-            localStorage.setItem('access', data.accessToken)
-            sessionStorage.removeItem('userId')
-        } catch (e) {
-            authService.deleteInfo()
-            history.replace('/auth?expSession=true')
+    if (error.response?.status === 401) {
+        if (!refreshToken) {
+            authService.deleteInfo();
+            history.replace('/auth?expSession=true');
+            return Promise.reject(error);
+        }
+        if (!isRefreshing) {
+            isRefreshing = true;
+            try {
+                const { data } = await authService.refresh();
+                localStorage.setItem('access', data.accessToken)
+                sessionStorage.removeItem('userId')
+            } catch (e) {
+                authService.deleteInfo()
+                history.replace('/auth?expSession=true')
+                return Promise.reject(e);
+            }
         }
         isRefreshing = false;
         return $authHost(error.config)

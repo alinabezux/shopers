@@ -1,8 +1,8 @@
 import axios from "axios";
 import { createBrowserHistory } from "history"
 
-import { devURL, prodURL } from "../configs/urls";
 import { authService } from "./auth.service";
+import { devURL, prodURL } from "../configs/urls";
 
 const baseURL = process.env.NODE_ENV === "production" ? prodURL : devURL;
 
@@ -30,10 +30,8 @@ $authHost.interceptors.response.use((config) => {
         isRefreshing = true;
         try {
             const { data } = await authService.refresh();
-            console.log('data')
-            console.log(data)
             localStorage.setItem('access', data.accessToken)
-            sessionStorage.setItem('userId', data._user);
+            sessionStorage.removeItem('userId')
         } catch (e) {
             authService.deleteInfo()
             history.replace('/auth?expSession=true')
@@ -41,11 +39,6 @@ $authHost.interceptors.response.use((config) => {
         isRefreshing = false;
         return $authHost(error.config)
     }
-    if (error.response?.status === 401) {
-        // Якщо помилка 401 і не вдається оновити токен, видалити інформацію
-        authService.deleteInfo(); // Видаляємо доступ і користувача
-    }
-
     return Promise.reject(error)
 }
 )

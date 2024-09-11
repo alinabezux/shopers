@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie"
+// import Cookies from "js-cookie"
 
 import { $authHost, $host } from "./axios.service";
 import { urls } from "../configs/urls";
@@ -21,14 +21,14 @@ const authService = {
 
     getAccessToken: () => localStorage.getItem('access'),
 
-    getRefreshToken: () => Cookies.get('refreshToken'),
+    // getRefreshToken: () => Cookies.get('refreshToken'),
 
     logOut: () => $authHost.post(urls.auth.logOut),
 
     deleteInfo: () => {
         localStorage.removeItem('access')
         sessionStorage.removeItem('userId')
-        Cookies.remove('refreshToken')
+        // Cookies.remove('refreshToken')
     },
 
     getUser: () => {

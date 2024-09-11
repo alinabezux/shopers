@@ -24,32 +24,24 @@ $authHost.interceptors.request.use((config) => {
 $authHost.interceptors.response.use((config) => {
     return config;
 }, async (error) => {
-    const refreshToken = authService.getRefreshToken();
-    console.log(`refreshToken = ${refreshToken}`)
-    if (error.response?.status === 401) {
-        if (!refreshToken) {
-            authService.deleteInfo();
-            history.replace('/auth?expSession=true');
-            return Promise.reject(error);
+    if (error.response?.status === 401 && error.config && !error.config._isRetry) {
+        originalRequest._isRetry = true;
+        try {
+            const { data } = await authService.refresh();
+            console.log(`data = ${data}`)
+
+            localStorage.setItem('access', data.accessToken)
+            sessionStorage.setItem('userId', data._user)
+        } catch (e) {
+            console.log('НЕ АВТОРИЗОВАН')
+            authService.deleteInfo()
+            history.replace('/auth?expSession=true')
+            return Promise.reject(e);
         }
-        if (!isRefreshing) {
-            isRefreshing = true;
-            try {
-                const { data } = await authService.refresh();
-                console.log(`data = ${data}`)
-                localStorage.setItem('access', data.accessToken)
-                sessionStorage.removeItem('userId')
-            } catch (e) {
-                authService.deleteInfo()
-                history.replace('/auth?expSession=true')
-                return Promise.reject(e);
-            }
-        }
-        isRefreshing = false;
-        return $authHost(error.config)
+
+        // return $authHost(error.config)
     }
     return Promise.reject(error)
-}
-)
+})
 
 export { $host, $authHost, history };

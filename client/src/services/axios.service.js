@@ -11,7 +11,6 @@ const $host = axios.create({ withCredentials: true, baseURL })
 const $authHost = axios.create({ withCredentials: true, baseURL })
 
 const history = createBrowserHistory();
-let isRefreshing = false;
 
 $authHost.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
@@ -24,6 +23,7 @@ $authHost.interceptors.request.use((config) => {
 $authHost.interceptors.response.use((config) => {
     return config;
 }, async (error) => {
+    const originalRequest = error.config;
     if (error.response?.status === 401 && error.config && !error.config._isRetry) {
         originalRequest._isRetry = true;
         try {

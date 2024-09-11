@@ -9,7 +9,7 @@ const authService = {
 
     login: (user) => $host.post(urls.auth.logIn, { user }),
 
-    refresh: () => $authHost.post(urls.auth.refresh),
+    refresh: (refresh) => $authHost.post(urls.auth.refresh, { refresh }),
 
     forgotPassword: (email) => $host.post(urls.auth.forgotPassword, { email }),
 
@@ -21,18 +21,19 @@ const authService = {
 
     getAccessToken: () => localStorage.getItem('access'),
 
-    // getRefreshToken: () => Cookies.get('refreshToken'),
+    getRefreshToken: () => localStorage.getItem('refresh'),
 
     logOut: () => $authHost.post(urls.auth.logOut),
 
     deleteInfo: () => {
         localStorage.removeItem('access')
-        sessionStorage.removeItem('userId')
-        // Cookies.remove('refreshToken')
+        localStorage.removeItem('refresh')
+        localStorage.removeItem('userId')
     },
 
     getUser: () => {
-        const userId = sessionStorage.getItem('userId');
+        const userId = localStorage.getItem('userId');
+
         if (userId) {
             return userId;
         }
@@ -44,14 +45,13 @@ const authService = {
 
         try {
             const decodedToken = jwtDecode(accessToken);
-            sessionStorage.setItem('userId', decodedToken.id);
+            localStorage.setItem('userId', decodedToken.id);
             return decodedToken.id;
         } catch (error) {
             localStorage.removeItem('access');
-            sessionStorage.removeItem('userId');
+            localStorage.removeItem('userId');
             return null;
         }
-
     }
 }
 export { authService }

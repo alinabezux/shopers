@@ -12,6 +12,8 @@ const $authHost = axios.create({ withCredentials: true, baseURL })
 
 const history = createBrowserHistory();
 
+let isRefreshing = false;
+
 $authHost.interceptors.request.use((config) => {
     const accessToken = authService.getAccessToken();
     if (accessToken) {
@@ -20,45 +22,31 @@ $authHost.interceptors.request.use((config) => {
     return config
 })
 
-$authHost.interceptors.response.use(
-    (config) => {
-        return config;
-    },
+$authHost.interceptors.response.use((config) => {
+    return config;
+},
     async (error) => {
-        const originalRequest = error.config;
-        
-        // Якщо відповідь 401 і запит не було повторено
-        if (error.response?.status === 401 && !originalRequest._isRetry) {
-            originalRequest._isRetry = true;  // Встановлюємо флаг
-            
-            try {
-                const { data } = await authService.refresh();
-                console.log(`data = ${data}`);
-                
-                // Зберігаємо новий access token та оновлюємо сесію
-                localStorage.setItem('access', data.accessToken);
-                sessionStorage.setItem('userId', data._user);
+        const refreshToken = authService.getRefreshToken();
+        console.log('refreshToken')
+        console.log(refreshToken)
 
-                // Пробуємо повторити початковий запит з новим токеном
-                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-                return $authHost(originalRequest);
+        if (error.response?.status === 401 && refreshToken && !isRefreshing) {
+            isRefreshing = true;
+            try {
+                const { data } = await authService.refresh(refreshToken);
+
+                localStorage.setItem('access', data.accessToken)
+                localStorage.setItem('refresh', data.refreshToken)
 
             } catch (e) {
-                console.log('НЕ АВТОРИЗОВАН');
-                
-                // Видаляємо інформацію користувача і перенаправляємо
-                authService.deleteInfo();
-                history.replace('/auth?expSession=true');
-                
-                // Повертаємо помилку, щоб запобігти подальшим спробам
-                return Promise.reject(e);
+                authService.deleteInfo()
+                history.replace('/auth?expSession=true')
             }
+            isRefreshing = false;
+            return $authHost(error.config)
         }
-        
-        // Якщо це інша помилка або запит вже був повторений
-        return Promise.reject(error);
-    }
-);
+        return Promise.reject(error)
+    })
 
 
 export { $host, $authHost, history };

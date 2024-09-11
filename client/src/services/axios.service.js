@@ -20,28 +20,45 @@ $authHost.interceptors.request.use((config) => {
     return config
 })
 
-$authHost.interceptors.response.use((config) => {
-    return config;
-}, async (error) => {
-    const originalRequest = error.config;
-    if (error.response?.status === 401 && error.config && !error.config._isRetry) {
-        originalRequest._isRetry = true;
-        try {
-            const { data } = await authService.refresh();
-            console.log(`data = ${data}`)
+$authHost.interceptors.response.use(
+    (config) => {
+        return config;
+    },
+    async (error) => {
+        const originalRequest = error.config;
+        
+        // Якщо відповідь 401 і запит не було повторено
+        if (error.response?.status === 401 && !originalRequest._isRetry) {
+            originalRequest._isRetry = true;  // Встановлюємо флаг
+            
+            try {
+                const { data } = await authService.refresh();
+                console.log(`data = ${data}`);
+                
+                // Зберігаємо новий access token та оновлюємо сесію
+                localStorage.setItem('access', data.accessToken);
+                sessionStorage.setItem('userId', data._user);
 
-            localStorage.setItem('access', data.accessToken)
-            sessionStorage.setItem('userId', data._user)
-        } catch (e) {
-            console.log('НЕ АВТОРИЗОВАН')
-            authService.deleteInfo()
-            history.replace('/auth?expSession=true')
-            return Promise.reject(e);
+                // Пробуємо повторити початковий запит з новим токеном
+                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+                return $authHost(originalRequest);
+
+            } catch (e) {
+                console.log('НЕ АВТОРИЗОВАН');
+                
+                // Видаляємо інформацію користувача і перенаправляємо
+                authService.deleteInfo();
+                history.replace('/auth?expSession=true');
+                
+                // Повертаємо помилку, щоб запобігти подальшим спробам
+                return Promise.reject(e);
+            }
         }
-
-        // return $authHost(error.config)
+        
+        // Якщо це інша помилка або запит вже був повторений
+        return Promise.reject(error);
     }
-    return Promise.reject(error)
-})
+);
+
 
 export { $host, $authHost, history };

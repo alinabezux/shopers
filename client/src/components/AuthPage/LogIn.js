@@ -43,7 +43,7 @@ const LogIn = () => {
         } catch (e) {
             console.log("catch e: ", e);
         }
-    }, [dispatch, navigate, query])
+    }, [dispatch, navigate, query, user.isAdmin])
 
 
     return (

@@ -27,8 +27,6 @@ $authHost.interceptors.response.use((config) => {
 },
     async (error) => {
         const refreshToken = authService.getRefreshToken();
-        console.log('refreshToken')
-        console.log(refreshToken)
 
         if (error.response?.status === 401 && refreshToken && !isRefreshing) {
             isRefreshing = true;

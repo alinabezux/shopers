@@ -26,7 +26,7 @@ app.use(fileUpload());
 app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
-    // origin: configs.CLIENT_URL ,
+    // origin: configs.CLIENT_URL,
     origin: 'http://localhost:3000',
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Token', 'X-Sign']
 }));

@@ -228,7 +228,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 
     const handleEditType = useCallback(async (data) => {
         let productProperties = {
-            info: {}
+            info: { ...selectedProduct.info }
         };
 
         if (data.article) {

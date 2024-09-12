@@ -20,7 +20,7 @@ const LogIn = () => {
     const { control, handleSubmit, register } = useForm();
 
     const { loading, logInError } = useSelector(state => state.authReducer);
-
+    const { user } = useSelector(state => state.userReducer);
 
     const submit = useCallback(async (data) => {
         try {
@@ -32,7 +32,9 @@ const LogIn = () => {
             }))
             if (res.meta.requestStatus === 'fulfilled') {
                 if (query.has('admin')) {
-                    navigate('/admin')
+                    if (!user.isAdmin) {
+                        navigate('/admin')
+                    }
                 } else {
                     navigate('/')
                 }

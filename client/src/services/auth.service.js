@@ -32,25 +32,29 @@ const authService = {
 
     getUser: () => {
         const userId = localStorage.getItem('userId');
-
-        if (userId) {
-            return userId;
-        }
-
         const accessToken = localStorage.getItem('access');
-        if (!accessToken) {
-            return null;
-        }
+
+        if (userId) return userId;
+
+        if (!accessToken) return null;
 
         try {
             const decodedToken = jwtDecode(accessToken);
-            localStorage.setItem('userId', decodedToken.id);
-            return decodedToken.id;
+            const { id } = decodedToken;
+            if (id) {
+                localStorage.setItem('userId', id);
+                return id;
+            }
         } catch (error) {
-            localStorage.removeItem('access');
-            localStorage.removeItem('userId');
-            return null;
+            console.error("Invalid access token:", error);
         }
+
+        // Очищення даних у разі помилки
+        localStorage.removeItem('access');
+        localStorage.removeItem('userId');
+
+        return null;
     }
+
 }
 export { authService }

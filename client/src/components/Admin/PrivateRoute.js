@@ -1,19 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { userActions } from '../../redux';
 
 const PrivateRoute = () => {
-    const dispatch = useDispatch();
-    const { user } = useSelector(state => state.userReducer);
+    const { user, loading } = useSelector(state => state.userReducer);
     const { userId } = useSelector(state => state.authReducer);
 
-    useEffect(() => {
-        if (userId !== null) {
-            dispatch(userActions.getUserById(userId));
-        }
-    }, [dispatch, userId])
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     if (!userId || !user.isAdmin) {
         return <Navigate to="/auth?admin" />;

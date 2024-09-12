@@ -3,7 +3,7 @@ import { useLocation, Link, useSearchParams } from 'react-router-dom'
 
 import image from '../assets/loginpage.jpg'
 
-import { Typography, Stack, Box } from "@mui/material";
+import { Typography, Stack, Box, CircularProgress } from "@mui/material";
 import { Tabs, TabList, Tab, TabPanel, Alert } from '@mui/joy';
 import { tabClasses } from '@mui/joy/Tab'
 import Snackbar from '@mui/joy/Snackbar';
@@ -11,6 +11,8 @@ import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import WarningIcon from '@mui/icons-material/Warning';
 
 import { LogIn, Register } from '../components';
+import { useSelector } from 'react-redux';
+import { ErrorPage } from './ErrorPage';
 
 const AuthPage = () => {
     const [query] = useSearchParams();
@@ -18,6 +20,8 @@ const AuthPage = () => {
 
     const [activeTab, setActiveTab] = useState('logIn');
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const { loading } = useSelector(state => state.userReducer);
+    const { error } = useSelector(state => state.authReducer);
 
     useEffect(() => {
         const hash = location.hash.replace('#', '');
@@ -26,6 +30,16 @@ const AuthPage = () => {
         }
     }, [location]);
 
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                <CircularProgress color="inherit" />
+            </Box>
+        );
+    }
+    if (error) {
+        return <ErrorPage />;
+    }
 
     return (
         <Box className='authpage'>

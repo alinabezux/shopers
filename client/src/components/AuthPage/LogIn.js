@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
@@ -19,8 +19,15 @@ const LogIn = () => {
 
     const { control, handleSubmit, register } = useForm();
 
-    const { loading, logInError } = useSelector(state => state.authReducer);
-    const { user } = useSelector(state => state.userReducer);
+    const { logInError, loading } = useSelector(state => state.authReducer);
+    const { user} = useSelector(state => state.userReducer);
+
+    useEffect(() => {
+        if (user && user.isAdmin) {
+            navigate('/admin');
+        }
+    }, [user, navigate]);
+
 
     const submit = useCallback(async (data) => {
         try {
@@ -32,7 +39,7 @@ const LogIn = () => {
             }))
             if (res.meta.requestStatus === 'fulfilled') {
                 if (query.has('admin')) {
-                    if (!user.isAdmin) {
+                    if (user.isAdmin) {
                         navigate('/admin')
                     }
                 } else {
@@ -43,7 +50,7 @@ const LogIn = () => {
         } catch (e) {
             console.log("catch e: ", e);
         }
-    }, [dispatch, navigate, query, user.isAdmin])
+    }, [dispatch, navigate, query, user?.isAdmin])
 
 
     return (

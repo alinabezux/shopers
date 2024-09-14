@@ -132,12 +132,14 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
                             )}
                         </FormControl>
 
-                        <FormControl required error={!!errors.type} className="checkout__form">
+                        <FormControl
+                            // required error={!!errors.type}
+                            className="checkout__form">
                             <FormLabel>Тип, до якої відноситься даний товар</FormLabel>
                             <Controller
                                 name="type"
                                 control={control}
-                                rules={{ required: "Обов'язкове поле" }}
+                                // rules={{ required: "Обов'язкове поле" }}
                                 render={({ field: { onChange, onBlur, value = '', ref } }) => (
                                     <Select
                                         ref={ref}
@@ -154,12 +156,12 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
                                     </Select>
                                 )}
                             />
-                            {errors.type && (
+                            {/* {errors.type && (
                                 <FormHelperText>
                                     <InfoOutlined sx={{ mr: 1 }} />
                                     {errors.type.message}
                                 </FormHelperText>
-                            )}
+                            )} */}
                         </FormControl>
 
                         <FormControl className="checkout__form" >

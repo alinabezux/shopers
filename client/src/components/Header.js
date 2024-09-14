@@ -148,39 +148,41 @@ const Header = () => {
                                     {category.name}
                                 </Typography>
                             </NavLink>
-
-                            <Menu
-                                id={`basic-menu-${category._id}`}
-                                variant="outlined"
-                                anchorEl={anchorEl && selCat._id === category._id ? anchorEl : null}
-                                open={Boolean(anchorEl) && selCat._id === category._id}
-                                onMouseLeave={handleCloseMenu}
-                                menulistprops={{
-                                    'aria-labelledby': `basic-button-${category._id}`,
-                                }}
-                                sx={{
-                                    width: "150px",
-                                    fontSize: "20px",
-                                    opacity: 0.9,
-                                    zIndex: "9999"
-                                }}
-                            >
-                                {types
-                                    .filter(type => type._category === category._id)
-                                    .map(type =>
-                                    (<MenuItem key={type._id} onClick={() => handleTypeClick(category, type)}
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            alignItems: "center",
-                                            textTransform: 'lowercase',
-                                            fontWeight: 400,
-                                            margin: "0",
+                            {
+                                types.filter(type => type._category === category._id).length > 0 && (
+                                    <Menu
+                                        id={`basic-menu-${category._id}`}
+                                        variant="outlined"
+                                        anchorEl={anchorEl && selCat._id === category._id ? anchorEl : null}
+                                        open={Boolean(anchorEl) && selCat._id === category._id}
+                                        onMouseLeave={handleCloseMenu}
+                                        menulistprops={{
+                                            'aria-labelledby': `basic-button-${category._id}`,
                                         }}
-                                    ><NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className={({ isActive }) => isActive ? "link active" : "link"}
-                                    >{type.name}</NavLink></MenuItem>)
-                                    )}
-                            </Menu>
+                                        sx={{
+                                            width: "150px",
+                                            fontSize: "20px",
+                                            opacity: 0.9,
+                                            zIndex: "9999"
+                                        }}
+                                    >
+                                        {types.filter(type => type._category === category._id)
+                                            .map(type =>
+                                            (<MenuItem key={type._id} onClick={() => handleTypeClick(category, type)}
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    textTransform: 'lowercase',
+                                                    fontWeight: 400,
+                                                    margin: "0",
+                                                }}
+                                            ><NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className={({ isActive }) => isActive ? "link active" : "link"}
+                                            >{type.name}</NavLink></MenuItem>)
+                                            )}
+                                    </Menu>
+                                )
+                            }
                         </Box>
                     ))}
 

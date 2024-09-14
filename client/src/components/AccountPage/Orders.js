@@ -41,10 +41,10 @@ const Orders = () => {
                         {userOrders.map(order =>
                         (<Card variant="plain" size="sm" color="neutral" >
                             <CardContent >
-                                <Typography >{order.orderID}</Typography>
-                                <Typography >{order.createdAt}</Typography>
+                                <Typography variant="h3" className="product-card__card-name">{order.orderID}</Typography>
+                                <Typography className="product-card__card-color">Дата покупки: {order.createdAt.split('T')[0].split('-').reverse().join('.')}</Typography>
                                 {order.orderItems.map(item => (
-                                    <Card orientation="horizontal" variant="soft">
+                                    <Card orientation="horizontal" variant="soft" sx={{ my: 1 }}>
                                         <AspectRatio ratio="1" sx={{ width: "20%" }}>
                                             {item?.img ? (
                                                 <img src={item.img} alt={item.name} />
@@ -53,27 +53,26 @@ const Orders = () => {
                                             )}
                                         </AspectRatio>
                                         <CardContent >
-                                            <Typography >{item.name}</Typography>
-                                            <Typography >{item.quantity}</Typography>
-                                            <Typography >{item.price}</Typography>
-                                            <Typography >{item?.info?.color}</Typography>
-                                            <Typography >{item?.info?.size}</Typography>
+                                            <Typography variant="h3" className="product-card__card-name">{item.name}</Typography>
+                                            <Typography className="product-card__card-price">{item.price} грн.</Typography>
+                                            <Typography className="product-card__card-color">Колір: {item?.info?.color}</Typography>
+                                            <Typography className="product-card__card-color">Розмір: {item?.info?.size}</Typography>
+                                            <Typography className="product-card__card-price">{item.quantity} шт.</Typography>
                                         </CardContent>
 
                                     </Card>
                                 ))}
-
-                                <Typography >{order.firstName} {order.lastName}</Typography>
-                                <Typography >{order.phoneNumber}</Typography>
-                                <Typography >{order.city.description}</Typography>
-                                <Typography >№{order.warehouse.number}</Typography>
+                                <Typography variant="h3" className="product-card__card-name">Дані замовлення:</Typography>
+                                <Typography className="product-card__card-color">{order.firstName} {order.lastName}</Typography>
+                                <Typography className="product-card__card-color">{order.phoneNumber}</Typography>
+                                <Typography className="product-card__card-color">{order.city.description}</Typography>
+                                <Typography className="product-card__card-color">№{order.warehouse.number}</Typography>
                                 <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                    <Typography>{order.totalSum} грн.</Typography>
+                                    <Typography variant="h3" className="product-card__card-name">{order.totalSum} грн.</Typography>
                                     <Chip size="sm" variant="soft" color="success">
                                         {order.cashback} грн. кешбек
                                     </Chip>
                                 </Stack>
-                                <Typography >{order.paymentMethod}</Typography>
                             </CardContent>
                         </Card>)
                         )}

@@ -82,7 +82,7 @@ const OrderTable = () => {
     }, [dispatch, currentPageOrders]);
 
     useEffect(() => {
-        const socket = io('https://shopersvi-d6c7c2418328.herokuapp.com' || 'https://localhost:5000');
+        const socket = io('https://shopersvi-d6c7c2418328.herokuapp.com');
 
         socket.on('connect', () => {
             console.log('Socket connected');
@@ -304,14 +304,6 @@ const OrderTable = () => {
                                 <td>
                                     {order?.orderItems.map((item, index) => (
                                         <Card key={item._productId} variant="soft" orientation="horizontal" sx={{ margin: "10px 0" }}>
-                                            {/* <AspectRatio ratio="1" sx={{ width: 50 }}>
-                                                <img
-                                                    src={item.img}
-                                                    srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
-                                                    loading="lazy"
-                                                    alt=""
-                                                />
-                                            </AspectRatio> */}
                                             <div>
                                                 <Typography level="title-sm">{item.article}</Typography>
                                                 <Typography level="title-md">{item.name} - {item.quantity} шт.</Typography>

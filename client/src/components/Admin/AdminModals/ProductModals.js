@@ -51,6 +51,7 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
 
         try {
             const res = await dispatch(productActions.createProduct({ product: productProperties }));
+
             if (res.meta.requestStatus === 'fulfilled') {
                 setOpenCreate(false);
                 reset();

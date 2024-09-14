@@ -179,9 +179,8 @@ const ProductPage = () => {
                             </SwiperSlide>
                         ))}
                     </Swiper>
-
                 </Box>
-                <Box>
+                <Box className="product-page__info__box">
                     <Stack direction="column" spacing={1} className="product-page__info">
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Typography variant="h5" className="product-page__name">{product.name}</Typography>

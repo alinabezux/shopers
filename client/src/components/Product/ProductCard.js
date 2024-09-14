@@ -91,7 +91,7 @@ const ProductCard = memo(({ product }) => {
                         <CardOverflow>
                             {
                                 product.images.length !== 0 ?
-                                    <img src={product.images[0]} alt={product.name} /> :
+                                    <img src={product.images[0]} alt={product.name} loading="lazy" /> :
                                     <NoPhotographyOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                             }
                         </CardOverflow>

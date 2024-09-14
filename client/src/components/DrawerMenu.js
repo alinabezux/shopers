@@ -34,17 +34,17 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
         dispatch(categoryActions.setSelectedCategory(category));
     }, [dispatch]);
 
-    useEffect(() => {
-        if (selectedCategory) {
-            dispatch(typeActions.getAll());
-        }
-    }, [dispatch, selectedCategory]);
-
     const handleTypeClick = useCallback((category, type) => {
         dispatch(categoryActions.setSelectedCategory(category));
         dispatch(typeActions.setSelectedType(type));
         onClose();
     }, [dispatch, onClose]);
+
+    useEffect(() => {
+        if (selectedCategory) {
+            dispatch(typeActions.getAll());
+        }
+    }, [dispatch, selectedCategory]);
 
 
     const handleClickWislist = useCallback(() => {
@@ -77,8 +77,13 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                             margin: 0,
                         }
                     }}>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />} onClick={() => handleMenu(category)}>
-                            <h2 className='drawerMenu__category' >{category.name}</h2>
+                        <AccordionSummary 
+                        expandIcon={types.filter(type => type._category === category._id).length > 0 && <ExpandMoreIcon onClick={() => handleMenu(category)} />} >
+                            <h2 key={category._id} className='drawerMenu__category' onClick={() => handleTypeClick(category, null)}>
+                                <NavLink to={`/${(toUrlFriendly(category.name))}`} className="link" >
+                                    {category.name}
+                                </NavLink>
+                            </h2>
                         </AccordionSummary>
 
                         <AccordionDetails sx={{ color: "grey", margin: "0 0 0 30px" }}>

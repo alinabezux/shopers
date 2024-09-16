@@ -297,7 +297,9 @@ const CheckoutPage = () => {
                             <Divider inset="none" />
                             <FormControl required>
                                 <RadioGroup defaultValue='Нова пошта' name="radio-buttons-group">
-                                    <Stack direction="row" spacing={5} >
+                                    <Stack
+                                        direction={{ xs: 'column', sm: 'row' }}
+                                        spacing={5} >
                                         <Stack direction="row" spacing={2} className='checkout__post'>
                                             <Radio
                                                 checked={post === 'Нова пошта'}
@@ -449,7 +451,7 @@ const CheckoutPage = () => {
                                                 {/* <img src={visa} style={{ height: "10px" }} />
                                                 <img src={mc} style={{ height: "10px" }} /> */}
                                             </Stack>
-                                            <img src={platamono} alt='platamono' style={{ height: "20px" }} />
+                                            <img src={platamono} alt='platamono' style={{ height: "15px" }} />
                                         </Stack>
 
                                         {post === 'Нова пошта' &&

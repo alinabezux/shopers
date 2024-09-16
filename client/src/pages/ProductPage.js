@@ -153,6 +153,7 @@ const ProductPage = () => {
                                     <img
                                         src={image}
                                         alt={`Slide ${index}`}
+                                        loading="lazy"
                                     />
                                 </SwiperSlide>
                             ))}
@@ -174,6 +175,7 @@ const ProductPage = () => {
                                     <img
                                         src={image}
                                         alt={`Slide ${index}`}
+                                        loading="lazy"
                                     />
                                 </AspectRatio>
                             </SwiperSlide>

@@ -35,7 +35,7 @@ div.checkout__orderContent {
         width: 60%;
     }
 
-    .checkout__post {
+    .checkout__post img{
         height: 40px;
     }
 
@@ -62,7 +62,7 @@ div.checkout__orderContent {
         grid-column: 1/-1;
     }
 
-    .checkout__post {
+    .checkout__post img {
         height: 30px;
     }
 
@@ -86,11 +86,7 @@ div.checkout__orderContent {
         width: 95%;
     }
 
-    .checkout__post {
-        height: 30px;
-    }
-
-    .checkout__post {
+    .checkout__post img {
         height: 50px;
     }
 }

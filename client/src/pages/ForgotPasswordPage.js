@@ -50,7 +50,7 @@ const ForgotPasswordPage = () => {
                 Посилання для відновлення паролю надіслано на пошту.
             </Snackbar>
             <Box className='forgotPage__main'>
-                <Typography variant="h4" className='title' >МІЙ КАБІНЕТ</Typography>
+                <Typography variant="h5" className='title' >МІЙ КАБІНЕТ</Typography>
                 <Typography>
                     Забули пароль? Введіть ваш e-mail.<br /> Ми надішлемо вам електронний лист з інструкцією для створення нового паролю.
                 </Typography>

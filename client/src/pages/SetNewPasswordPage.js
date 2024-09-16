@@ -44,7 +44,7 @@ const SetNewPasswordPage = () => {
     return (
         <Container className='forgotPage'>
             <Box className='forgotPage__main'>
-                <Typography variant="h4" className='title' >МІЙ КАБІНЕТ</Typography>
+                <Typography variant="h5" className='title' >МІЙ КАБІНЕТ</Typography>
                 <Form onSubmit={handleSubmit(submit)} control={control}>
                     <Card className='forgotPage__card' variant="plain"
                         sx={{

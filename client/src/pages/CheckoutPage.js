@@ -227,7 +227,7 @@ const CheckoutPage = () => {
 
     return (
         <Container className='checkout'>
-            <Typography variant="h4" className='title'>ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</Typography>
+            <Typography variant="h5" className='title'>ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</Typography>
             <Form onSubmit={handleSubmit(handleCreateOrder)} control={control}>
                 <Box className='checkout__main'>
                     <Box className='checkout__first'>

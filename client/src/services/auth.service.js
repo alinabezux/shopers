@@ -32,12 +32,11 @@ const authService = {
 
     getUser: () => {
         const userId = localStorage.getItem('userId');
-        const accessToken = localStorage.getItem('access');
-
         if (userId) return userId;
-
+        
+        const accessToken = localStorage.getItem('access');
         if (!accessToken) return null;
-
+        
         try {
             const decodedToken = jwtDecode(accessToken);
             const { id } = decodedToken;

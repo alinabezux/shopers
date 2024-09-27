@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ import { Alert, Chip } from "@mui/joy";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-import emoji from '../assets/emoji glasses.png'
+import emoji from '../assets/emoji present.png'
 
 const DrawerBasket = ({ open, onClose }) => {
     const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const DrawerBasket = ({ open, onClose }) => {
 
     const handleUpdateBasket = (updatedBasket) => {
         setLocalBasket(Object.values(updatedBasket));
-        localStorage.setItem('basket', JSON.stringify(updatedBasket)); // Оновлюємо localStorage
+        localStorage.setItem('basket', JSON.stringify(updatedBasket));
     };
 
     const basketToUse = userId ? basket : localBasket;
@@ -71,50 +71,46 @@ const DrawerBasket = ({ open, onClose }) => {
                     >
                         <CloseIcon fontSize="large" />
                     </IconButton>
-
                 </Box>
-                {!userId &&
-                    <Alert sx={{ m: 2 }}
-                        variant="soft"
-                        color="success"
-                        startDecorator={<img src={emoji} alt='emoji' loading="lazy" style={{ height: "20px" }} />}
-                    >
-                        <Link className='link' to='/auth#logIn'>
-                            <Button onClick={onClose} size="sm" variant="outlined" color="success" type='submit' className='authpage__button'>Авторизуйся</Button>
-                        </Link>
-                        та отримуй КЕШБЕК на це замовлення!
-                    </Alert>
-                }
-                {loading ?
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-                        <CircularProgress color="inherit" />
-                    </Box> :
-                    (basketToUse.length > 0 ?
-                        (
-                            <Container className='basket__content'>
-                                <Box className='basket__products'>
-                                    <Stack direction="column" spacing={2} alignItems="center">
-                                        {basketToUse.map(productInBasket => (
-                                            <ProductInBasket key={userId ? productInBasket._id : productInBasket.id} productInBasket={productInBasket} setOpenBasket={onClose} onUpdateBasket={handleUpdateBasket} />
-                                        ))}
+                <Container className='basket__content'>
+                    {!userId &&
+                        <Alert sx={{ mb: 2 }}
+                            variant="soft"
+                            color="success"
+                            startDecorator={<img src={emoji} alt='emoji' loading="lazy" style={{ height: "20px" }} />}
+                        >
+                            <Link className='link' to='/auth#logIn' >
+                                <Button onClick={onClose} size="sm" variant="outlined" color="success" type='submit' sx={{ fontSize: "large" }} >Авторизуйся</Button>
+                            </Link>
+                            та отримуй КЕШБЕК на це замовлення!
+                        </Alert>
+                    }
+                    {loading ?
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                            <CircularProgress color="inherit" />
+                        </Box> :
+                        (basketToUse.length > 0 ?
+                            <Box className='basket__products'>
+                                <Stack direction="column" spacing={2} >
+                                    {basketToUse.map(productInBasket => (
+                                        <ProductInBasket key={userId ? productInBasket._id : productInBasket.id} productInBasket={productInBasket} setOpenBasket={onClose} onUpdateBasket={handleUpdateBasket} />
+                                    ))}
+                                    <Stack direction="column" className='basket__order' sx={{ m: 2, width: "100% " }}>
+                                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                                            <Typography className="basket__price">Разом :</Typography>
+                                            <Typography className="basket__price">{totalPrice} грн.</Typography>
+                                        </Stack>
+                                        {userId &&
+                                            <Chip className="basket__cashback" size="sm" variant="soft" color="success">
+                                                Кешбек з покупки : {totalCashback} грн.
+                                            </Chip>
+                                        }
+                                        <Link to='/checkout' className='link' >
+                                            <Button onClick={onClose} variant="solid" color="neutral" className="basket__button mainbutton" endDecorator={<LocalMallOutlinedIcon />}>ОФОРМИТИ ЗАМОВЛЕННЯ</Button>
+                                        </Link>
                                     </Stack>
-                                </Box>
-                                <Stack direction="column" className='basket__order'>
-                                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                        <Typography className="basket__price">Разом :</Typography>
-                                        <Typography className="basket__price">{totalPrice} грн.</Typography>
-                                    </Stack>
-                                    {userId && <Chip className="basket__cashback" size="sm" variant="soft" color="success">
-                                        Кешбек з покупки : {totalCashback} грн.
-                                    </Chip>}
-
-                                    <Link to='/checkout' className='link' >
-                                        <Button onClick={onClose} variant="solid" color="neutral" className="basket__button mainbutton" endDecorator={<LocalMallOutlinedIcon />}>ОФОРМИТИ ЗАМОВЛЕННЯ</Button>
-                                    </Link>
                                 </Stack>
-                            </Container>
-                        ) :
-                        (
+                            </Box> :
                             <Container sx={{ height: "80%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                                 <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
                                 <Typography variant="h5" sx={{ fontSize: "28px" }}>Цей кошик порожній.</Typography>
@@ -122,9 +118,10 @@ const DrawerBasket = ({ open, onClose }) => {
                                     <Link to="/shop" className='link'>КАТАЛОГ</Link>
                                 </Button2>
                             </Container>
-                        )
-                    )
-                }
+                        )}
+                </Container>
+
+
 
             </Box>
         </Drawer >

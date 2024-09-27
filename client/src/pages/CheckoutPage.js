@@ -20,6 +20,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import { InfoOutlined, LocalMallOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import emoji from '../assets/emoji present.png'
+
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -162,8 +164,8 @@ const CheckoutPage = () => {
             if (userId) {
                 res = await dispatch(orderActions.createOrderAuth({ userId, order }));
             } else {
-                res = await dispatch(orderActions.createOrder({ productsInBasket: basketToUse, order}));
-      
+                res = await dispatch(orderActions.createOrder({ productsInBasket: basketToUse, order }));
+
                 if (res.meta.requestStatus === 'fulfilled') {
                     localStorage.setItem('basket', JSON.stringify({}));
                     handleUpdateBasket({});
@@ -511,17 +513,17 @@ const CheckoutPage = () => {
                             <Divider inset="none" />
                             <CardContent>
                                 {!userId &&
-                                    <Alert sx={{ mt: 1 }}
+                                    <Alert sx={{ mb: 2 }}
                                         variant="soft"
                                         color="success"
-                                    // startDecorator={<img src={emoji} alt='emoji' loading="lazy" style={{ height: "20px" }} />}
+                                        startDecorator={<img src={emoji} alt='emoji' loading="lazy" style={{ height: "20px" }} />}
                                     >
                                         <Link className='link' to='/auth#logIn' >
-                                            <Button size="sm" variant="outlined" color="success" type='submit' className='authpage__button'>Авторизуйся</Button>
+                                            <Button size="sm" variant="outlined" color="success" type='submit'>Авторизуйся</Button>
                                         </Link>
-                                        <Typography className="product-in-basket__card-name">
+                                        <p style={{ fontSize: "12px" }}>
                                             та отримуй КЕШБЕК на це замовлення!
-                                        </Typography>
+                                        </p>
                                     </Alert>
                                 }
                                 {

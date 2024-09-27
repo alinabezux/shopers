@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
+import { ObjectId } from 'bson'
 
 import { Typography, Box, Stack, CircularProgress } from '@mui/material';
-import { Button, Chip, ButtonGroup, AspectRatio } from "@mui/joy";
+import { Button, Chip, ButtonGroup, AspectRatio, Select, Option } from "@mui/joy";
 import { Container } from '@mui/joy';
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import 'swiper/css';
@@ -17,7 +18,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Snackbar from '@mui/joy/Snackbar';
-import AccountCircleRounded from '@mui/icons-material/AccountCircleRounded';
+import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 
 import { basketActions, favoriteActions, productActions } from '../redux';
 import { DrawerBasket } from '../components';
@@ -33,10 +34,13 @@ const ProductPage = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [product, setProduct] = useState({});
     const [quantity, setQuantity] = useState(1);
+    const [size, setSize] = useState("");
+    const [localBasket, setLocalBasket] = useState(() => JSON.parse(localStorage.getItem('basket')) || {});
 
     const dispatch = useDispatch();
 
     const { userId } = useSelector(state => state.authReducer);
+    const { basket } = useSelector(state => state.basketReducer);
     const { selectedProduct, loading, error } = useSelector(state => state.productReducer);
     const { categories } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
@@ -57,7 +61,6 @@ const ProductPage = () => {
     }, [dispatch, selectedProduct]);
 
 
-
     useEffect(() => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
@@ -70,17 +73,18 @@ const ProductPage = () => {
     }, [favorite, product._id]);
 
 
-    const increaseQuantity = () => {
+    const increaseQuantity = useCallback(() => {
         if (quantity < product.quantity) {
             setQuantity(prevQuantity => prevQuantity + 1);
         }
-    };
+    }, [quantity, product.quantity]);
 
-    const decreaseQuantity = () => {
+    const decreaseQuantity = useCallback(() => {
         if (quantity > 1) {
             setQuantity(prevQuantity => prevQuantity - 1);
         }
-    };
+    }, [quantity]);
+
 
     const handleAddProductToFavourite = useCallback(async (product) => {
         if (userId) {
@@ -88,6 +92,14 @@ const ProductPage = () => {
             setSnackbarMessage(`${product.name} додано у список бажань.`);
             setOpenSnackbar(true)
         } else {
+            setSnackbarMessage(
+                <>
+                    <Link to="/auth#logIn" className="link" style={{ margin: 0, padding: 0, textAlign: "center" }}>
+                        <b>Увійдіть </b>
+                    </Link>
+                    щоб додати до списку бажань.
+                </>
+            );
             setOpenErrorSnackbar(true)
         }
     }, [userId, dispatch]);
@@ -100,11 +112,75 @@ const ProductPage = () => {
     }, [userId, dispatch])
 
     const handleAddProductToBasket = useCallback(async (product) => {
+        const sizeString = product.info.size || '';
+        const sizeOptions = sizeString.split(',').map(s => s.trim());
+
+        const addProductToLocalBasket = (product, quantity, size) => {
+            const currentBasket = JSON.parse(localStorage.getItem('basket')) || {};
+            let isProductUpdated = false;
+
+            for (const key in currentBasket) {
+                if (currentBasket[key]._id === product._id && currentBasket[key].size === size) {
+                    currentBasket[key].quantity += quantity;
+                    isProductUpdated = true;
+                    break;
+                }
+            }
+            if (!isProductUpdated) {
+                const newId = new ObjectId();
+                currentBasket[newId.toString()] = {
+                    id: newId.toString(),
+                    ...product,
+                    quantity,
+                    size: size || undefined
+                };
+            }
+
+            localStorage.setItem('basket', JSON.stringify(currentBasket));
+            setLocalBasket(currentBasket);
+            setOpenBasket(true);
+        };
+
+        const validateSize = () => {
+            if (sizeOptions.length > 1 && !size) {
+                setSnackbarMessage('Виберіть розмір, будь ласка!');
+                setOpenErrorSnackbar(true);
+                return false;
+            }
+            return true;
+        };
+
         if (userId) {
-            await dispatch(basketActions.addToBasket({ userId, productId: product._id, quantity }));
+            if (validateSize()) {
+                const sizePayload = sizeOptions.length > 1 ? { size } : {};
+
+                const existingProduct = sizeOptions.length > 1 ?
+                    basket.find(item => item.productId === product._id && item.size === size) :
+                    basket.find(item => item.productId === product._id)
+
+                if (existingProduct) {
+                    await dispatch(basketActions.updateProductInBasketQuantity({
+                        userId,
+                        productInBasketId: existingProduct._id,
+                        quantity: existingProduct.quantity + quantity
+                    }))
+                } else {
+                    await dispatch(basketActions.addToBasket({
+                        userId,
+                        productId: product._id,
+                        quantity,
+                        ...sizePayload
+                    }));
+                }
+                setOpenBasket(true);
+            }
+        } else {
+            if (validateSize()) {
+                addProductToLocalBasket(product, quantity, sizeOptions.length > 1 ? size : undefined);
+            }
         }
-        setOpenBasket(true);
-    }, [userId, dispatch, quantity]);
+    }, [userId, dispatch, quantity, size, basket]);
+
 
     if (loading) {
         return (
@@ -120,7 +196,7 @@ const ProductPage = () => {
 
     return (
         <Container className="product-page">
-            {category && type ?
+            {category ?
                 (<Breadcrumbs className='product-page__breadrumbs'
                     separator={<NavigateNextIcon fontSize='small' />}
                     aria-label="breadcrumb"
@@ -131,9 +207,12 @@ const ProductPage = () => {
                     <NavLink className="link product-page__breadrumb" underline="hover" key="1" to={`/${(toUrlFriendly(category.name))}`} >
                         {category.name}
                     </NavLink>
-                    <NavLink className="link product-page__breadrumb" underline="hover" key="1" to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} >
-                        {type.name}
-                    </NavLink>
+                    {
+                        type?.name &&
+                        <NavLink className="link product-page__breadrumb" underline="hover" key="1" to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} >
+                            {type.name}
+                        </NavLink>
+                    }
                     <Typography sx={{ color: "black" }}>{product.name}</Typography>
                 </Breadcrumbs>)
                 : null
@@ -142,7 +221,7 @@ const ProductPage = () => {
             <Box className="product-page__content">
                 <Box className="product-page__gallery">
                     <AspectRatio ratio="1" >
-                        <Swiper lazy="true"
+                        <Swiper
                             spaceBetween={10}
                             thumbs={{ swiper: thumbsSwiper }}
                             modules={[FreeMode, Navigation, Thumbs]}
@@ -150,17 +229,13 @@ const ProductPage = () => {
                         >
                             {(product.images || []).map((image, index) => (
                                 <SwiperSlide key={index}>
-                                    <img
-                                        src={image}
-                                        alt={`Slide ${index}`}
-                                        loading="lazy"
-                                    />
+                                    <img src={image} alt={`Slide ${index}`} loading="lazy" />
                                 </SwiperSlide>
                             ))}
                         </Swiper>
 
                     </AspectRatio>
-                    <Swiper lazy="true"
+                    <Swiper
                         onSwiper={setThumbsSwiper}
                         spaceBetween={10}
                         slidesPerView={4}
@@ -190,6 +265,7 @@ const ProductPage = () => {
                                 favourite ? <FavoriteIcon className="product-page__heart-icon" sx={{ color: '#730000', fontSize: "35px" }} onClick={() => handleDeleteProductFromFavorite(product)} /> :
                                     <FavoriteBorderIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" onClick={() => handleAddProductToFavourite(product)} />
                             }
+
                         </Stack>
 
                         <Stack direction="row" spacing={1} alignItems="center">
@@ -206,10 +282,10 @@ const ProductPage = () => {
                             </ButtonGroup>
                             <Button disabled={product.quantity <= 0} variant="solid" color="neutral" className="product-page__button mainbutton" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
-                        {product.quantity === 0 &&
-                            // <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
-                            //     {product.quantity} в наявності
-                            // </Chip> :
+                        {product.quantity > 0 ?
+                            <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
+                                {product.quantity} в наявності
+                            </Chip> :
                             <Chip className="product-page__cashback" size="md" variant="soft" color="danger">
                                 Немає в наявності
                             </Chip>
@@ -219,9 +295,30 @@ const ProductPage = () => {
                         {product?.info?.color &&
                             <Typography className="product-page__color"><b style={{ color: "black" }}>Колір: </b>{product.info.color}</Typography>
                         }
-                        {product?.info?.size &&
-                            <Typography className="product-page__size"><b style={{ color: "black" }}>Розмір: </b>{product.info.size}</Typography>
-                        }
+
+                        {product?.info?.size && (
+                            product.info.size.split(',').length > 1 ? (
+                                <Select
+                                    placeholder="Виберіть розмір"
+                                    name="foo"
+                                    required
+                                    sx={{ maxWidth: 200 }}
+                                    value={size}
+                                    onChange={(e, newValue) => setSize(newValue)}
+                                >
+                                    {product.info.size.split(',').map((item, index) => (
+                                        <Option key={index + 1} value={item.trim()}>
+                                            {item.trim()}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            ) : (
+                                <Typography className="product-page__size">
+                                    <b style={{ color: "black" }}>Розмір: </b>{product.info.size}
+                                </Typography>
+                            )
+                        )}
+
                         {product?.info?.material &&
                             <Typography className="product-page__material">
                                 <b style={{ color: "black" }}>Матеріал: </b>
@@ -255,7 +352,7 @@ const ProductPage = () => {
             <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                startDecorator={<AccountCircleRounded />}
+                startDecorator={<ErrorOutlineRoundedIcon />}
                 color="warning" size="lg" variant="soft"
                 autoHideDuration={3000}
                 open={openErrorSnackbar}
@@ -266,7 +363,9 @@ const ProductPage = () => {
                     setOpenErrorSnackbar(false);
                 }}
             >
-                <Link to='/auth#logIn' className='link' sx={{ margin: 0, p: 0, textAlign: "center" }} ><b>Увійдіть</b></Link>щоб додати до списку бажань.
+                <Typography>
+                    {snackbarMessage}
+                </Typography>
             </Snackbar>
         </Container >
     );

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, memo } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { basketActions, favoriteActions, productActions } from "../../redux";
+import { favoriteActions, productActions } from "../../redux";
 import { toUrlFriendly } from '../../utils';
 import { DrawerBasket } from '../DrawerBasket';
 
@@ -69,18 +69,11 @@ const ProductCard = memo(({ product }) => {
         setOpenSnackbar(true)
     }, [userId, dispatch])
 
-    const handleAddProductToBasket = useCallback(async (product) => {
-        if (userId) {
-            await dispatch(basketActions.addToBasket({ userId, productId: product._id }));
-        }
-        setOpenBasket(true);
-    }, [userId, dispatch]);
 
     const stopPropagation = (e) => {
         e.preventDefault();
         e.stopPropagation();
     }
-
 
     return (
         <>
@@ -111,12 +104,19 @@ const ProductCard = memo(({ product }) => {
                                 <Stack direction="row" spacing={1}>
                                     {
                                         favourite ?
-                                            <FavoriteIcon sx={{ color: '#730000' }} onClick={stopPropagation} onClickCapture={() => handleDeleteProductFromFavorite(product)} /> :
-                                            <FavoriteBorderIcon onClick={stopPropagation} onClickCapture={() => handleAddProductToFavourite(product)} />
+                                            <FavoriteIcon sx={{ color: '#730000' }}
+                                                onClick={(e) => {
+                                                    stopPropagation(e);
+                                                    handleDeleteProductFromFavorite(product)
+                                                }} />
+                                            :
+                                            <FavoriteBorderIcon onClick={(e) => {
+                                                stopPropagation(e);
+                                                handleAddProductToFavourite(product)
+                                            }}
+                                            />
                                     }
-                                    {product.quantity > 0 &&
-                                        <LocalMallOutlinedIcon onClick={stopPropagation} onClickCapture={() => handleAddProductToBasket(product)} />
-                                    }
+                                    {product.quantity > 0 && <LocalMallOutlinedIcon />}
                                 </Stack>
                             </Stack>
 

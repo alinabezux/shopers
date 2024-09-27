@@ -100,7 +100,7 @@ h4.basket__title {
 .basket__products {}
 
 .basket__order {
-    margin: 50px 0 0 0;
+    /* margin: 50px 0 0 0; */
     /* position: absolute; */
     /* bottom: 0; */
 }
@@ -122,11 +122,11 @@ div.product-in-basket {
 }
 
 div.basket__content {
-    margin: 70px 0 0 0;
-    /* height: 85%; */
+    position: relative;
+    top: 70px;
+    height: 90%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 

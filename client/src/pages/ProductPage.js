@@ -35,7 +35,7 @@ const ProductPage = () => {
     const [product, setProduct] = useState({});
     const [quantity, setQuantity] = useState(1);
     const [size, setSize] = useState("");
-    const [localBasket, setLocalBasket] = useState(() => JSON.parse(localStorage.getItem('basket')) || {});
+    // const [localBasket, setLocalBasket] = useState(() => JSON.parse(localStorage.getItem('basket')) || {});
 
     const dispatch = useDispatch();
 
@@ -137,7 +137,7 @@ const ProductPage = () => {
             }
 
             localStorage.setItem('basket', JSON.stringify(currentBasket));
-            setLocalBasket(currentBasket);
+            // setLocalBasket(currentBasket);
             setOpenBasket(true);
         };
 

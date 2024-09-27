@@ -20,8 +20,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import { InfoOutlined, LocalMallOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { ErrorPage } from './ErrorPage';
-import emoji from '../assets/emoji glasses.png'
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();

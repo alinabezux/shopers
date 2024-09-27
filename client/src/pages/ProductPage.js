@@ -282,10 +282,7 @@ const ProductPage = () => {
                             </ButtonGroup>
                             <Button disabled={product.quantity <= 0} variant="solid" color="neutral" className="product-page__button mainbutton" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
-                        {product.quantity > 0 ?
-                            <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
-                                {product.quantity} в наявності
-                            </Chip> :
+                        {product.quantity === 0 &&
                             <Chip className="product-page__cashback" size="md" variant="soft" color="danger">
                                 Немає в наявності
                             </Chip>

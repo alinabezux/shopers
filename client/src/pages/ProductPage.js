@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
-import { ObjectId } from 'bson'
+import { v4 as uuidv4 } from 'uuid';
 
 import { Typography, Box, Stack, CircularProgress } from '@mui/material';
 import { Button, Chip, ButtonGroup, AspectRatio, Select, Option } from "@mui/joy";
@@ -127,7 +127,7 @@ const ProductPage = () => {
                 }
             }
             if (!isProductUpdated) {
-                const newId = new ObjectId();
+                const newId = uuidv4();
                 currentBasket[newId.toString()] = {
                     id: newId.toString(),
                     ...product,

@@ -39,12 +39,12 @@ const Orders = () => {
                 <Box sx={{ width: "100%" }}>
                     <Stack direction="column" spacing={2} >
                         {userOrders.map(order =>
-                        (<Card variant="plain" size="sm" color="neutral" >
+                        (<Card variant="plain" size="sm" color="neutral" key={order.orderID}>
                             <CardContent >
                                 <Typography variant="h3" className="product-card__card-name">{order.orderID}</Typography>
                                 <Typography className="product-card__card-color">Дата покупки: {order.createdAt.split('T')[0].split('-').reverse().join('.')}</Typography>
                                 {order.orderItems.map(item => (
-                                    <Card orientation="horizontal" variant="soft" sx={{ my: 1 }}>
+                                    <Card orientation="horizontal" variant="soft" sx={{ my: 1 }} key={item._productId}>
                                         <AspectRatio ratio="1" sx={{ width: "20%" }}>
                                             {item?.img ? (
                                                 <img src={item.img} alt={item.name} />
@@ -55,8 +55,8 @@ const Orders = () => {
                                         <CardContent >
                                             <Typography variant="h3" className="product-card__card-name">{item.name}</Typography>
                                             <Typography className="product-card__card-price">{item.price} грн.</Typography>
-                                            <Typography className="product-card__card-color">Колір: {item?.info?.color}</Typography>
-                                            <Typography className="product-card__card-color">Розмір: {item?.info?.size}</Typography>
+                                            {item?.color && <Typography className="product-card__card-color">Колір: {item.color}</Typography>}
+                                            {item?.size && <Typography className="product-card__card-color">Розмір: {item.size}</Typography>}
                                             <Typography className="product-card__card-price">{item.quantity} шт.</Typography>
                                         </CardContent>
 
@@ -65,8 +65,20 @@ const Orders = () => {
                                 <Typography variant="h3" className="product-card__card-name">Дані замовлення:</Typography>
                                 <Typography className="product-card__card-color">{order.firstName} {order.lastName}</Typography>
                                 <Typography className="product-card__card-color">{order.phoneNumber}</Typography>
-                                <Typography className="product-card__card-color">{order.city.description}</Typography>
-                                <Typography className="product-card__card-color">№{order.warehouse.number}</Typography>
+
+                                {order.city ?
+                                    <>
+                                        <Typography className="product-card__card-color">{order.city.description}</Typography>
+                                        <Typography className="product-card__card-color">№{order.warehouse.number}</Typography>
+                                    </>
+                                    :
+                                    <>
+                                        <Typography className="product-card__card-color">{order.cityUKR}</Typography>
+                                        <Typography className="product-card__card-color">{order.index}</Typography>
+                                        <Typography className="product-card__card-color">{order.region.label}</Typography>
+                                    </>
+                                }
+
                                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                                     <Typography variant="h3" className="product-card__card-name">{order.totalSum} грн.</Typography>
                                     <Chip size="sm" variant="soft" color="success">

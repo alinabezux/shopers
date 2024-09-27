@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form } from "react-hook-form";
 
-import { authActions } from '../../redux';
+import { authActions, basketActions } from '../../redux';
 
 import { Typography } from "@mui/material";
 import { FormControl, FormLabel, Input, Button, Card, CardContent } from '@mui/joy';
@@ -19,8 +19,8 @@ const LogIn = () => {
 
     const { control, handleSubmit, register } = useForm();
 
-    const { logInError, loading } = useSelector(state => state.authReducer);
-    const { user} = useSelector(state => state.userReducer);
+    const { logInError, loading, userId } = useSelector(state => state.authReducer);
+    const { user } = useSelector(state => state.userReducer);
 
     useEffect(() => {
         if (user && user.isAdmin) {
@@ -36,22 +36,37 @@ const LogIn = () => {
                     email: data.email,
                     password: data.password
                 }
-            }))
+            }));
             if (res.meta.requestStatus === 'fulfilled') {
-                if (query.has('admin')) {
-                    if (user.isAdmin) {
-                        navigate('/admin')
-                    }
+                if (query.has('admin') && user.isAdmin) {
+                    navigate('/admin');
                 } else {
-                    navigate('/')
+                    navigate('/');
                 }
-
             }
         } catch (e) {
             console.log("catch e: ", e);
         }
     }, [dispatch, navigate, query, user?.isAdmin])
 
+    useEffect(() => {
+        if (userId) {
+            const savedBasket = JSON.parse(localStorage.getItem('basket')) || {};
+            const addProductsToBasket = async () => {
+                for (const key in savedBasket) {
+                    const product = savedBasket[key];
+                    await dispatch(basketActions.addToBasket({
+                        userId: userId,
+                        productId: product._id,
+                        quantity: product.quantity,
+                        size: product?.size,
+                    }));
+                }
+            };
+            addProductsToBasket();
+            localStorage.setItem('basket', JSON.stringify({}));
+        }
+    }, [userId, dispatch]);
 
     return (
         <Form onSubmit={handleSubmit(submit)} control={control} className='authpage__tabpanel'>

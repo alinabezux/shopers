@@ -10,7 +10,7 @@ const productsService = {
             isGettingAll
         }
     }),
-    getById: (productId) => $host.get(`${urls.products}/${productId}`),
+    getProductById: (productId) => $host.get(`${urls.products}/${productId}`),
     createProduct: (product) => $authHost.post(urls.products, { product }),
     uploadPhoto: (productId, images) => $authHost.patch(`${urls.products}/${productId}/images`, images),
     updateProduct: (productId, product) => $authHost.put(`${urls.products}/${productId}`, { product }),

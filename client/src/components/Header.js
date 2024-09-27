@@ -54,8 +54,6 @@ const Header = () => {
         if (userId) {
             dispatch(userActions.getUserById(userId));
         }
-        // console.log(`userId - ${userId}`)
-        // console.log(user)
     }, [dispatch, userId])
 
     const handleHoverMenu = useCallback((event, category) => {
@@ -107,6 +105,7 @@ const Header = () => {
     const handleLogOut = async () => {
         await dispatch(authActions.logOut())
         navigate('/')
+        window.location.reload();
     };
 
     return (
@@ -126,7 +125,7 @@ const Header = () => {
                     {categories.map((category) => (
                         <Box key={category._id}>
                             <NavLink to={`/${(toUrlFriendly(category.name))}`}
-                                className={({ isActive }) => isActive ? "link active" : "link"}
+                                className='link'
                             >
                                 <Typography
                                     id="basic-button"
@@ -137,8 +136,7 @@ const Header = () => {
                                         textTransform: 'uppercase',
                                         fontFamily: "Geologica",
                                         fontSize: 20,
-                                        fontWeight: 600,
-                                        transition: 'color 0.3s ease'
+                                        fontWeight: 600
                                     }}
                                     aria-controls={anchorEl && selCat._id === category._id ? `basic-menu-${category._id}` : undefined}
                                     aria-haspopup="true"
@@ -177,8 +175,10 @@ const Header = () => {
                                                     fontWeight: 400,
                                                     margin: "0",
                                                 }}
-                                            ><NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className={({ isActive }) => isActive ? "link active" : "link"}
-                                            >{type.name}</NavLink></MenuItem>)
+                                            ><NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className='link'>
+                                                    {type.name}
+                                                </NavLink>
+                                            </MenuItem>)
                                             )}
                                     </Menu>
                                 )

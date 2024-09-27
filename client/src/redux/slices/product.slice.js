@@ -24,11 +24,12 @@ const getAll = createAsyncThunk(
     }
 );
 
-const getById = createAsyncThunk(
-    'productSlice/getById',
+const getProductById = createAsyncThunk(
+    'productSlice/getProductById',
     async ({ productId }, { rejectWithValue }) => {
         try {
-            const { data } = await productsService.getById(productId);
+            const { data } = await productsService.getProductById(productId);
+            console.log(data)
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -128,15 +129,15 @@ const productSlice = createSlice({
                 state.loading = false
             })
 
-            .addCase(getById.fulfilled, (state, action) => {
+            .addCase(getProductById.fulfilled, (state, action) => {
                 state.product = action.payload
                 state.loading = false
                 state.error = null
             })
-            .addCase(getById.pending, (state) => {
+            .addCase(getProductById.pending, (state) => {
                 state.loading = true
             })
-            .addCase(getById.rejected, (state, action) => {
+            .addCase(getProductById.rejected, (state, action) => {
                 state.error = action.payload
                 state.loading = false
             })
@@ -202,7 +203,7 @@ const productSlice = createSlice({
                 state.loading = false
             })
 
-            
+
             .addCase(deleteImage.fulfilled, (state, action) => {
                 const { productId, imageUrl } = action.payload;
                 const product = state.products.find(p => p._id === productId);
@@ -227,7 +228,7 @@ const productSlice = createSlice({
 const { reducer: productReducer, actions: { setSelectedProduct, setCurrentPageProducts } } = productSlice;
 
 const productActions = {
-    getAll, getById, setSelectedProduct, setCurrentPageProducts, createProduct, updateProduct, deleteById, uploadPhoto, deleteImage
+    getAll, getProductById, setSelectedProduct, setCurrentPageProducts, createProduct, updateProduct, deleteById, uploadPhoto, deleteImage
 }
 
 export {

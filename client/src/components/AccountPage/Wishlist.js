@@ -24,8 +24,6 @@ const Wishlist = () => {
         if (userId) {
             dispatch(favoriteActions.getFavorite(userId))
         }
-        // console.log('favorite')
-        // console.log(favorite)
     }, [dispatch, userId])
 
 

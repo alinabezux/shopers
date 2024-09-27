@@ -15,11 +15,22 @@ const initialState = {
     error: null
 }
 
-const createOrder = createAsyncThunk(
-    'orderSlice/createOrder',
+const createOrderAuth = createAsyncThunk(
+    'orderSlice/createOrderAuth',
     async ({ userId, order }, { rejectWithValue }) => {
         try {
-            const { data } = await orderService.createOrder(userId, order);
+            const { data } = await orderService.createOrderAuth(userId, order);
+            return data
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+const createOrder = createAsyncThunk(
+    'orderSlice/createOrder',
+    async ({ productsInBasket, order }, { rejectWithValue }) => {
+        try {
+            const { data } = await orderService.createOrder(productsInBasket, order);
             return data
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -87,6 +98,19 @@ const orderSlice = createSlice({
     },
     extraReducers: builder =>
         builder
+            .addCase(createOrderAuth.fulfilled, (state, action) => {
+                state.orders.push(action.payload)
+                state.loadingOrder = false
+                state.errorOrder = null
+            })
+            .addCase(createOrderAuth.pending, (state) => {
+                state.loadingOrder = true
+            })
+            .addCase(createOrderAuth.rejected, (state, action) => {
+                state.errorOrder = action.payload
+                state.loadingOrder = false
+            })
+
             .addCase(createOrder.fulfilled, (state, action) => {
                 state.orders.push(action.payload)
                 state.loadingOrder = false
@@ -153,7 +177,7 @@ const orderSlice = createSlice({
 const { reducer: orderReducer, actions: { setSelectedOrder, setCurrentPageOrders, updateOrderStatus } } = orderSlice;
 
 const orderActions = {
-    createOrder, getAllOrders, setSelectedOrder, setCurrentPageOrders, getUserOrders, deleteById, updateOrderStatus
+    createOrder, createOrderAuth, getAllOrders, setSelectedOrder, setCurrentPageOrders, getUserOrders, deleteById, updateOrderStatus
 }
 
 export { orderReducer, orderActions }

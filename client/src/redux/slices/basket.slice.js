@@ -21,9 +21,9 @@ const getBasket = createAsyncThunk(
 
 const addToBasket = createAsyncThunk(
     'basketSlice/addToBasket',
-    async ({ userId, productId, quantity = 1 }, { rejectWithValue }) => {
+    async ({ userId, productId, quantity = 1, size }, { rejectWithValue }) => {
         try {
-            const { data } = await basketService.addToBasket(userId, productId, quantity);
+            const { data } = await basketService.addToBasket(userId, productId, quantity, size);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -33,10 +33,10 @@ const addToBasket = createAsyncThunk(
 
 const deleteFromBasket = createAsyncThunk(
     'basketSlice/deleteFromBasket',
-    async ({ userId, productId }, { rejectWithValue }) => {
+    async ({ userId, productInBasketId }, { rejectWithValue }) => {
         try {
-            await basketService.deleteFromBasket(userId, productId);
-            return productId
+            await basketService.deleteFromBasket(userId, productInBasketId);
+            return productInBasketId;
         } catch (e) {
             return rejectWithValue(e.response.data)
         }
@@ -45,10 +45,10 @@ const deleteFromBasket = createAsyncThunk(
 
 const updateProductInBasketQuantity = createAsyncThunk(
     'basketSlice/updateProductInBasketQuantity',
-    async ({ userId, productId, quantity }, { rejectWithValue }) => {
+    async ({ userId, productInBasketId, quantity }, { rejectWithValue }) => {
         try {
-            const { data } = await basketService.updateProductInBasketQuantity(userId, productId, quantity);
-            return { _product: productId, quantity: data.quantity };
+            const { data } = await basketService.updateProductInBasketQuantity(userId, productInBasketId, quantity);
+            return { _id: productInBasketId, quantity: data.quantity };
         } catch (e) {
             return rejectWithValue(e.response.data);
         }
@@ -104,7 +104,7 @@ const basketSlice = createSlice({
             })
 
             .addCase(updateProductInBasketQuantity.fulfilled, (state, action) => {
-                const findProduct = state.basket.find(item => item._id === action.payload._product);
+                const findProduct = state.basket.find(item => item._id === action.payload._id);
                 findProduct.quantity = action.payload.quantity;
 
                 state.loading = false

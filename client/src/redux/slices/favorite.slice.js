@@ -13,8 +13,6 @@ const getFavorite = createAsyncThunk(
     async (userId, { rejectWithValue }) => {
         try {
             const { data } = await favoriteService.getFavorite(userId);
-            console.log('getFavorite')
-            console.log(data)
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -27,8 +25,6 @@ const addToFavorite = createAsyncThunk(
     async ({ userId, productId }, { rejectWithValue }) => {
         try {
             const { data } = await favoriteService.addToFavorite(userId, productId);
-            console.log('addToFavorite')
-            console.log(data)
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)

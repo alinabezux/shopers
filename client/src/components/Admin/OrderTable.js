@@ -69,6 +69,7 @@ const OrderTable = () => {
     const [order, setOrder] = useState('desc');
     const [selectedPost, setSelectedPost] = useState(null);
     const [selectedPayment, setSelectedPayment] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [openDelete, setOpenDelete] = useState(false);
 
@@ -82,13 +83,15 @@ const OrderTable = () => {
     }, [dispatch, currentPageOrders]);
 
     useEffect(() => {
-        const socket = io('https://shopersvi-d6c7c2418328.herokuapp.com');
+        const socket = io('http://localhost:5000');
 
         socket.on('connect', () => {
             console.log('Socket connected');
         });
 
         socket.on('update', (change) => {
+            console.log(change);
+
             dispatch(orderActions.updateOrderStatus({
                 orderId: change.documentKey._id,
                 paymentStatus: change.updateDescription.updatedFields.paymentStatus
@@ -125,6 +128,7 @@ const OrderTable = () => {
     const filteredOrders = orders.filter(order =>
         (selectedPost ? order.shipping === selectedPost : true) &&
         (selectedPayment ? order.paymentMethod === selectedPayment : true) &&
+        (selectedStatus ? order.paymentStatus === selectedStatus : true) &&
         (
             (order.orderID && order.orderID.toLowerCase().includes(searchQuery.toLowerCase())) ||
             (order.firstName && order.firstName.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -239,6 +243,62 @@ const OrderTable = () => {
                         <Option value="Нова пошта">Нова пошта</Option>
                     </Select>
                 </FormControl>
+                <FormControl size="sm" sx={{ width: "25%" }}>
+                    <Select
+                        placeholder="Статус оплати"
+                        action={action}
+                        value={selectedStatus}
+                        onChange={(e, newValue) => setSelectedStatus(newValue)}
+                        {...(selectedStatus && {
+                            endDecorator: (
+                                <IconButton
+                                    variant="plain"
+                                    color="neutral"
+                                    onMouseDown={(event) => {
+                                        event.stopPropagation();
+                                    }}
+                                    onClick={() => {
+                                        setSelectedStatus(null);
+                                        action.current?.focusVisible();
+                                    }}
+                                >
+                                    <CloseRounded />
+                                </IconButton>
+                            ),
+                            indicator: null,
+                        })}
+                    >
+                        <Option value="success">
+                            <Chip
+                                size="sm"
+                                variant="soft"
+                                color='success'
+                                startDecorator={<CheckRoundedIcon />}
+                            >
+                                success
+                            </Chip>
+                        </Option>
+
+                        <Option value="created">
+                            <Chip
+                                size="sm"
+                                variant="soft"
+                                color='primary'
+                            >
+                                created
+                            </Chip>
+                        </Option>
+
+                        <Option value="rejected"><Chip
+                            size="sm"
+                            variant="soft"
+                            color='danger'
+                        >
+                            rejected
+                        </Chip>
+                        </Option>
+                    </Select>
+                </FormControl>
             </Stack >
             <Sheet
                 className="OrderTableContainer"
@@ -307,8 +367,8 @@ const OrderTable = () => {
                                             <div>
                                                 <Typography level="title-sm">{item.article}</Typography>
                                                 <Typography level="title-md">{item.name} - {item.quantity} шт.</Typography>
-                                                <Typography level="body-sm">колір: {item?.info?.color}</Typography>
-                                                <Typography level="body-sm">розмір: {item?.info?.size}</Typography>
+                                                {item?.color && <Typography level="body-sm">колір: {item.color}</Typography>}
+                                                {item?.size && <Typography level="body-sm">розмір: {item.size}</Typography>}
                                                 <Typography level="title-sm">{item.price} грн.</Typography>
                                             </div>
                                         </Card>
@@ -351,7 +411,7 @@ const OrderTable = () => {
 
                                 <td>{order.paymentMethod}
                                     {order.paymentMethod === 'Накладений платіж' &&
-                                        <Typography level="title-sm">{order.totalSum - 100} грн.</Typography>
+                                        <Typography level="title-sm">{order.totalSum - 200} грн.</Typography>
                                     }</td>
                                 <td>
                                     <Tooltip title={order.invoiceId} variant="soft">

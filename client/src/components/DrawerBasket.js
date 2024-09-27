@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { Link } from 'react-router-dom';
@@ -11,35 +11,51 @@ import {
     IconButton,
     Typography,
     Container,
-    Stack
+    Stack,
+    CircularProgress
 } from "@mui/material";
 import Button2 from "@mui/material/Button";
 import Button from '@mui/joy/Button';
-import { Chip } from "@mui/joy";
+import { Alert, Chip } from "@mui/joy";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-
+import emoji from '../assets/emoji glasses.png'
 
 const DrawerBasket = ({ open, onClose }) => {
     const dispatch = useDispatch();
-    const { basket } = useSelector(state => state.basketReducer);
+    const { basket, loading } = useSelector(state => state.basketReducer);
     const { userId } = useSelector(state => state.authReducer);
+    const [localBasket, setLocalBasket] = useState([]);
 
     useEffect(() => {
-        if (userId) {
+        if (userId && open) {
             dispatch(basketActions.getBasket(userId));
         }
-    }, [dispatch, userId, basket.length]);
+    }, [dispatch, userId, basket.length, open]);
 
+    useEffect(() => {
+        if (!userId && open) {
+            const savedBasket = JSON.parse(localStorage.getItem('basket')) || {};
+            setLocalBasket(Object.values(savedBasket));
+        }
+    }, [userId, open]);
+
+    const handleUpdateBasket = (updatedBasket) => {
+        setLocalBasket(Object.values(updatedBasket));
+        localStorage.setItem('basket', JSON.stringify(updatedBasket)); // Оновлюємо localStorage
+    };
+
+    const basketToUse = userId ? basket : localBasket;
 
     const totalPrice = useMemo(() => {
-        return basket.reduce((total, productInBasket) => total + productInBasket.price * productInBasket.quantity, 0);
-    }, [basket]);
+        return basketToUse.reduce((total, productInBasket) => total + productInBasket.price * productInBasket.quantity, 0);
+    }, [basketToUse]);
 
     const totalCashback = useMemo(() => {
-        return basket.reduce((total, productInBasket) => total + productInBasket.cashback, 0);
-    }, [basket]);
+        return basketToUse.reduce((total, productInBasket) => total + productInBasket.cashback, 0);
+    }, [basketToUse]);
+
 
     return (
         <Drawer open={open} onClose={onClose} anchor="right">
@@ -55,16 +71,31 @@ const DrawerBasket = ({ open, onClose }) => {
                     >
                         <CloseIcon fontSize="large" />
                     </IconButton>
-                </Box>
 
-                {userId ?
-                    (basket.length > 0 ?
+                </Box>
+                {!userId &&
+                    <Alert sx={{ m: 2 }}
+                        variant="soft"
+                        color="success"
+                        startDecorator={<img src={emoji} alt='emoji' loading="lazy" style={{ height: "20px" }} />}
+                    >
+                        <Link className='link' to='/auth#logIn'>
+                            <Button onClick={onClose} size="sm" variant="outlined" color="success" type='submit' className='authpage__button'>Авторизуйся</Button>
+                        </Link>
+                        та отримуй КЕШБЕК на це замовлення!
+                    </Alert>
+                }
+                {loading ?
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                        <CircularProgress color="inherit" />
+                    </Box> :
+                    (basketToUse.length > 0 ?
                         (
                             <Container className='basket__content'>
                                 <Box className='basket__products'>
                                     <Stack direction="column" spacing={2} alignItems="center">
-                                        {basket.map(product => (
-                                            <ProductInBasket key={product._id} product={product} setOpenBasket={onClose} />
+                                        {basketToUse.map(productInBasket => (
+                                            <ProductInBasket key={userId ? productInBasket._id : productInBasket.id} productInBasket={productInBasket} setOpenBasket={onClose} onUpdateBasket={handleUpdateBasket} />
                                         ))}
                                     </Stack>
                                 </Box>
@@ -73,9 +104,10 @@ const DrawerBasket = ({ open, onClose }) => {
                                         <Typography className="basket__price">Разом :</Typography>
                                         <Typography className="basket__price">{totalPrice} грн.</Typography>
                                     </Stack>
-                                    <Chip className="basket__cashback" size="sm" variant="soft" color="success">
+                                    {userId && <Chip className="basket__cashback" size="sm" variant="soft" color="success">
                                         Кешбек з покупки : {totalCashback} грн.
-                                    </Chip>
+                                    </Chip>}
+
                                     <Link to='/checkout' className='link' >
                                         <Button onClick={onClose} variant="solid" color="neutral" className="basket__button mainbutton" endDecorator={<LocalMallOutlinedIcon />}>ОФОРМИТИ ЗАМОВЛЕННЯ</Button>
                                     </Link>
@@ -91,17 +123,9 @@ const DrawerBasket = ({ open, onClose }) => {
                                 </Button2>
                             </Container>
                         )
-                    ) :
-                    (
-                        <Container sx={{ height: "80%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 2 }}>
-                            <LocalMallOutlinedIcon sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
-                            <Link className='header_accout-icon link' to='/auth#logIn'>
-                                <Button onClick={onClose} variant="soft" color="primary" sx={{ mt: 1, width: "200px" }} type='submit' className='authpage__button'>УВІЙДІТЬ</Button>
-                            </Link>
-                            <Typography sx={{ textAlign: "center" }}>щоб переглянути <br />ваші продукти в корзині.</Typography>
-                        </Container>
                     )
                 }
+
             </Box>
         </Drawer >
     );

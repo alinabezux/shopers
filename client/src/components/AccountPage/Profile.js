@@ -22,8 +22,9 @@ const Profile = ({ user }) => {
     const handleLogOut = async () => {
         await dispatch(authActions.logOut())
         navigate('/')
+        window.location.reload();
     };
-    const { userId } = useSelector(state => state.authReducer);
+    const { userId, loading } = useSelector(state => state.authReducer);
     const { dataLoading } = useSelector(state => state.userReducer);
 
     const { control, handleSubmit, register, formState: { errors } } = useForm();
@@ -117,7 +118,7 @@ const Profile = ({ user }) => {
                     </CardContent>
                 </Card>
             </Box>
-            <Button className='accountpage__button' variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
+            <Button className='accountpage__button' loading={loading} variant="soft" color="danger" onClick={handleLogOut} startDecorator={<LogoutRoundedIcon />}>ВИЙТИ</Button>
         </Box >
     )
 };

@@ -11,13 +11,17 @@ import { postService } from '../services';
 import platamono from '../assets/plata_light_bg@2x.png'
 
 import { Box, Typography, Stack, Container } from '@mui/material';
-import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel, Radio, RadioGroup, Tooltip, FormHelperText } from '@mui/joy';
+import Button2 from "@mui/material/Button";
+import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel, Radio, RadioGroup, Tooltip, FormHelperText, Alert } from '@mui/joy';
 import Checkbox from '@mui/joy/Checkbox';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
-import { InfoOutlined } from '@mui/icons-material';
+import { InfoOutlined, LocalMallOutlined } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import { ErrorPage } from './ErrorPage';
+import emoji from '../assets/emoji glasses.png'
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -32,7 +36,7 @@ const CheckoutPage = () => {
     const [warehouses, setWarehouses] = useState([]);
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
-
+    const [localBasket, setLocalBasket] = useState([]);
 
     const { basket } = useSelector(state => state.basketReducer);
     const { user } = useSelector(state => state.userReducer);
@@ -71,6 +75,19 @@ const CheckoutPage = () => {
         { value: 28, label: "Чернівецька область" }
     ]
 
+    useEffect(() => {
+        if (userId) {
+            dispatch(basketActions.getBasket(userId));
+        } else {
+            const savedBasket = JSON.parse(localStorage.getItem('basket')) || {};
+            setLocalBasket(Object.values(savedBasket));
+        }
+    }, [dispatch, userId]);
+
+    const handleUpdateBasket = (updatedBasket) => {
+        setLocalBasket(Object.values(updatedBasket));
+    };
+
     const handleClick = () => {
         setOpen(prev => !prev);
     };
@@ -98,67 +115,76 @@ const CheckoutPage = () => {
         }
     }, [user, setValue]);
 
+    const basketToUse = userId ? basket : localBasket;
+
     const totalPrice = useMemo(() => {
         if (!checked) {
-            return basket.reduce((total, productInBasket) => {
-                return total + productInBasket.price * productInBasket.quantity;
-            }, 0);
+            return basketToUse.reduce((total, productInBasket) => total + productInBasket.price * productInBasket.quantity, 0);
         } else {
-            return basket.reduce((total, productInBasket) => {
+            return basketToUse.reduce((total, productInBasket) => {
                 return total + productInBasket.price * productInBasket.quantity;
             }, -user.bonus);
         }
-    }, [basket, checked, user.bonus]);
+    }, [basketToUse, checked, user.bonus]);
 
 
     const totalCashback = useMemo(() => {
-        return basket.reduce((total, productInBasket) => {
-            return total + productInBasket.cashback;
-        }, 0);
-    }, [basket]);
+        return basketToUse.reduce((total, productInBasket) => total + productInBasket.cashback, 0);
+    }, [basketToUse]);
 
     const handleCreateOrder = useCallback(async (data) => {
         try {
-            const orderData = {
-                userId: userId,
-                order: {
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    phoneNumber: data.phoneNumber,
-                    email: data.email,
-                    shipping: post,
-                    instagram: data.instagram,
+            const order = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phoneNumber: data.phoneNumber,
+                email: data.email,
+                shipping: post,
+                instagram: data.instagram,
+                city: selectedCity ? {
+                    ref: selectedCity.value,
+                    description: selectedCity.label
+                } : null,
+                warehouse: selectedWarehouse ? {
+                    ref: selectedWarehouse.value,
+                    description: selectedWarehouse.label,
+                    index: selectedWarehouse.index,
+                    number: selectedWarehouse.number,
+                } : null,
+                cityUKR: data.cityUKR || null,
+                region: selectedRegion || null,
+                index: data.index || null,
+                paymentMethod: payment,
+                totalSum: totalPrice,
+                cashback: userId ? totalCashback : 0,
+                useBonus: checked
+            };
 
-                    city: selectedCity ? {
-                        ref: selectedCity.value,
-                        description: selectedCity.label
-                    } : null,
-                    warehouse: selectedWarehouse ? {
-                        ref: selectedWarehouse.value,
-                        description: selectedWarehouse.label,
-                        index: selectedWarehouse.index,
-                        number: selectedWarehouse.number,
-                    } : null,
-
-                    cityUKR: data.cityUKR || null,
-                    region: selectedRegion || null,
-                    index: data.index || null,
-
-                    paymentMethod: payment,
-                    totalSum: totalPrice,
-                    cashback: totalCashback,
-                    useBonus: checked
+            let res;
+            if (userId) {
+                res = await dispatch(orderActions.createOrderAuth({ userId, order }));
+            } else {
+                res = await dispatch(orderActions.createOrder({ productsInBasket: basketToUse, order}));
+      
+                if (res.meta.requestStatus === 'fulfilled') {
+                    localStorage.setItem('basket', JSON.stringify({}));
+                    handleUpdateBasket({});
                 }
             }
-            const res = await dispatch(orderActions.createOrder(orderData))
+
+            // Перевірка, чи замовлення створено успішно
             if (res.meta.requestStatus === 'fulfilled') {
                 window.location.href = res.payload.invoice.pageUrl;
+            } else {
+                throw new Error('Не вдалося створити замовлення');
             }
-        } catch (error) {
-            console.error('Error creating order:', error);
-        }
 
-    }, [dispatch, userId, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion, checked, totalCashback]);
+        } catch (error) {
+            console.error('Помилка при створенні замовлення:', error);
+        }
+    }, [dispatch, userId, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion, checked, totalCashback, basketToUse]);
+
+
 
     const handleInputChange = async (value) => {
         setSearchString(value);
@@ -216,13 +242,6 @@ const CheckoutPage = () => {
     const handleChangePayment = (event) => {
         setPayment(event.target.value);
     };
-
-
-    useEffect(() => {
-        if (userId) {
-            dispatch(basketActions.getBasket(userId));
-        }
-    }, [dispatch, userId]);
 
 
     return (
@@ -458,7 +477,7 @@ const CheckoutPage = () => {
                                             <Stack direction="row" alignItems="center" justifyContent="space-between">
                                                 <Stack direction="row" spacing={2} alignItems="center" justifyContent="flex-start">
                                                     <Radio value="Накладений платіж" color="neutral" onChange={handleChangePayment} />
-                                                    <Typography sx={{ maxWidth: "70%" }}>Накладений платіж по передоплаті 100 грн. (тільки Нова пошта)</Typography>
+                                                    <Typography sx={{ maxWidth: "70%" }}>Накладений платіж по передоплаті 200 грн. (тільки Нова пошта)</Typography>
                                                 </Stack>
                                                 <Tooltip
                                                     placement="right"
@@ -493,60 +512,89 @@ const CheckoutPage = () => {
                             </Typography>
                             <Divider inset="none" />
                             <CardContent>
-                                <Container className='checkout__orderContent'>
-                                    <Box className='checkout__orderContent__products'>
-                                        <Stack direction="column" spacing={2} alignItems="center">
-                                            {basket.map(product => (
-                                                <ProductInBasket key={product._id} product={product} />
-                                            ))}
-                                        </Stack>
-                                    </Box>
-                                    <Stack direction="column" className='checkout__orderContent__order' >
-                                        <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                            <Typography className="basket__price">Разом :</Typography>
-                                            <Typography className="basket__price">{totalPrice} грн.</Typography>
-                                        </Stack>
-                                        <Chip className="basket__cashback" size="sm" variant="soft" color="success" sx={{ mt: 1 }}>
-                                            Кешбек з покупки : {totalCashback} грн.
-                                        </Chip>
-                                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: "20px" }} spacing={2}>
-                                            <Checkbox label="Оплатити за допомогою бонусів" color="success" variant="soft" checked={checked} onChange={handleCheckboxChange} />
-                                            <Tooltip
-                                                placement="right"
-                                                arrow
-                                                variant="outlined"
-                                                open={open2}
-                                                onClose={handleClose2}
-                                                onClick={handleClick2}
-                                                disableFocusListener
-                                                disableHoverListener
-                                                disableTouchListener={false}
-                                                title={
-                                                    <Typography sx={{
-                                                        maxWidth: 250,
-                                                        p: 1,
-                                                    }}>
-                                                        З вашого бонусого рахунку буде списано {user.bonus} грн.
-                                                    </Typography>
-
-                                                }>
-                                                <InfoOutlinedIcon />
-                                            </Tooltip>
-                                        </Stack>
-
-                                        <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="mainbutton" endDecorator={<DoneRoundedIcon />}>
-                                            ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
-                                        </Button>
-                                        <Typography sx={{
-                                            padding: "10px 20px",
-                                            color: "grey",
-                                            fontSize: "14px",
-                                            textAlign: "center"
-                                        }}>
-                                            Ми не телефонуємо для підтвердження. Оплачуючи замовлення, Ви автоматично підтверджуєте його.
+                                {!userId &&
+                                    <Alert sx={{ mt: 1 }}
+                                        variant="soft"
+                                        color="success"
+                                    // startDecorator={<img src={emoji} alt='emoji' loading="lazy" style={{ height: "20px" }} />}
+                                    >
+                                        <Link className='link' to='/auth#logIn' >
+                                            <Button size="sm" variant="outlined" color="success" type='submit' className='authpage__button'>Авторизуйся</Button>
+                                        </Link>
+                                        <Typography className="product-in-basket__card-name">
+                                            та отримуй КЕШБЕК на це замовлення!
                                         </Typography>
-                                    </Stack>
-                                </Container>
+                                    </Alert>
+                                }
+                                {
+                                    basketToUse.length > 0 ? (
+                                        <Container className='checkout__orderContent'>
+                                            <Box className='checkout__orderContent__products'>
+                                                <Stack direction="column" spacing={2} alignItems="center">
+                                                    {basketToUse.map(productInBasket => (
+                                                        <ProductInBasket key={userId ? productInBasket._id : productInBasket.id} productInBasket={productInBasket} onUpdateBasket={handleUpdateBasket} />
+                                                    ))}
+                                                </Stack>
+                                            </Box>
+                                            <Stack direction="column" className='checkout__orderContent__order' >
+                                                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                                                    <Typography className="basket__price">Разом :</Typography>
+                                                    <Typography className="basket__price">{totalPrice} грн.</Typography>
+                                                </Stack>
+                                                {userId &&
+                                                    <>
+                                                        <Chip className="basket__cashback" size="sm" variant="soft" color="success" sx={{ mt: 1 }}>
+                                                            Кешбек з покупки : {totalCashback} грн.
+                                                        </Chip>
+                                                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: "20px" }} spacing={2}>
+                                                            <Checkbox label="Оплатити за допомогою бонусів" color="success" variant="soft" checked={checked} onChange={handleCheckboxChange} />
+                                                            <Tooltip
+                                                                placement="right"
+                                                                arrow
+                                                                variant="outlined"
+                                                                open={open2}
+                                                                onClose={handleClose2}
+                                                                onClick={handleClick2}
+                                                                disableFocusListener
+                                                                disableHoverListener
+                                                                disableTouchListener={false}
+                                                                title={
+                                                                    <Typography sx={{
+                                                                        maxWidth: 250,
+                                                                        p: 1,
+                                                                    }}>
+                                                                        З вашого бонусого рахунку буде списано {user.bonus} грн.
+                                                                    </Typography>
+
+                                                                }>
+                                                                <InfoOutlinedIcon />
+                                                            </Tooltip>
+                                                        </Stack>
+                                                    </>
+                                                }
+                                                <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="mainbutton" endDecorator={<DoneRoundedIcon />}>
+                                                    ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
+                                                </Button>
+                                                <Typography sx={{
+                                                    padding: "10px 20px",
+                                                    color: "grey",
+                                                    fontSize: "14px",
+                                                    textAlign: "center"
+                                                }}>
+                                                    Ми не телефонуємо для підтвердження. Оплачуючи замовлення, Ви автоматично підтверджуєте його.
+                                                </Typography>
+                                            </Stack>
+                                        </Container>
+                                    ) : (
+                                        <Container sx={{ height: "80%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                            <LocalMallOutlined sx={{ fontSize: "95px", color: "rgba(0, 0, 0, 0.1)" }} />
+                                            <Typography variant="h5" sx={{ fontSize: "28px" }}>Ваш кошик порожній.</Typography>
+                                            <Button2 variant="outlined" size="large" className='white-button'>
+                                                <Link to="/shop" className='link'>КАТАЛОГ</Link>
+                                            </Button2>
+                                        </Container>
+                                    )
+                                }
                             </CardContent>
                         </Card>
                     </Box>

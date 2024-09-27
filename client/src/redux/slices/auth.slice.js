@@ -81,6 +81,9 @@ const authSlice = createSlice({
     reducers: {
         setUserId: (state, action) => {
             state.userId = action.payload;
+        },
+        clearUserId: (state) => {
+            state.userId = null;
         }
     },
     extraReducers: builder =>
@@ -153,10 +156,10 @@ const authSlice = createSlice({
 });
 
 
-const { reducer: authReducer, actions: { setUserId } } = authSlice;
+const { reducer: authReducer, actions: { setUserId, clearUserId } } = authSlice;
 
 const authActions = {
-    register, logIn, logOut, forgotPassword, setNewPassword, setUserId
+    register, logIn, logOut, forgotPassword, setNewPassword, setUserId, clearUserId
 }
 
 export {

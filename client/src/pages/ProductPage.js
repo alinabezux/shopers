@@ -142,7 +142,7 @@ const ProductPage = () => {
             <Box className="product-page__content">
                 <Box className="product-page__gallery">
                     <AspectRatio ratio="1" >
-                        <Swiper lazy
+                        <Swiper lazy="true"
                             spaceBetween={10}
                             thumbs={{ swiper: thumbsSwiper }}
                             modules={[FreeMode, Navigation, Thumbs]}
@@ -160,7 +160,7 @@ const ProductPage = () => {
                         </Swiper>
 
                     </AspectRatio>
-                    <Swiper
+                    <Swiper lazy="true"
                         onSwiper={setThumbsSwiper}
                         spaceBetween={10}
                         slidesPerView={4}
@@ -190,7 +190,6 @@ const ProductPage = () => {
                                 favourite ? <FavoriteIcon className="product-page__heart-icon" sx={{ color: '#730000', fontSize: "35px" }} onClick={() => handleDeleteProductFromFavorite(product)} /> :
                                     <FavoriteBorderIcon sx={{ fontSize: "35px" }} className="product-page__heart-icon" onClick={() => handleAddProductToFavourite(product)} />
                             }
-
                         </Stack>
 
                         <Stack direction="row" spacing={1} alignItems="center">
@@ -207,10 +206,10 @@ const ProductPage = () => {
                             </ButtonGroup>
                             <Button disabled={product.quantity <= 0} variant="solid" color="neutral" className="product-page__button mainbutton" endDecorator={<LocalMallOutlinedIcon />} onClick={() => handleAddProductToBasket(product)}>ДОДАТИ В КОШИК</Button>
                         </Stack>
-                        {product.quantity > 0 ?
-                            <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
-                                {product.quantity} в наявності
-                            </Chip> :
+                        {product.quantity === 0 &&
+                            // <Chip className="product-page__cashback" size="md" variant="soft" color={product.quantity < 6 ? "danger" : "success"}>
+                            //     {product.quantity} в наявності
+                            // </Chip> :
                             <Chip className="product-page__cashback" size="md" variant="soft" color="danger">
                                 Немає в наявності
                             </Chip>

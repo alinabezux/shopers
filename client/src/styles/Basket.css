@@ -22,6 +22,10 @@
         font-size: 12px;
     }
 
+    p.basket__price {
+        font-size: 18px;
+    }
+
 }
 
 /* tablet */
@@ -31,17 +35,17 @@
     }
 
     div.product-in-basket__card-image {
-        width: 150px;
+        width: 120px;
     }
 
     p.product-in-basket__card-name,
     p.product-in-basket__card-price,
     p.basket__price {
-        font-size: 24px;
+        font-size: 21px;
     }
 
     p.product-in-basket__card-color {
-        font-size: 18px;
+        font-size: 16px;
     }
 
 
@@ -60,11 +64,11 @@
     p.product-in-basket__card-name,
     p.product-in-basket__card-price,
     p.basket__price {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     p.product-in-basket__card-color {
-        font-size: 14px;
+        font-size: 12px;
     }
 }
 
@@ -82,7 +86,11 @@ div.product-in-basket__card-image {
     justify-content: space-between;
     padding: 0 15px;
     box-sizing: border-box;
+    position: fixed;
+    z-index: 10;
 }
+
+
 
 h4.basket__title {
     font-size: 28px;
@@ -92,7 +100,7 @@ h4.basket__title {
 .basket__products {}
 
 .basket__order {
-    margin: 50px 0;
+    margin: 50px 0 0 0;
     /* position: absolute; */
     /* bottom: 0; */
 }
@@ -114,7 +122,7 @@ div.product-in-basket {
 }
 
 div.basket__content {
-    margin: 10px 0;
+    margin: 70px 0 0 0;
     /* height: 85%; */
     display: flex;
     flex-direction: column;
@@ -128,8 +136,6 @@ div.basket__cashback {
 
 
 button.basket__button {
-    /* font-weight: 700; */
-    /* margin-top: 20px; */
     width: 100%;
 }
 

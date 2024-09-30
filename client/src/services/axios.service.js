@@ -1,5 +1,4 @@
 import axios from "axios";
-import { createBrowserHistory } from "history"
 
 import { authService } from "./auth.service";
 import { devURL, prodURL } from "../configs/urls";
@@ -10,7 +9,6 @@ const $host = axios.create({ withCredentials: true, baseURL })
 
 const $authHost = axios.create({ withCredentials: true, baseURL })
 
-const history = createBrowserHistory();
 
 let isRefreshing = false;
 
@@ -48,4 +46,4 @@ $authHost.interceptors.response.use((config) => {
     })
 
 
-export { $host, $authHost, history };
+export { $host, $authHost };

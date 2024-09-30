@@ -124,9 +124,7 @@ const Header = () => {
                 <Stack direction="row" spacing={1} className='header__menu' sx={{ zIndex: "999" }}>
                     {categories.map((category) => (
                         <Box key={category._id}>
-                            <NavLink to={`/${(toUrlFriendly(category.name))}`}
-                                className='link'
-                            >
+                            <NavLink to={`/${(toUrlFriendly(category.name))}`} className='link'>
                                 <Typography
                                     id="basic-button"
                                     sx={{

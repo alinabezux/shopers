@@ -1,6 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { unstable_HistoryRouter as BrowserRouter } from "react-router-dom"
-import { history } from "./services";
+import { Route, Routes, Navigate,BrowserRouter } from "react-router-dom";
 
 import { MainLayout } from "./components";
 import {
@@ -27,10 +25,9 @@ import { CategoriesTable, OrderTable, PrivateRoute, ProductsTable, TypesTable } 
 import './styles';
 
 
-
 function App() {
     return (
-        <BrowserRouter history={history}>
+        <BrowserRouter>
             <Routes>
                 <Route element={<MainLayout />} >
                     <Route path={'/'} element={<HomePage />} />

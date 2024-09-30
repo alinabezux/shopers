@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect} from 'react';
 import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,7 +28,6 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
     const { userId } = useSelector(state => state.authReducer);
     const { types } = useSelector(state => state.typeReducer);
 
-    const filteredTypes = useMemo(() => types.filter(type => type._category === selectedCategory?._id), [types, selectedCategory]);
 
     const handleMenu = useCallback((category) => {
         dispatch(categoryActions.setSelectedCategory(category));
@@ -67,38 +66,48 @@ const DrawerMenu = ({ open, onClose, setOpenSnackbar }) => {
                     </IconButton>
                 </Box>
 
-                {categories.map((category) =>
-                    <Accordion key={category._id} id={category._id} sx={{
-                        boxShadow: 'none',
-                        '&:before': {
-                            display: 'none',
-                        },
-                        '&.Mui-expanded': {
-                            margin: 0,
-                        }
-                    }}>
-                        <AccordionSummary 
-                        expandIcon={types.filter(type => type._category === category._id).length > 0 && <ExpandMoreIcon onClick={() => handleMenu(category)} />} >
-                            <h2 key={category._id} className='drawerMenu__category' onClick={() => handleTypeClick(category, null)}>
-                                <NavLink to={`/${(toUrlFriendly(category.name))}`} className="link" >
-                                    {category.name}
-                                </NavLink>
-                            </h2>
-                        </AccordionSummary>
+                {categories.map((category) => {
+                    const categoryTypes = types.filter(type => type._category === category._id);
 
-                        <AccordionDetails sx={{ color: "grey", margin: "0 0 0 30px" }}>
-                            {
-                                filteredTypes.map(type =>
-                                (<h3 className='drawerMenu__type' key={type._id}
-                                    onClick={() => handleTypeClick(category, type)}>
-                                    <NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className="link" >
-                                        {type.name}
-                                    </NavLink>
-                                </h3>))
+                    return categoryTypes.length === 0 ? (
+                        <h2 style={{margin:"15px 0 10px 15px"}} key={category._id} className='drawerMenu__category' onClick={() => handleTypeClick(category, null)}>
+                            <NavLink to={`/${(toUrlFriendly(category.name))}`} className="link">
+                                {category.name}
+                            </NavLink>
+                        </h2>
+                    ) : (
+                        <Accordion key={category._id} id={category._id} sx={{
+                            boxShadow: 'none',
+                            '&:before': {
+                                display: 'none',
+                            },
+                            '&.Mui-expanded': {
+                                margin: 0,
                             }
-                        </AccordionDetails>
-                    </Accordion>
-                )}
+                        }}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon onClick={() => handleMenu(category)} />}
+                            >
+                                <h2 key={category._id} className='drawerMenu__category' onClick={() => handleTypeClick(category, null)}>
+                                    <NavLink to={`/${(toUrlFriendly(category.name))}`} className="link">
+                                        {category.name}
+                                    </NavLink>
+                                </h2>
+                            </AccordionSummary>
+
+                            <AccordionDetails sx={{ color: "grey", margin: "0 0 0 30px" }}>
+                                {categoryTypes.map(type => (
+                                    <h3 className='drawerMenu__type' key={type._id} onClick={() => handleTypeClick(category, type)}>
+                                        <NavLink to={`/${(toUrlFriendly(category.name))}/${(toUrlFriendly(type.name))}`} className="link">
+                                            {type.name}
+                                        </NavLink>
+                                    </h3>
+                                ))}
+                            </AccordionDetails>
+                        </Accordion>
+                    );
+                })}
+
 
                 <Box>
                     <Divider variant="middle" />

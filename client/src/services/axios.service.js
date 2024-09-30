@@ -38,7 +38,7 @@ $authHost.interceptors.response.use((config) => {
 
             } catch (e) {
                 authService.deleteInfo()
-                history.replace('/auth?expSession=true')
+                // history.replace('/auth?expSession=true')
                 // localStorage.setItem('userId', null);
             }
             isRefreshing = false;

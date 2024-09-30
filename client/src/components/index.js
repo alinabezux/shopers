@@ -20,3 +20,5 @@ export * from './Product/Products'
 export * from './Product/ProductCard'
 export * from './ProductInBasket'
 export * from './ProductInFavorite'
+
+export * from './ScrollToTop'

@@ -35,7 +35,6 @@ const ProductPage = () => {
     const [product, setProduct] = useState({});
     const [quantity, setQuantity] = useState(1);
     const [size, setSize] = useState("");
-    // const [localBasket, setLocalBasket] = useState(() => JSON.parse(localStorage.getItem('basket')) || {});
 
     const dispatch = useDispatch();
 

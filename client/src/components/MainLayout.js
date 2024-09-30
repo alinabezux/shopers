@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { ScrollToTop } from "./ScrollToTop";
 
 import { Header } from './Header';
 import { Footer } from './Footer';
@@ -12,6 +13,7 @@ const MainLayout = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+            <ScrollToTop />
             {!isAdminPage && <Header />}
             <Box sx={{ flex: 1 }}>
                 <Outlet />

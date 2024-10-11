@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Stack, Typography } from "@mui/joy";
+import { AspectRatio, Box, Button, Card, CardContent, CardCover, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormHelperText, FormLabel, IconButton, Input, Modal, ModalDialog, Option, Select, Stack, Typography, Textarea } from "@mui/joy";
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../../../redux";
@@ -182,7 +182,7 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
 
                         <FormControl className="checkout__form">
                             <FormLabel>Опис</FormLabel>
-                            <Input {...register('description')} />
+                            <Textarea {...register('description')} />
                         </FormControl>
 
                         <FormControl required error={!!errors.quantity} className="checkout__form">
@@ -339,7 +339,7 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
 
                         <FormControl className="checkout__form">
                             <FormLabel>Опис</FormLabel>
-                            <Input placeholder={selectedProduct?.info?.description} {...register('description')} />
+                            <Textarea placeholder={selectedProduct?.info?.description} {...register('description')} />
                         </FormControl>
 
                         <FormControl className="checkout__form">

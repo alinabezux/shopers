@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -321,7 +323,18 @@ const ProductPage = () => {
                                 {product.info.material}
                             </Typography>
                         }
-                        <Typography variant="h5" className="product-page__description" sx={{ color: "black", fontSize: "18px" }}>{product?.info?.description}</Typography>
+                        <Typography 
+                            variant="h5" 
+                            className="product-page__description" 
+                            sx={{ color: "black", fontSize: "18px" }}
+                            >
+                            {product?.info?.description?.split('\n').map((line, index) => (
+                               <React.Fragment key={index}>
+                               {line}
+                               <br />
+                             </React.Fragment>
+                            ))}
+                            </Typography>
                     </Stack>
                 </Box>
             </Box>

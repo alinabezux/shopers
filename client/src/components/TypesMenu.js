@@ -37,7 +37,9 @@ const TypesMenu = () => {
                         sx={{
                             textTransform: 'lowercase',
                             fontWeight: 300,
-                            mx: "5px",
+                            color: 'rgb(64, 64, 64)',
+                            mx: "15px",
+                            my:"5px"
                         }}>
                         <NavLink to={`/${(toUrlFriendly(selectedCategory.name))}/${(toUrlFriendly(type.name))}`} className="link typeItem">
                             {type.name}

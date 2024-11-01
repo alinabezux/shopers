@@ -9,7 +9,7 @@ import { Box, Typography } from "@mui/material";
 
 const TypesMenu = () => {
     const { selectedCategory } = useSelector(state => state.categoryReducer);
-    const { typesByCategory, selectedType } = useSelector(state => state.typeReducer);
+    const { typesByCategory } = useSelector(state => state.typeReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {

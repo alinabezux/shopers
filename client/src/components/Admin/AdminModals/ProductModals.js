@@ -73,7 +73,26 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
             <ModalDialog>
                 <DialogTitle>Створити новий товар</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleCreateProduct)}>
-                    <Box className="checkout__info" sx={{ gap: "15px" }}>
+                    <Box className="checkout__info"
+                        sx={{
+                            maxHeight: '80vh',
+                            overflowY: 'auto',
+                            '&::-webkit-scrollbar': {
+                                width: '5px',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: '#f1f1f1',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#888',
+                                borderRadius: '10px',
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#555',
+                            },
+                            gap: "15px"
+                        }}
+                    >
                         <FormControl required error={!!errors.article || error} className="checkout__form">
                             <FormLabel>Артикул</FormLabel>
                             <Input {...register('article', { required: "Обов'язкове поле" })} />
@@ -157,12 +176,7 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
                                     </Select>
                                 )}
                             />
-                            {/* {errors.type && (
-                                <FormHelperText>
-                                    <InfoOutlined sx={{ mr: 1 }} />
-                                    {errors.type.message}
-                                </FormHelperText>
-                            )} */}
+
                         </FormControl>
 
                         <FormControl className="checkout__form" >
@@ -207,8 +221,8 @@ const CreateProductModal = ({ openCreate, setOpenCreate }) => {
                             }
                         </FormControl>
 
-                        <Button type="submit" loading={loading}>Зберегти</Button>
                     </Box>
+                    <Button type="submit" sx={{ width: "300px", my: "20px" }} loading={loading}>Зберегти</Button>
                 </Form>
             </ModalDialog>
         </Modal >
@@ -283,7 +297,25 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
             <ModalDialog>
                 <DialogTitle>Редагувати товар</DialogTitle>
                 <Form control={control} onSubmit={handleSubmit(handleEditType)}>
-                    <Box className="checkout__info" sx={{ gap: "15px" }}>
+                    <Box className="checkout__info"
+                        sx={{
+                            maxHeight: '80vh',
+                            overflowY: 'auto',
+                            '&::-webkit-scrollbar': {
+                                width: '5px',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: '#f1f1f1',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#888',
+                                borderRadius: '10px',
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#555',
+                            },
+                            gap: "15px"
+                        }}>
                         <FormControl className="checkout__form" error={error}>
                             <FormLabel>Артикул</FormLabel>
                             <Input placeholder={selectedProduct.article} {...register('article')} />
@@ -352,8 +384,8 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
                             <Input placeholder={selectedProduct.price} {...register('price')} />
                         </FormControl>
 
-                        <Button type="submit" loading={loading}>Зберегти</Button>
                     </Box>
+                    <Button type="submit" sx={{ width: "48%", my: "20px" }} loading={loading}>Зберегти</Button>
                 </Form>
             </ModalDialog>
         </Modal>

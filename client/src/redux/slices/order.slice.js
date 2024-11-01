@@ -6,8 +6,6 @@ const initialState = {
     userOrders: [],
     selectedOrder: null,
 
-    currentPageOrders: 1,
-    totalPagesOrders: null,
     count: null,
     loading: false,
     loadingOrder: false,
@@ -40,9 +38,9 @@ const createOrder = createAsyncThunk(
 
 const getAllOrders = createAsyncThunk(
     'orderSlice/getAllOrders',
-    async (page, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const { data } = await orderService.getAllOrders(page);
+            const { data } = await orderService.getAllOrders();
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -84,9 +82,6 @@ const orderSlice = createSlice({
         setSelectedOrder: (state, action) => {
             state.selectedOrder = action.payload
         },
-        setCurrentPageOrders: (state, action) => {
-            state.currentPageOrders = action.payload
-        },
         updateOrderStatus: (state, action) => {
             const { orderId, paymentStatus } = action.payload;
 
@@ -127,7 +122,6 @@ const orderSlice = createSlice({
 
             .addCase(getAllOrders.fulfilled, (state, action) => {
                 state.orders = action.payload.orders
-                state.totalPagesOrders = action.payload.totalPages
                 state.count = action.payload.count
 
                 state.loadingOrder = false
@@ -174,10 +168,10 @@ const orderSlice = createSlice({
             })
 });
 
-const { reducer: orderReducer, actions: { setSelectedOrder, setCurrentPageOrders, updateOrderStatus } } = orderSlice;
+const { reducer: orderReducer, actions: { setSelectedOrder, updateOrderStatus } } = orderSlice;
 
 const orderActions = {
-    createOrder, createOrderAuth, getAllOrders, setSelectedOrder, setCurrentPageOrders, getUserOrders, deleteById, updateOrderStatus
+    createOrder, createOrderAuth, getAllOrders, setSelectedOrder, getUserOrders, deleteById, updateOrderStatus
 }
 
 export { orderReducer, orderActions }

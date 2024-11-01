@@ -34,7 +34,6 @@ import {
     WarningRounded,
     DeleteOutlineRounded,
 } from '@mui/icons-material';
-import { Pagination } from '@mui/material';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -76,11 +75,11 @@ const OrderTable = () => {
     const action = useRef(null);
 
     const dispatch = useDispatch();
-    const { orders, selectedOrder, currentPageOrders, totalPagesOrders, loadingOrder } = useSelector(state => state.orderReducer);
+    const { orders, selectedOrder, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
-        dispatch(orderActions.getAllOrders({ page: currentPageOrders }));
-    }, [dispatch, currentPageOrders]);
+        dispatch(orderActions.getAllOrders());
+    }, [dispatch]);
 
     useEffect(() => {
         const socket = io('https://shopersvi-d6c7c2418328.herokuapp.com/');
@@ -107,10 +106,6 @@ const OrderTable = () => {
     }, [dispatch]);
 
 
-
-    const handleSetCurrentPageOrders = (event, value) => {
-        dispatch(orderActions.setCurrentPageOrders(value));
-    }
 
     const handleDelete = useCallback(async (order) => {
         await dispatch(orderActions.setSelectedOrder(order))
@@ -319,7 +314,7 @@ const OrderTable = () => {
                             <th style={{ width: 80, padding: "12px " }}>
                                 <Typography
                                     color="primary"
-                                    onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
+                                    onClick={() => setOrder(order === 'desc' ? 'desc' : 'asc')}
                                     fontWeight="lg"
                                     endDecorator={<ArrowDropDownIcon />}
                                     sx={{
@@ -439,21 +434,7 @@ const OrderTable = () => {
                             </tr>
                         ))}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colSpan={6}>
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Pagination count={totalPagesOrders || 0} color="primary" onChange={handleSetCurrentPageOrders} />
-                                </Box>
-                            </td>
-                        </tr>
-                    </tfoot>
+                    
                 </Table>
             </Sheet>
 

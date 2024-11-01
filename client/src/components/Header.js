@@ -157,7 +157,7 @@ const Header = () => {
                                         }}
                                         sx={{
                                             width: "150px",
-                                            fontSize: "20px",
+                                            fontSize: "16px",
                                             opacity: 0.9,
                                             zIndex: "9999"
                                         }}

@@ -9,7 +9,7 @@ import { Box, Typography } from "@mui/material";
 
 const TypesMenu = () => {
     const { selectedCategory } = useSelector(state => state.categoryReducer);
-    const { typesByCategory } = useSelector(state => state.typeReducer);
+    const { typesByCategory, selectedType } = useSelector(state => state.typeReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -35,11 +35,25 @@ const TypesMenu = () => {
                     <Typography variant="h5" key={type._id}
                         onClick={() => handleTypeClick(type)}
                         sx={{
+                            position: 'relative',
                             textTransform: 'lowercase',
                             fontWeight: 300,
-                            color: 'rgb(64, 64, 64)',
                             mx: "15px",
-                            my:"5px"
+                            color: "grey",
+                            my: "5px",
+                            ":after": {
+                                content: '""',
+                                position: 'absolute',
+                                width: 0,
+                                height: '1.5px',
+                                bottom: '-2px',
+                                left: 0,
+                                backgroundColor: 'rgb(64, 64, 64)',
+                                transition: 'width 0.3s ease-in-out',
+                            },
+                            ":hover:after": {
+                                width: '100%',
+                            },
                         }}>
                         <NavLink to={`/${(toUrlFriendly(selectedCategory.name))}/${(toUrlFriendly(type.name))}`} className="link typeItem">
                             {type.name}

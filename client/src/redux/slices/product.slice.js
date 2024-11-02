@@ -143,7 +143,7 @@ const productSlice = createSlice({
             })
 
             .addCase(createProduct.fulfilled, (state, action) => {
-                state.products.unshift(action.payload)
+                state.products.push(action.payload)
                 state.loading = false
                 state.error = null
             })

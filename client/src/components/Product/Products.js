@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { productActions } from "../../redux";
 import ProductCard from "./ProductCard";
 
-import { Box, CircularProgress, Pagination } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { ErrorPage } from '../../pages';
 
 const Products = () => {
@@ -13,7 +13,7 @@ const Products = () => {
     const location = useLocation();
     const isShop = useMemo(() => location.pathname.includes('/shop'), [location]);
 
-    const { products, currentPageProducts, totalPagesProducts, loading, error } = useSelector(state => state.productReducer);
+    const { products, loading, error } = useSelector(state => state.productReducer);
     const { selectedCategory } = useSelector(state => state.categoryReducer);
     const { selectedType } = useSelector(state => state.typeReducer);
 
@@ -24,14 +24,14 @@ const Products = () => {
         dispatch(productActions.getAll({
             _category: categoryId,
             _type: typeId,
-            page: currentPageProducts,
-            isGettingAll: false
+            // page: currentPageProducts,
+            // isGettingAll: true
         }))
-    }, [dispatch, currentPageProducts, categoryId, typeId]);
+    }, [dispatch, categoryId, typeId]);
 
-    const handleSetCurrentPageProducts = async (event, value) => {
-        dispatch(productActions.setCurrentPageProducts(value));
-    }
+    // const handleSetCurrentPageProducts = async (event, value) => {
+    //     dispatch(productActions.setCurrentPageProducts(value));
+    // }
 
     if (loading) {
         return (
@@ -52,19 +52,19 @@ const Products = () => {
                     <>
                         <Box className="products__container">
                             {
-                                products.map(product =>
+                                 [...products].reverse().map(product =>
                                     <ProductCard key={product._id} product={product} />)
                             }
                         </Box>
 
-                        <Box sx={{
+                        {/* <Box sx={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             mt: 3
                         }}>
                             <Pagination count={totalPagesProducts || 0} onChange={handleSetCurrentPageProducts} />
-                        </Box>
+                        </Box> */}
                     </>
                 ) : (
                     <Box sx={{ textAlign: 'center', mt: 3 }}>

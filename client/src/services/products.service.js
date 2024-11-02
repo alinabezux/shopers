@@ -2,12 +2,11 @@ import { $authHost, $host } from "./axios.service";
 import { urls } from "../configs/urls";
 
 const productsService = {
-    getAll: (_category, _type, page, isGettingAll) => $host.get(urls.products, {
+    getAll: (_category, _type) => $host.get(urls.products, {
         params: {
             _category,
             _type,
-            page,
-            isGettingAll
+            // isGettingAll
         }
     }),
     getProductById: (productId) => $host.get(`${urls.products}/${productId}`),

@@ -31,7 +31,6 @@ import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateR
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
-import { Pagination } from '@mui/material';
 import Link2 from '@mui/joy/Link'
 
 
@@ -48,7 +47,7 @@ const ProductsTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
 
-    const { products, totalPagesProducts, currentPageProducts } = useSelector(state => state.productReducer);
+    const { products } = useSelector(state => state.productReducer);
     const { categories } = useSelector(state => state.categoryReducer);
     const { types } = useSelector(state => state.typeReducer);
     const action = useRef(null);
@@ -65,10 +64,10 @@ const ProductsTable = () => {
         dispatch(productActions.getAll({
             _category: category,
             _type: type,
-            page: currentPageProducts,
-            isGettingAll: false
+            // page: currentPageProducts,
+            // isGettingAll: false
         }))
-    }, [dispatch, currentPageProducts, category, type]);
+    }, [dispatch, category, type]);
 
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -99,9 +98,9 @@ const ProductsTable = () => {
         dispatch(productActions.setSelectedProduct(product));
     }, [dispatch]);
 
-    const handleSetCurrentPageProducts = (event, value) => {
-        dispatch(productActions.setCurrentPageProducts(value));
-    }
+    // const handleSetCurrentPageProducts = (event, value) => {
+    //     dispatch(productActions.setCurrentPageProducts(value));
+    // }
 
 
     function RowMenu({ product }) {
@@ -324,7 +323,7 @@ const ProductsTable = () => {
                         )}
                     </tbody>
 
-                    <tfoot>
+                    {/* <tfoot>
                         <tr>
                             <td colSpan={8}>
                                 <Box
@@ -338,7 +337,7 @@ const ProductsTable = () => {
                                 </Box>
                             </td>
                         </tr>
-                    </tfoot>
+                    </tfoot> */}
                 </Table >
             </Sheet >
         </Box >

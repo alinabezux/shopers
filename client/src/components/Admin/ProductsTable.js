@@ -260,7 +260,7 @@ const ProductsTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredProducts.map(product =>
+                        {[...filteredProducts].reverse().map(product =>
                             <tr key={product._id}>
                                 <td><h3>{product.article}</h3></td>
                                 <td>

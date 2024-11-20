@@ -1,5 +1,4 @@
-const devURL = 'http://localhost:5000/api'
-// const prodURL = 'http://localhost:5000/api'
+const devURL = 'http://localhost:5001/api'
 const prodURL = 'https://shopersvi-d6c7c2418328.herokuapp.com/api'
 
 const POST_URL = 'https://api.novaposhta.ua/v2.0/json/';

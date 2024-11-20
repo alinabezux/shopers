@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import io from 'socket.io-client';
 import { useDispatch, useSelector } from "react-redux";
 
 import { orderActions } from '../../redux';
@@ -26,6 +25,8 @@ import {
     Card,
     Tooltip,
 } from '@mui/joy';
+import { CircularProgress } from "@mui/material";
+
 import {
     Search as SearchIcon,
     ArrowDropDown as ArrowDropDownIcon,
@@ -34,6 +35,7 @@ import {
     WarningRounded,
     DeleteOutlineRounded,
 } from '@mui/icons-material';
+
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -75,36 +77,11 @@ const OrderTable = () => {
     const action = useRef(null);
 
     const dispatch = useDispatch();
-    const { orders, selectedOrder, loadingOrder } = useSelector(state => state.orderReducer);
+    const { orders, selectedOrder, loading, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
         dispatch(orderActions.getAllOrders());
     }, [dispatch]);
-
-    useEffect(() => {
-        const socket = io('https://shopersvi-d6c7c2418328.herokuapp.com/');
-        socket.on('connect', () => {
-            console.log('Socket connected');
-        });
-
-        socket.on('update', (change) => {
-            console.log(change);
-
-            dispatch(orderActions.updateOrderStatus({
-                orderId: change.documentKey._id,
-                paymentStatus: change.updateDescription.updatedFields.paymentStatus
-            }));
-        });
-
-        socket.on('disconnect', () => {
-            console.log('Socket disconnected');
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, [dispatch]);
-
 
 
     const handleDelete = useCallback(async (order) => {
@@ -130,6 +107,13 @@ const OrderTable = () => {
         )
     );
 
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                <CircularProgress color="inherit" />
+            </Box>
+        );
+    }
 
     return (
         <Box>
@@ -434,7 +418,7 @@ const OrderTable = () => {
                             </tr>
                         ))}
                     </tbody>
-                    
+
                 </Table>
             </Sheet>
 

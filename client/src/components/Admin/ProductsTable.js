@@ -306,7 +306,7 @@ const ProductsTable = () => {
                                     </Stack>
 
                                 </td>
-                                <td><h3>{product.price} грн.</h3></td>
+                                <td><p style={{fontSize:'18px'}}>{product.price} грн.</p></td>
                                 <td>
                                     <Chip color={product.quantity < 10 ? 'danger' : 'success'}>{product.quantity}</Chip>
                                 </td>

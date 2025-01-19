@@ -1,5 +1,7 @@
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
-import { MainLayout } from "./components"; // Імпортуйте MainLayout
+import { MainLayout } from "./components"; 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import {
     CategoryPage,
     DogovirOfertuPage,

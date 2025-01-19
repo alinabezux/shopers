@@ -7,7 +7,7 @@ module.exports = {
         try {
             const userId = req.user._id;
 
-            const productsInBasket = await ProductInBasket.find({ _user: userId }).populate('_product');
+            const productsInBasket = ((await ProductInBasket.find({ _user: userId }).populate('_product')));
 
             if (productsInBasket.length === 0) {
                 return res.status(400).json({ message: "No products in basket" });
@@ -107,14 +107,20 @@ module.exports = {
 
     getAllOrders: async (req, res, next) => {
         try {
-            // let { page } = req.query;
-            // page = page || 1;
-            // console.log(page)
+            let { page } = req.query;
 
-            // const limit = 20;
-            let count;
+            page = parseInt(page) || 1;
+            const limit = 10;
 
-            const orders = await Order.find({});
+            console.log(page)
+
+            const skip = (page - 1) * limit;
+
+            const orders = await (await Order.find({})
+                .sort({ updatedAt: -1 })
+                .skip(skip)
+                .limit(limit))
+
             for (let order of orders) {
                 if (order.invoiceId) {
                     const status = await monoService.getInvoiceStatus(order.invoiceId);
@@ -125,16 +131,15 @@ module.exports = {
 
                 }
             }
-            const updatedOrders = await Order.find({}); // Можна додати фільтри за потреби
+            // const updatedOrders = await Order.find({}); // Можна додати фільтри за потреби
 
 
-            count = await Order.countDocuments();
-
+            let count = await Order.countDocuments();
             res.status(200).json({
-                updatedOrders,
+                orders,
                 count: count,
-                // totalPages: Math.ceil(count / limit),
-                // currentPage: page
+                totalPages: Math.ceil(count / limit),
+                currentPage: page
             });
 
         } catch (e) {

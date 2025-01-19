@@ -3,10 +3,13 @@ import { orderService } from "../../services/order.service";
 
 const initialState = {
     orders: [],
+    currentPage: 1,
+    totalPages: 0,
+    count: 0,
+
     userOrders: [],
     selectedOrder: null,
 
-    count: null,
     loading: false,
     loadingOrder: false,
     errorOrder: null,
@@ -38,9 +41,9 @@ const createOrder = createAsyncThunk(
 
 const getAllOrders = createAsyncThunk(
     'orderSlice/getAllOrders',
-    async (_, { rejectWithValue }) => {
+    async (page, { rejectWithValue }) => {
         try {
-            const { data } = await orderService.getAllOrders();
+            const { data } = await orderService.getAllOrders(page);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -89,6 +92,9 @@ const orderSlice = createSlice({
             if (index !== -1) {
                 state.orders[index].paymentStatus = paymentStatus;
             }
+        },
+        setCurrentPageOrders: (state, action) => {
+            state.currentPage = action.payload
         }
     },
     extraReducers: builder =>
@@ -121,14 +127,16 @@ const orderSlice = createSlice({
 
 
             .addCase(getAllOrders.fulfilled, (state, action) => {
-                state.orders = action.payload.updatedOrders
+                state.orders = action.payload.orders
                 state.count = action.payload.count
+                state.currentPage = action.payload.currentPage;
+                state.totalPages = action.payload.totalPages;
 
                 state.loading = false
                 state.errorOrder = null
             })
             .addCase(getAllOrders.pending, (state) => {
-                state.loading= true
+                state.loading = true
             })
             .addCase(getAllOrders.rejected, (state, action) => {
                 state.errorOrder = action.payload
@@ -168,10 +176,10 @@ const orderSlice = createSlice({
             })
 });
 
-const { reducer: orderReducer, actions: { setSelectedOrder, updateOrderStatus } } = orderSlice;
+const { reducer: orderReducer, actions: { setSelectedOrder, setCurrentPageOrders, updateOrderStatus } } = orderSlice;
 
 const orderActions = {
-    createOrder, createOrderAuth, getAllOrders, setSelectedOrder, getUserOrders, deleteById, updateOrderStatus
+    createOrder, createOrderAuth, getAllOrders, setSelectedOrder, getUserOrders, deleteById, updateOrderStatus, setCurrentPageOrders
 }
 
 export { orderReducer, orderActions }

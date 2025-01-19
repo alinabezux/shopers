@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import Pagination from 'react-bootstrap/Pagination';
+import generatePagination from '../Pagination';
 
 import { orderActions } from '../../redux';
 
@@ -77,11 +79,25 @@ const OrderTable = () => {
     const action = useRef(null);
 
     const dispatch = useDispatch();
-    const { orders, selectedOrder, loading, loadingOrder } = useSelector(state => state.orderReducer);
+    const { orders, currentPage, totalPages, selectedOrder, loading, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
-        dispatch(orderActions.getAllOrders());
-    }, [dispatch]);
+        if (currentPage > totalPages) {
+            dispatch(orderActions.setCurrentPageOrders(1));
+        }
+    }, [dispatch, currentPage, totalPages]);
+
+    useEffect(() => {
+        dispatch(orderActions.getAllOrders({ page: currentPage }));
+    }, [dispatch, currentPage]);
+
+
+    const handleChangePage = async (pageNumber) => {
+        console.log(pageNumber)
+        dispatch(orderActions.setCurrentPageOrders(pageNumber));
+    }
+
+    const paginationItemsOrders = generatePagination(totalPages, currentPage, handleChangePage);
 
 
     const handleDelete = useCallback(async (order) => {
@@ -116,7 +132,7 @@ const OrderTable = () => {
     }
 
     return (
-        <Box>
+        <Box >
             <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
                 <ModalDialog variant="outlined" role="alertdialog" >
                     <DialogTitle>
@@ -422,6 +438,10 @@ const OrderTable = () => {
                 </Table>
             </Sheet>
 
+            <Pagination
+                style={{ display: "flex", justifyContent: "center", marginBottom: '30px' }} size="sm">
+                {paginationItemsOrders}
+            </Pagination>
         </Box>
     );
 }

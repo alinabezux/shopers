@@ -7,6 +7,7 @@ const urls = {
     products: '/products',
     categories: '/categories',
     types: '/types',
+    promocode: '/promocode',
     users: '/users',
     auth: {
         registration: '/users/register',

@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
-import { MainLayout } from "./components"; 
+import { MainLayout } from "./components";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {
@@ -21,7 +21,7 @@ import {
     SetNewPasswordPage,
     ErrorPage
 } from "./pages";
-import { CategoriesTable, OrderTable, PrivateRoute, ProductsTable, TypesTable } from "./components/Admin";
+import { CategoriesTable, OrderTable, PrivateRoute, ProductsTable, TypesTable, PromocodeTable } from "./components/Admin";
 import './styles';
 
 function App() {
@@ -52,6 +52,7 @@ function App() {
                             <Route path="categories" element={<CategoriesTable />} />
                             <Route path="products" element={<ProductsTable />} />
                             <Route path="types" element={<TypesTable />} />
+                            <Route path="promocode" element={<PromocodeTable />} />
                         </Route>
                     </Route>
                     <Route path='/error' element={<ErrorPage />} />

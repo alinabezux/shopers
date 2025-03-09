@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom'
 
 import { toUrlFriendly } from '../../utils';
-import { AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
+import { AddDiscountModal, AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
 import { categoryActions, productActions, typeActions } from '../../redux';
 
 import {
@@ -30,6 +30,7 @@ import { CloseRounded, MoreHorizRounded, Search } from '@mui/icons-material';
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import Link2 from '@mui/joy/Link'
 
@@ -39,6 +40,7 @@ const ProductsTable = () => {
 
     const [openCreate, setOpenCreate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
+    const [openDiscount, setOpenDiscount] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openAddPhoto, setOpenAddPhoto] = useState(false);
     const [openImages, setOpenImages] = useState(false);
@@ -64,8 +66,6 @@ const ProductsTable = () => {
         dispatch(productActions.getAll({
             _category: category,
             _type: type,
-            // page: currentPageProducts,
-            // isGettingAll: false
         }))
     }, [dispatch, category, type]);
 
@@ -84,6 +84,11 @@ const ProductsTable = () => {
         setOpenEdit(true)
     }, [dispatch]);
 
+    const handleAddDiscountProduct = useCallback(async (product) => {
+        await dispatch(productActions.setSelectedProduct(product));
+        setOpenDiscount(true)
+    }, [dispatch]);
+
     const handleAddPhotoProduct = useCallback(async (product) => {
         await dispatch(productActions.setSelectedProduct(product));
         setOpenAddPhoto(true);
@@ -98,9 +103,6 @@ const ProductsTable = () => {
         dispatch(productActions.setSelectedProduct(product));
     }, [dispatch]);
 
-    // const handleSetCurrentPageProducts = (event, value) => {
-    //     dispatch(productActions.setCurrentPageProducts(value));
-    // }
 
 
     function RowMenu({ product }) {
@@ -125,6 +127,12 @@ const ProductsTable = () => {
                         </ListItemDecorator>{' '}
                         Додати фото
                     </MenuItem>
+                    <MenuItem onClick={() => handleAddDiscountProduct(product)}>
+                        <ListItemDecorator>
+                            <LoyaltyIcon />
+                        </ListItemDecorator>{' '}
+                        Знижки
+                    </MenuItem>
                     <Divider />
                     <MenuItem color="danger" onClick={() => handleDeleteProduct(product)}>
                         <ListItemDecorator>
@@ -141,6 +149,7 @@ const ProductsTable = () => {
         <Box className="productTable">
             <CreateProductModal openCreate={openCreate} setOpenCreate={setOpenCreate} />
             <EditProductModal openEdit={openEdit} setOpenEdit={setOpenEdit} />
+            <AddDiscountModal openDiscount={openDiscount} setOpenDiscount={setOpenDiscount} />
             <DeleteProductModal openDelete={openDelete} setOpenDelete={setOpenDelete} />
             <AddPhotoProductModal openAddPhoto={openAddPhoto} setOpenAddPhoto={setOpenAddPhoto} />
             <ImagesModal openImages={openImages} setOpenImages={setOpenImages} />
@@ -262,7 +271,7 @@ const ProductsTable = () => {
                     <tbody>
                         {[...filteredProducts].reverse().map(product =>
                             <tr key={product._id}>
-                                <td><h3>{product.article}</h3></td>
+                                <td><h5>{product.article}</h5></td>
                                 <td>
                                     <Box className="gallery-container">
                                         {product.images.slice(0, 2).map((image, index) => (
@@ -306,7 +315,20 @@ const ProductsTable = () => {
                                     </Stack>
 
                                 </td>
-                                <td><p style={{fontSize:'18px'}}>{product.price} грн.</p></td>
+                                <td>
+                                    {product.discount > 0 ? (
+                                        <Stack direction="column" spacing={1}>
+                                            <Chip variant="solid"  color="danger" size='sm'>
+                                                - {product.discount} %
+                                            </Chip>
+                                            <p style={{ fontSize: '18px', color: '#7c1313' }}>{product.price - product.price / 100 * product.discount} грн.</p>
+                                            <p style={{ fontSize: '14px', textDecoration: "line-through" }}>{product.price} грн.</p>
+                                        </Stack>
+                                    ) : (
+                                        <p style={{ fontSize: '18px' }}> {product.price} грн.</p>
+                                    )}
+                                </td>
+
                                 <td>
                                     <Chip color={product.quantity < 10 ? 'danger' : 'success'}>{product.quantity}</Chip>
                                 </td>
@@ -322,22 +344,6 @@ const ProductsTable = () => {
                             </tr>
                         )}
                     </tbody>
-
-                    {/* <tfoot>
-                        <tr>
-                            <td colSpan={8}>
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Pagination count={totalPagesProducts || 0} color="primary" onChange={handleSetCurrentPageProducts} />
-                                </Box>
-                            </td>
-                        </tr>
-                    </tfoot> */}
                 </Table >
             </Sheet >
         </Box >

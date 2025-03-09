@@ -78,7 +78,7 @@ const ProductInBasket = ({ productInBasket, onUpdateBasket, setOpenBasket }) => 
     // }, [dispatch, setOpenBasket]);
 
     return (
-        <Card variant="plain" orientation="horizontal" size="sm" color="neutral" className="product-in-basket" >
+        <Card variant="soft" orientation="horizontal" size="sm" color="neutral" className="product-in-basket" >
             {/* <Link key={productInBasket.productId} to={`/product/${toUrlFriendly(productInBasket?.name || productInBasket?._product?.name)}`} className="link" onClick={() => handleShowDetails(productInBasket)}> */}
             <AspectRatio ratio="1" className="product-in-basket__card-image">
                 {productInBasket?.images && productInBasket?.images.length > 0 ? (
@@ -106,11 +106,26 @@ const ProductInBasket = ({ productInBasket, onUpdateBasket, setOpenBasket }) => 
                     <Button className="product-in-basket__card-quantity">{productInBasket.quantity}</Button>
                     <Button className="product-in-basket__card-quantity" onClick={increaseQuantity}>+</Button>
                 </ButtonGroup>
+
                 <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }}>
-                    <Typography className="product-in-basket__card-price">{productInBasket.quantity * productInBasket.price} грн.</Typography>
-                    {userId && <Chip className="product-in-basket__card-cashback" size="sm" variant="soft" color="success">
-                        {productInBasket.cashback} грн. кешбек
-                    </Chip>}
+                    {productInBasket.discount > 0 ?
+                        <>
+                            <Stack direction="column" >
+                                <Chip variant="soft" size="md" sx={{ fontSize: '16px' }} color="danger" >{(productInBasket.price - productInBasket.price / 100 * productInBasket.discount) * productInBasket.quantity} ₴</Chip>
+                                <Typography sx={{ textDecoration: "line-through", fontSize: '12px', ml: "5px" }} >{productInBasket.quantity * productInBasket.price} грн.</Typography>
+                            </Stack>
+                            {userId && <Chip className="product-in-basket__card-cashback" size="sm" variant="soft" color="success">
+                                {productInBasket.cashback * productInBasket.quantity} грн. кешбек
+                            </Chip>}
+                        </>
+                        :
+                        <>
+                            <Typography className="product-in-basket__card-price">{productInBasket.quantity * productInBasket.price} грн.</Typography>
+                            {userId && <Chip className="product-in-basket__card-cashback" size="sm" variant="soft" color="success">
+                                {productInBasket.cashback * productInBasket.quantity} грн. кешбек
+                            </Chip>}
+                        </>
+                    }
                 </Stack>
             </CardContent>
         </Card>

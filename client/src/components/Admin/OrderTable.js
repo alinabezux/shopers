@@ -37,6 +37,7 @@ import {
     WarningRounded,
     DeleteOutlineRounded,
 } from '@mui/icons-material';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -363,7 +364,11 @@ const OrderTable = () => {
                                                 <Typography level="title-md">{item.name} - {item.quantity} шт.</Typography>
                                                 {item?.color && <Typography level="body-sm">колір: {item.color}</Typography>}
                                                 {item?.size && <Typography level="body-sm">розмір: {item.size}</Typography>}
-                                                <Typography level="title-sm">{item.price} грн.</Typography>
+                                                {item.discount > 0 ?
+                                                    <Chip variant="soft" size="md" sx={{ fontSize: '14px' }} color="danger" >{(item.price - item.price / 100 * item.discount)} ₴</Chip>
+                                                    :
+                                                    <Typography level="title-sm">{item.price} грн.</Typography>
+                                                }
                                             </div>
                                         </Card>
                                     ))}
@@ -400,13 +405,21 @@ const OrderTable = () => {
                                                         ? 'warning'
                                                         : 'neutral'
                                             }>{order.shipping}</Chip>
+                                        {
+                                            order.freeShipping ?
+                                                <Chip startDecorator={<LocalShippingOutlinedIcon />} size="sm" variant="soft" color='warning' sx={{ marginTop: "7px" }} >Безкоштовна доставка</Chip> : null
+                                        }
+
+
                                     </Box>
                                 </td>
 
                                 <td>{order.paymentMethod}
                                     {order.paymentMethod === 'Накладений платіж' &&
                                         <Typography level="title-sm">{order.totalSum - 200} грн.</Typography>
-                                    }</td>
+                                    }
+
+                                </td>
                                 <td>
                                     <Tooltip title={order.invoiceId} variant="soft">
                                         <Chip

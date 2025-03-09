@@ -14,6 +14,7 @@ import Sheet from '@mui/joy/Sheet';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import DiscountRoundedIcon from '@mui/icons-material/DiscountRounded';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import { List, ListItem } from '@mui/joy';
@@ -111,15 +112,6 @@ export default function Sidebar() {
                         </ListItemButton>
                     </ListItem>
 
-                    {/* <ListItem>
-                        <ListItemButton>
-                            <DashboardRoundedIcon />
-                            <ListItemContent>
-                                <Typography level="title-md">Dashboard</Typography>
-                            </ListItemContent>
-                        </ListItemButton>
-                    </ListItem> */}
-
                     <ListItem>
                         <ListItemButton selected={pathname.includes('/admin/orders') ? true : false}>
                             <ShoppingCartRoundedIcon />
@@ -154,14 +146,15 @@ export default function Sidebar() {
                             </ListItemContent>
                         </ListItemButton>
                     </ListItem>
-                    {/* <ListItem>
-                        <ListItemButton >
-                            <GroupRoundedIcon />
+                    <ListItem>
+                        <ListItemButton selected={pathname.includes('/admin/promocode') ? true : false}>
+                            <DiscountRoundedIcon />
                             <ListItemContent>
-                                <Typography component={Link} to="/admin/users" className='link' level="title-md">Користувачі</Typography>
+                                <Typography component={Link} to="/admin/promocode" className='link' level="title-md">Промокоди</Typography>
                             </ListItemContent>
                         </ListItemButton>
-                    </ListItem> */}
+                    </ListItem>
+
                 </List>
             </Box>
         </Sheet >

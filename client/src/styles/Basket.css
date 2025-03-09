@@ -106,7 +106,7 @@ h4.basket__title {
 }
 
 .product-in-basket {
-    width: 95%;
+    width: 100%;
     display: flex;
     align-items: center;
     align-items: flex-start;

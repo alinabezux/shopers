@@ -82,6 +82,19 @@ const ProductCard = memo(({ product }) => {
                 <Link className='link' to={`/product/${(toUrlFriendly(product.name))}`} key={product._id}>
                     <AspectRatio ratio="1">
                         <CardOverflow>
+                            {product.discount > 0 ?
+                                <Chip
+                                    variant="solid"
+                                    color="danger"
+                                    sx={{
+                                        position: "absolute",
+                                        top: 8,
+                                        right: 8,
+                                        zIndex: 2,
+                                    }}
+                                >-{product.discount} %</Chip>
+                                : null
+                            }
                             {
                                 product.images.length !== 0 ?
                                     <img src={product.images[0]} alt={product.name} loading="lazy" /> :
@@ -95,12 +108,15 @@ const ProductCard = memo(({ product }) => {
                             {product?.info?.color &&
                                 <Typography className="product-card__card-color">{product.info.color}</Typography>
                             }
-                            {/* {product?.info?.size &&
-                                <Typography sx={{ fontSize: "12px" }}>{product.info.size}</Typography>
-                            } */}
-
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                <Typography className="product-card__card-price">{product.price} ₴</Typography>
+                                {product.discount > 0 ?
+                                    <Stack direction="column">
+                                        <Typography sx={{ textDecoration: "line-through", fontSize: "12px"}} >{product.price} ₴</Typography>
+                                        <Chip variant="soft" size='md' color="danger"  >{product.price - product.price / 100 * product.discount} ₴</Chip>
+                                    </Stack>
+                                    : <Typography className="product-card__card-price">{product.price} ₴</Typography>
+                                }
+
                                 <Stack direction="row" spacing={1}>
                                     {
                                         favourite ?
@@ -132,7 +148,7 @@ const ProductCard = memo(({ product }) => {
                         </Stack>
                     </CardContent>
                 </Link>
-            </Card>
+            </Card >
             <DrawerBasket open={openBasket} onClose={() => setOpenBasket(false)} />
             <Snackbar
                 startDecorator={<FavoriteIcon sx={{ fontSize: 20 }} />}

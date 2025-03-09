@@ -116,6 +116,7 @@ const ProductPage = () => {
         const sizeString = product.info.size || '';
         const sizeOptions = sizeString.split(',').map(s => s.trim());
 
+        
         const addProductToLocalBasket = (product, quantity, size) => {
             const currentBasket = JSON.parse(localStorage.getItem('basket')) || {};
             let isProductUpdated = false;
@@ -138,7 +139,6 @@ const ProductPage = () => {
             }
 
             localStorage.setItem('basket', JSON.stringify(currentBasket));
-            // setLocalBasket(currentBasket);
             setOpenBasket(true);
         };
 
@@ -228,6 +228,20 @@ const ProductPage = () => {
                             modules={[FreeMode, Navigation, Thumbs]}
                             className="mySwiper2"
                         >
+                            {product.discount > 0 ?
+                                <Chip
+                                    size="lg"
+                                    variant="solid"
+                                    color="danger"
+                                    sx={{
+                                        position: "absolute",
+                                        top: 8,
+                                        right: 8,
+                                        zIndex: 2,
+                                    }}
+                                >-{product.discount} %</Chip>
+                                : null
+                            }
                             {(product.images || []).map((image, index) => (
                                 <SwiperSlide key={index}>
                                     <img src={image} alt={`Slide ${index}`} loading="lazy" />
@@ -270,7 +284,14 @@ const ProductPage = () => {
                         </Stack>
 
                         <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography variant="h5" className="product-page__price">{product.price} грн.</Typography>
+                            {product.discount > 0 ?
+                                <>
+                                    <Typography sx={{ textDecoration: "line-through" }} className="product-card__card-price">{product.price} ₴</Typography>
+                                    <Chip variant="soft" size='lg' color="danger" sx={{ fontSize: "20px" }} >{product.price - product.price / 100 * product.discount} ₴</Chip>
+                                </>
+                                :
+                                <Typography variant="h5" className="product-page__price">{product.price} грн.</Typography>
+                            }
                             <Chip className="product-page__cashback" size="md" variant="soft" color="success" >
                                 {product.cashback} грн. кешбек
                             </Chip>
@@ -323,18 +344,18 @@ const ProductPage = () => {
                                 {product.info.material}
                             </Typography>
                         }
-                        <Typography 
-                            variant="h5" 
-                            className="product-page__description" 
+                        <Typography
+                            variant="h5"
+                            className="product-page__description"
                             sx={{ color: "black", fontSize: "18px" }}
-                            >
+                        >
                             {product?.info?.description?.split('\n').map((line, index) => (
-                               <React.Fragment key={index}>
-                               {line}
-                               <br />
-                             </React.Fragment>
+                                <React.Fragment key={index}>
+                                    {line}
+                                    <br />
+                                </React.Fragment>
                             ))}
-                            </Typography>
+                        </Typography>
                     </Stack>
                 </Box>
             </Box>

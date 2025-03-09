@@ -7,6 +7,8 @@ import { FileUploadRounded, InfoOutlined, WarningRounded } from "@mui/icons-mate
 import { FileUpload } from "./FileUpload";
 import { styled } from '@mui/joy';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import PercentIcon from '@mui/icons-material/Percent';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -391,6 +393,57 @@ const EditProductModal = ({ openEdit, setOpenEdit }) => {
         </Modal>
     )
 };
+const AddDiscountModal = ({ openDiscount, setOpenDiscount }) => {
+    const dispatch = useDispatch();
+    const { selectedProduct} = useSelector(state => state.productReducer);
+    const { control, handleSubmit, register, reset } = useForm();
+    const handleDiscount = useCallback(async (discount) => {
+        const res = await dispatch(productActions.addDiscountProduct({ productId: selectedProduct._id, discount }));
+        if (res.meta.requestStatus === 'fulfilled') {
+            reset();
+            setOpenDiscount(false);
+        }
+
+    }, [dispatch, selectedProduct, reset, setOpenDiscount])
+
+
+    return (
+        <Modal open={openDiscount} onClose={() => setOpenDiscount(false)} >
+            <ModalDialog>
+                <DialogTitle>Додати знижку</DialogTitle>
+                <Form control={control} onSubmit={handleSubmit(data => handleDiscount(data.discount))}>
+                    <Box
+                        sx={{
+                            maxHeight: '80vh',
+                            overflowY: 'auto',
+                            '&::-webkit-scrollbar': {
+                                width: '5px',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: '#f1f1f1',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#888',
+                                borderRadius: '10px',
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#555',
+                            },
+                            gap: "15px"
+                        }}>
+                        <FormControl className="checkout__form">
+                            <FormLabel>Вкажіть суму знижки</FormLabel>
+                            <Input endDecorator={<PercentIcon />} placeholder={selectedProduct.discount} type="number" {...register('discount')} />
+                        </FormControl>
+
+                    </Box>
+                    <Button type="submit" sx={{ width: "48%", my: "20px" }} >Зберегти</Button>
+                    <Button startDecorator={<DeleteOutlineRoundedIcon />} color="danger" variant="soft" onClick={() => handleDiscount(0)} >Видалити знижку</Button>
+                </Form>
+            </ModalDialog>
+        </Modal>
+    )
+};
 
 const DeleteProductModal = ({ openDelete, setOpenDelete }) => {
     const dispatch = useDispatch();
@@ -613,4 +666,4 @@ const ImagesModal = ({ openImages, setOpenImages }) => {
     )
 };
 
-export { CreateProductModal, EditProductModal, DeleteProductModal, AddPhotoProductModal, ImagesModal }
+export { CreateProductModal, EditProductModal, AddDiscountModal, DeleteProductModal, AddPhotoProductModal, ImagesModal }

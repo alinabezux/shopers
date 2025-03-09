@@ -49,11 +49,11 @@ const DrawerBasket = ({ open, onClose }) => {
     const basketToUse = userId ? basket : localBasket;
 
     const totalPrice = useMemo(() => {
-        return basketToUse.reduce((total, productInBasket) => total + productInBasket.price * productInBasket.quantity, 0);
+        return basketToUse.reduce((total, productInBasket) => total + (productInBasket.price - (productInBasket.price / 100 * productInBasket.discount)) * productInBasket.quantity, 0);
     }, [basketToUse]);
 
     const totalCashback = useMemo(() => {
-        return basketToUse.reduce((total, productInBasket) => total + productInBasket.cashback, 0);
+        return basketToUse.reduce((total, productInBasket) => total + productInBasket.cashback * productInBasket.quantity, 0);
     }, [basketToUse]);
 
 

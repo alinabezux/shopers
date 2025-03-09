@@ -6,7 +6,7 @@ import Select2 from 'react-select'
 import ukrpost from '../assets/ukrpost.png'
 import novapost from '../assets/novapost.png'
 import { ProductInBasket } from '../components';
-import { basketActions, orderActions } from '../redux';
+import { basketActions, orderActions, promocodeActions } from '../redux';
 import { postService } from '../services';
 import platamono from '../assets/plata_light_bg@2x.png'
 
@@ -16,8 +16,11 @@ import { Card, Chip, CardContent, Divider, Input, Button, FormControl, FormLabel
 import Checkbox from '@mui/joy/Checkbox';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import AlternateEmailRoundedIcon from '@mui/icons-material/AlternateEmailRounded';
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+import DiscountRoundedIcon from '@mui/icons-material/DiscountRounded';
+
 import { InfoOutlined, LocalMallOutlined } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import emoji from '../assets/emoji present.png'
@@ -31,6 +34,8 @@ const CheckoutPage = () => {
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [payment, setPayment] = useState('Передоплата');
     const [checked, setChecked] = useState(false);
+    const [freeShipping, setFreeShipping] = useState(false);
+    const [promoError, setPromoError] = useState("");
     const [searchString, setSearchString] = useState('');
     const [options, setOptions] = useState([]);
     const [warehouses, setWarehouses] = useState([]);
@@ -43,7 +48,7 @@ const CheckoutPage = () => {
     const { userId } = useSelector(state => state.authReducer);
     const { loadingOrder } = useSelector(state => state.orderReducer);
 
-    const { control, handleSubmit, register, formState: { errors }, setValue } = useForm();
+    const { control, handleSubmit, register, formState: { errors }, setValue, getValues } = useForm();
 
     const regions = [
         { value: 1, label: "Вінницька область" },
@@ -104,7 +109,6 @@ const CheckoutPage = () => {
         setOpen2(false);
     };
 
-
     useEffect(() => {
         if (user) {
             setValue('firstName', user?.name);
@@ -116,21 +120,41 @@ const CheckoutPage = () => {
     }, [user, setValue]);
 
     const basketToUse = userId ? basket : localBasket;
-
+    console.log(basketToUse)
+    
     const totalPrice = useMemo(() => {
         if (!checked) {
-            return basketToUse.reduce((total, productInBasket) => total + productInBasket.price * productInBasket.quantity, 0);
+            return basketToUse.reduce((total, productInBasket) => total + (productInBasket.price - productInBasket.price / 100 * productInBasket.discount) * productInBasket.quantity, 0);
         } else {
             return basketToUse.reduce((total, productInBasket) => {
-                return total + productInBasket.price * productInBasket.quantity;
+                return total + (productInBasket.price - productInBasket.price / 100 * productInBasket.discount) * productInBasket.quantity;
             }, -user.bonus);
         }
     }, [basketToUse, checked, user.bonus]);
 
 
     const totalCashback = useMemo(() => {
-        return basketToUse.reduce((total, productInBasket) => total + productInBasket.cashback, 0);
+        return basketToUse.reduce((total, productInBasket) => total + productInBasket.cashback * productInBasket.quantity, 0);
     }, [basketToUse]);
+
+    const { promocodes } = useSelector(state => state.promocodeReducer);
+
+    useEffect(() => {
+        dispatch(promocodeActions.getAll({}))
+    }, [dispatch])
+
+    const handleApplyPromo = () => {
+        const enteredCode = getValues("promocode").trim();
+
+        if (promocodes.some((code) => code.name === enteredCode)) {
+            setFreeShipping(true);
+            setPromoError("Промокод застосовано!");
+        } else {
+            setFreeShipping(false);
+            setPromoError("Невірний промокод");
+        }
+    };
+
 
     const handleCreateOrder = useCallback(async (data) => {
         try {
@@ -157,7 +181,8 @@ const CheckoutPage = () => {
                 paymentMethod: payment,
                 totalSum: totalPrice,
                 cashback: userId ? totalCashback : 0,
-                useBonus: checked
+                useBonus: checked,
+                freeShipping: freeShipping
             };
 
             let res;
@@ -172,7 +197,6 @@ const CheckoutPage = () => {
                 }
             }
 
-            // Перевірка, чи замовлення створено успішно
             if (res.meta.requestStatus === 'fulfilled') {
                 window.location.href = res.payload.invoice.pageUrl;
             } else {
@@ -182,9 +206,7 @@ const CheckoutPage = () => {
         } catch (error) {
             console.error('Помилка при створенні замовлення:', error);
         }
-    }, [dispatch, userId, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion, checked, totalCashback, basketToUse]);
-
-
+    }, [dispatch, userId, post, payment, totalPrice, selectedCity, selectedWarehouse, selectedRegion, checked, totalCashback, basketToUse, freeShipping]);
 
     const handleInputChange = async (value) => {
         setSearchString(value);
@@ -242,7 +264,6 @@ const CheckoutPage = () => {
     const handleChangePayment = (event) => {
         setPayment(event.target.value);
     };
-
 
     return (
         <Container className='checkout'>
@@ -467,8 +488,6 @@ const CheckoutPage = () => {
                                             <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
                                                 <Radio value='Передоплата' color="neutral" onChange={handleChangePayment} />
                                                 <Typography>Повна оплата на сайті</Typography>
-                                                {/* <img src={visa} style={{ height: "10px" }} />
-                                                <img src={mc} style={{ height: "10px" }} /> */}
                                             </Stack>
                                             <img src={platamono} alt='platamono' style={{ height: "15px" }} />
                                         </Stack>
@@ -513,7 +532,7 @@ const CheckoutPage = () => {
                             <Divider inset="none" />
                             <CardContent>
                                 {!userId &&
-                                    <Alert sx={{ mb: 2 }}
+                                    <Alert sx={{ mb: 2, justifyContent: "center" }}
                                         variant="soft"
                                         color="success"
                                         startDecorator={<img src={emoji} alt='emoji' loading="lazy" style={{ height: "20px" }} />}
@@ -521,8 +540,8 @@ const CheckoutPage = () => {
                                         <Link className='link' to='/auth#logIn' >
                                             <Button size="sm" variant="outlined" color="success" type='submit'>Авторизуйся</Button>
                                         </Link>
-                                        <p style={{ fontSize: "12px" }}>
-                                            та отримуй КЕШБЕК на це замовлення!
+                                        <p style={{ fontSize: "12px", marginBottom: "0px" }}>
+                                            та отримуй<b> КЕШБЕК</b><br />на це замовлення!
                                         </p>
                                     </Alert>
                                 }
@@ -572,11 +591,56 @@ const CheckoutPage = () => {
                                                         </Stack>
                                                     </>
                                                 }
+                                                <Alert sx={{
+                                                    margin: '10px 0px',
+                                                    gap: 2,
+                                                    flexDirection: 'column'
+                                                }}
+                                                    variant="soft"
+                                                    color="primary"
+                                                    display='flex'
+                                                >
+                                                    <FormControl
+                                                        sx={{ width: '100%' }}>
+                                                        <Typography sx={{
+                                                            pb: "5px",
+                                                            color: "grey",
+                                                            fontSize: "14px",
+                                                            textAlign: "center"
+                                                        }}>
+                                                            Введи промокод і отримай <br /> <b>безкоштовну доставку</b>!
+                                                        </Typography>
+
+                                                        <Stack spacing={1} direction="column" sx={{ justifyContent: "center", }}>
+                                                            <Input
+                                                                {...register('promocode')}
+                                                                placeholder="Промокод"
+                                                                startDecorator={<DiscountRoundedIcon />}
+                                                                endDecorator={
+                                                                    freeShipping ? (
+                                                                        <CheckCircleRoundedIcon sx={{ color: "green" }} />
+                                                                    ) : (
+                                                                        <Button color="neutral" type="button" onClick={handleApplyPromo}>
+                                                                            OK
+                                                                        </Button>
+                                                                    )
+                                                                }
+                                                            />
+
+                                                            {promoError && (
+                                                                <FormHelperText sx={{ color: freeShipping ? "green" : "#7C1313" }}>
+                                                                    <InfoOutlined sx={{ mr: 1 }} />
+                                                                    {promoError}
+                                                                </FormHelperText>
+                                                            )}
+                                                        </Stack>
+                                                    </FormControl>
+                                                </Alert>
+                                                <Divider inset="none" />
                                                 <Button loading={loadingOrder} type='submit' variant="solid" color="neutral" className="mainbutton" endDecorator={<DoneRoundedIcon />}>
                                                     ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
                                                 </Button>
                                                 <Typography sx={{
-                                                    padding: "10px 20px",
                                                     color: "grey",
                                                     fontSize: "14px",
                                                     textAlign: "center"

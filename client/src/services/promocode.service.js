@@ -1,4 +1,4 @@
-import {$authHost, $host} from "./axios.service";
+import {$authHost} from "./axios.service";
 import {urls} from "../configs/urls";
 
 const promocodeService = {

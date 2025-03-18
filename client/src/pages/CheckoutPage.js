@@ -123,14 +123,15 @@ const CheckoutPage = () => {
     console.log(basketToUse)
     
     const totalPrice = useMemo(() => {
-        if (!checked) {
-            return basketToUse.reduce((total, productInBasket) => total + (productInBasket.price - productInBasket.price / 100 * productInBasket.discount) * productInBasket.quantity, 0);
-        } else {
-            return basketToUse.reduce((total, productInBasket) => {
-                return total + (productInBasket.price - productInBasket.price / 100 * productInBasket.discount) * productInBasket.quantity;
-            }, -user.bonus);
-        }
-    }, [basketToUse, checked, user.bonus]);
+        const calculateTotal = (initialTotal = 0) => 
+            basketToUse.reduce((total, product) => 
+                total + product.price * (1 - product.discount / 100) * product.quantity, 
+                initialTotal
+            );
+    
+        return checked ? calculateTotal(-user?.bonus || 0) : calculateTotal();
+    }, [basketToUse, checked, user?.bonus]);
+    
 
 
     const totalCashback = useMemo(() => {
@@ -182,7 +183,7 @@ const CheckoutPage = () => {
                 totalSum: totalPrice,
                 cashback: userId ? totalCashback : 0,
                 useBonus: checked,
-                freeShipping: freeShipping
+                freeShipping: freeShipping                 
             };
 
             let res;

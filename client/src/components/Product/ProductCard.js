@@ -77,9 +77,13 @@ const ProductCard = memo(({ product }) => {
 
     return (
         <>
-            <Card className="product-card" data-product-name={product.name} data-product-url={`/product/${(toUrlFriendly(product.name))}`} sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
+            <Card className="product-card" sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
                 onClick={() => handleShowDetails(product)}>
-                <Link className='link' to={`/product/${(toUrlFriendly(product.name))}`} key={product._id}>
+                <Link className='link'
+                    to={`/product/${(toUrlFriendly(product.name))}`}
+                    key={product._id}
+                    data-product-name={product.name}
+                    data-product-url={`/product/${toUrlFriendly(product.name)}`}>
                     <AspectRatio ratio="1">
                         <CardOverflow>
                             {product.discount > 0 ?

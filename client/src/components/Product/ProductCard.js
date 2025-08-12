@@ -77,7 +77,7 @@ const ProductCard = memo(({ product }) => {
 
     return (
         <>
-            <Card className="product-card" sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
+            <Card className="product-card" data-product-name={product.name} data-product-url={`/product/${(toUrlFriendly(product.name))}`} sx={{ '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' } }}
                 onClick={() => handleShowDetails(product)}>
                 <Link className='link' to={`/product/${(toUrlFriendly(product.name))}`} key={product._id}>
                     <AspectRatio ratio="1">
@@ -111,7 +111,7 @@ const ProductCard = memo(({ product }) => {
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 {product.discount > 0 ?
                                     <Stack direction="column">
-                                        <Typography sx={{ textDecoration: "line-through", fontSize: "12px"}} >{product.price} ₴</Typography>
+                                        <Typography sx={{ textDecoration: "line-through", fontSize: "12px" }} >{product.price} ₴</Typography>
                                         <Chip variant="soft" size='md' color="danger"  >{product.price - product.price / 100 * product.discount} ₴</Chip>
                                     </Stack>
                                     : <Typography className="product-card__card-price">{product.price} ₴</Typography>

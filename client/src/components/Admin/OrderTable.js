@@ -386,8 +386,8 @@ const OrderTable = () => {
 
                                         {order.city ?
                                             <>
-                                                <Typography>{order.city.description}, №{order.warehouse.number}</Typography>
-                                                <Typography>{order.warehouse.description}</Typography>
+                                                <Typography>{order.city.description}, №{order.warehouse?.number}</Typography>
+                                                <Typography>{order.warehouse?.description}</Typography>
                                             </>
                                             :
                                             <>

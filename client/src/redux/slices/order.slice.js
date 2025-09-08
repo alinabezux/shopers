@@ -41,9 +41,9 @@ const createOrder = createAsyncThunk(
 
 const getAllOrders = createAsyncThunk(
     'orderSlice/getAllOrders',
-    async (page, { rejectWithValue }) => {
+    async ({ page, limit }, { rejectWithValue }) => {
         try {
-            const { data } = await orderService.getAllOrders(page);
+            const { data } = await orderService.getAllOrders({page, limit});
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)

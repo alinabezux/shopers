@@ -89,7 +89,7 @@ const OrderTable = () => {
     }, [dispatch, currentPage, totalPages]);
 
     useEffect(() => {
-        dispatch(orderActions.getAllOrders({ page: currentPage }));
+        dispatch(orderActions.getAllOrders({ page: currentPage, limit: 10 }));
     }, [dispatch, currentPage]);
 
 

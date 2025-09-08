@@ -20,7 +20,7 @@ const UsersTable = () => {
     }, [dispatch, currentPageUser])
 
     useEffect(() => {
-        dispatch(orderActions.getAllOrders({ page: currentPage }));
+        dispatch(orderActions.getAllOrders({ page: currentPage, limit: 20 }));
     }, [dispatch, currentPage]);
 
     useEffect(() => {

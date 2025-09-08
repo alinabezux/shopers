@@ -3,6 +3,10 @@ import { userService } from "../../services";
 
 const initialState = {
     users: [],
+    currentPageUser: 1,
+    totalPagesUser: 0,
+    countUser: 0,
+
     user: {},
 
     loading: false,
@@ -12,7 +16,17 @@ const initialState = {
     pswrdError: null
 };
 
-
+const getAllUsers = createAsyncThunk(
+    'userSlice/getAllUsers',
+    async (page, { rejectWithValue }) => {
+        try {
+            const { data } = await userService.getAllUsers(page);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
 const getUserById = createAsyncThunk(
     'userSlice/getUserById',
     async (userId, { rejectWithValue }) => {
@@ -53,9 +67,31 @@ const changePassword = createAsyncThunk(
 const userSlice = createSlice({
     name: 'userSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        setCurrentPageUsers: (state, action) => {
+            state.currentPageUser = action.payload
+        }
+    },
     extraReducers: builder =>
         builder
+            .addCase(getAllUsers.fulfilled, (state, action) => {
+                state.users = action.payload.users
+                state.countUser = action.payload.count
+                state.currentPageUser = action.payload.currentPage;
+                state.totalPagesUser = action.payload.totalPages;
+
+                state.loading = false
+                state.error = null
+
+            })
+            .addCase(getAllUsers.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(getAllUsers.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
+
             .addCase(getUserById.fulfilled, (state, action) => {
                 state.user = action.payload
                 state.loading = false
@@ -102,10 +138,10 @@ const userSlice = createSlice({
 
 })
 
-const { reducer: userReducer } = userSlice;
+const { reducer: userReducer, actions: { setCurrentPageUsers } } = userSlice;
 
 const userActions = {
-    getUserById, updateUser, changePassword
+    getAllUsers, getUserById, updateUser, changePassword, setCurrentPageUsers
 }
 
 export {

@@ -20,7 +20,7 @@ const AnalyticsTable = () => {
                 <iframe
                     title="Аналітика Looker Studio"
                     width="100%"
-                    height="750"
+                    height="1000px"
                     src="https://lookerstudio.google.com/embed/reporting/12863f4e-f57c-4b00-a60e-b9d43764f965/page/M4dUF"
                     frameBorder="0"
                     style={{ border: 0, borderRadius: '20px' }}

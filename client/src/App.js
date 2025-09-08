@@ -21,7 +21,7 @@ import {
     SetNewPasswordPage,
     ErrorPage
 } from "./pages";
-import { CategoriesTable, OrderTable, PrivateRoute, ProductsTable, TypesTable, PromocodeTable, AnalyticsTable } from "./components/Admin";
+import { CategoriesTable, OrderTable, PrivateRoute, ProductsTable, TypesTable, PromocodeTable, AnalyticsTable, UsersTable } from "./components/Admin";
 import './styles';
 import AnalyticsTracker from "./AnalyticsTracker";
 
@@ -56,6 +56,7 @@ function App() {
                             <Route path="types" element={<TypesTable />} />
                             <Route path="promocode" element={<PromocodeTable />} />
                             <Route path="analytics" element={<AnalyticsTable />} />
+                            <Route path="users" element={<UsersTable />} />
                         </Route>
                     </Route>
                     <Route path='/error' element={<ErrorPage />} />

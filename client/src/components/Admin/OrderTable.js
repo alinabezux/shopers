@@ -306,10 +306,10 @@ const OrderTable = () => {
                 }}
             >
                 <Table
-                    aria-labelledby="tableTitle"
+                    aria-label="basic table"
                     stickyHeader
                     hoverRow
-                    sx={{ '--Table-headerUnderlineThickness': '1px' }}>
+                    sx={{ '--Table-headerUnderlineThickness': '1px', }}>
                     <thead>
                         <tr>
                             <th style={{ width: 80, padding: "12px " }}>

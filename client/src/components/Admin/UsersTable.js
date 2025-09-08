@@ -70,7 +70,7 @@ const UsersTable = () => {
                     sx={(theme) => ({
                         p: 1,
                         borderRadius: 16,
-                        maxWidth: 400,
+                        maxWidth: 300,
                         mx: '0',
                         boxShadow: theme.shadow.sm,
                         [`& .${tabClasses.root}`]: {

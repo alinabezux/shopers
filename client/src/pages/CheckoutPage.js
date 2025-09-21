@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Form, Controller } from "react-hook-form";
 import Select2 from 'react-select'
@@ -120,18 +120,17 @@ const CheckoutPage = () => {
     }, [user, setValue]);
 
     const basketToUse = userId ? basket : localBasket;
-    console.log(basketToUse)
-    
+
     const totalPrice = useMemo(() => {
-        const calculateTotal = (initialTotal = 0) => 
-            basketToUse.reduce((total, product) => 
-                total + product.price * (1 - product.discount / 100) * product.quantity, 
+        const calculateTotal = (initialTotal = 0) =>
+            basketToUse.reduce((total, product) =>
+                total + product.price * (1 - product.discount / 100) * product.quantity,
                 initialTotal
             );
-    
+
         return checked ? calculateTotal(-user?.bonus || 0) : calculateTotal();
     }, [basketToUse, checked, user?.bonus]);
-    
+
 
 
     const totalCashback = useMemo(() => {
@@ -183,7 +182,7 @@ const CheckoutPage = () => {
                 totalSum: totalPrice,
                 cashback: userId ? totalCashback : 0,
                 useBonus: checked,
-                freeShipping: freeShipping                 
+                freeShipping: freeShipping
             };
 
             let res;

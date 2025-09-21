@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from 'react-bootstrap/Pagination';
 import generatePagination from '../Pagination';

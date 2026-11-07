@@ -80,7 +80,7 @@ const OrderTable = () => {
     const action = useRef(null);
 
     const dispatch = useDispatch();
-    const { orders, currentPage, totalPages, selectedOrder, loading, loadingOrder } = useSelector(state => state.orderReducer);
+    const { orders, currentPage, totalPages, count, selectedOrder, loading, loadingOrder } = useSelector(state => state.orderReducer);
 
     useEffect(() => {
         if (currentPage > totalPages) {
@@ -451,10 +451,16 @@ const OrderTable = () => {
                 </Table>
             </Sheet>
 
-            <Pagination
-                style={{ display: "flex", justifyContent: "center", marginBottom: '30px' }} size="sm">
-                {paginationItemsOrders}
-            </Pagination>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 4, mt: 2 }}>
+                {totalPages > 1 && (
+                    <Typography level="body-xs" textColor="text.tertiary" sx={{ mb: 1 }}>
+                        Сторінка <b>{currentPage}</b> з <b>{totalPages}</b> (Всього замовлень: <b>{count || orders.length}</b>)
+                    </Typography>
+                )}
+                <Pagination size="sm">
+                    {paginationItemsOrders}
+                </Pagination>
+            </Box>
         </Box>
     );
 }

@@ -46,5 +46,120 @@
     /* Розміщення тексту поверх псевдоелементу */
 }
 
+/* Modern Admin Pagination */
+.pagination {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin: 20px 0 30px 0;
+    list-style: none;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.pagination .page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.pagination .page-item:not(.disabled):not(.active) .page-link:hover {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    color: #000000;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0b6bcb;
+    border-color: #0b6bcb;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(11, 107, 203, 0.3);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #9ca3af;
+    background-color: #f9fafb;
+    border-color: #f3f4f6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Products Table Characteristics styling */
+.char-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+}
+
+.char-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+}
+
+.char-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    background-color: #f1f5f9;
+    color: #334155;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.char-desc-snippet {
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.char-expand-btn {
+    background: none;
+    border: none;
+    color: #0b6bcb;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    margin-top: 2px;
+    display: inline-block;
+}
+
+.char-expand-btn:hover {
+    text-decoration: underline;
+}
+
+.char-desc-full {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-top: 4px;
+    color: #1e293b;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 
   

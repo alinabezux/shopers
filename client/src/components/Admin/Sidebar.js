@@ -19,6 +19,7 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
 import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
+import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 import { List, ListItem } from '@mui/joy';
 
 
@@ -169,6 +170,15 @@ export default function Sidebar() {
                             <PeopleAltRoundedIcon />
                             <ListItemContent>
                                 <Typography component={Link} to="/admin/users" className='link' level="title-md">Користувачі</Typography>
+                            </ListItemContent>
+                        </ListItemButton>
+                    </ListItem>
+
+                    <ListItem>
+                        <ListItemButton selected={pathname.includes('/admin/banner') ? true : false}>
+                            <ImageRoundedIcon />
+                            <ListItemContent>
+                                <Typography component={Link} to="/admin/banner" className='link' level="title-md">Фото головної сторінки</Typography>
                             </ListItemContent>
                         </ListItemButton>
                     </ListItem>

@@ -19,6 +19,7 @@ const urls = {
     basket: '/basket',
     favorite: '/favorite',
     order: '/order',
+    banner: '/banner',
 }
 
 export {

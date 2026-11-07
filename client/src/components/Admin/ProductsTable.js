@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import Pagination from 'react-bootstrap/Pagination';
+import generatePagination from '../Pagination';
 
 import { toUrlFriendly } from '../../utils';
 import { AddDiscountModal, AddPhotoProductModal, CreateProductModal, DeleteProductModal, EditProductModal, ImagesModal } from './AdminModals/ProductModals';
@@ -47,6 +49,13 @@ const ProductsTable = () => {
     const [category, setCategory] = useState('')
     const [type, setType] = useState('')
     const [searchQuery, setSearchQuery] = useState('');
+    const [page, setPage] = useState(1);
+    const [expandedIds, setExpandedIds] = useState({});
+    const itemsPerPage = 10;
+
+    const toggleExpand = useCallback((id) => {
+        setExpandedIds(prev => ({ ...prev, [id]: !prev[id] }));
+    }, []);
 
 
     const { products } = useSelector(state => state.productReducer);
@@ -69,10 +78,19 @@ const ProductsTable = () => {
         }))
     }, [dispatch, category, type]);
 
+    useEffect(() => {
+        setPage(1);
+    }, [searchQuery, category, type]);
+
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.article.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    const reversedFiltered = [...filteredProducts].reverse();
+    const paginatedProducts = reversedFiltered.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+    const paginationItems = generatePagination(totalPages, page, setPage);
 
     const handleDeleteProduct = useCallback(async (product) => {
         await dispatch(productActions.setSelectedProduct(product));
@@ -250,103 +268,196 @@ const ProductsTable = () => {
             </Stack>
             <Sheet
                 variant="outlined"
-                sx={{ width: '100%', boxShadow: 'sm', borderRadius: 'sm', my: 3 }}
+                sx={{ width: '100%', boxShadow: 'sm', borderRadius: 'sm', my: 3, overflowX: 'auto' }}
             >
                 <Table
-                    aria-label="basic table"
+                    aria-label="products table"
                     stickyHeader
-                    sx={{ '--Table-headerUnderlineThickness': '1px', }}>
+                    sx={{
+                        '--Table-headerUnderlineThickness': '1px',
+                        '& tr > *': { verticalAlign: 'top' },
+                    }}
+                >
                     <thead>
                         <tr>
-                            <th style={{ width: '10%' }}>Артикул</th>
-                            <th style={{ width: '25%' }}>Фото</th>
-                            <th style={{ width: '20%' }}>Назва</th>
-                            <th style={{ width: '15%' }}>Категорія/Тип</th>
-                            <th style={{ width: '10%' }}>Ціна</th>
-                            <th style={{ width: '5%' }}>К-сть</th>
-                            <th style={{ width: '30%' }}>Характеристики</th>
-                            <th style={{ width: '5%' }}></th>
+                            <th style={{ width: '11%' }}>Артикул</th>
+                            <th style={{ width: '13%' }}>Фото</th>
+                            <th style={{ width: '18%' }}>Назва</th>
+                            <th style={{ width: '13%' }}>Категорія / Тип</th>
+                            <th style={{ width: '11%' }}>Ціна</th>
+                            <th style={{ width: '6%' }}>К-сть</th>
+                            <th style={{ width: '24%' }}>Характеристики</th>
+                            <th style={{ width: '4%' }}></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {[...filteredProducts].reverse().map(product =>
-                            <tr key={product._id}>
-                                <td><h5>{product.article}</h5></td>
-                                <td>
-                                    <Box className="gallery-container">
-                                        {product.images.slice(0, 2).map((image, index) => (
-                                            <Box key={index} className="image-wrapper" >
-                                                <img src={image} alt={`img-${index}`} className="image" />
-                                            </Box>
-                                        ))}
-                                        {product.images.length > 2 && (
-                                            <Button className="more-images" style={{ backgroundImage: `url(${product.images[2]})` }} onClick={() => handleOpenImages(product)}>
-                                                <Box className="overlay">+{product.images.length - 2}</Box>
-                                            </Button>
-                                        )}
-                                    </Box>
+                        {paginatedProducts.length === 0 ? (
+                            <tr>
+                                <td colSpan={8} style={{ textAlign: 'center', padding: '30px' }}>
+                                    <Typography level="body-md" textColor="text.tertiary">
+                                        Товарів не знайдено
+                                    </Typography>
                                 </td>
-                                <td>
-                                    <Link2
-                                        underline="none"
-                                        color="primary"
-                                        component="button"
-                                        onClick={() => handleShowDetails(product)}
-                                        fontWeight="lg">
-                                        <Link className="link" to={`/product/${(toUrlFriendly(product.name))}`} key={product._id} >{product.name}</Link>
-                                    </Link2>
-                                </td>
-                                <td>
-                                    <Stack direction="column" spacing={1}>
-                                        {categories.find(item => item._id === product._category) ? (
-                                            <Chip color='primary'>
-                                                {(categories.find(item => item._id === product._category)).name}
-                                            </Chip>
-                                        ) : (
-                                            <Chip color='danger'>Невідома категорія</Chip>
-                                        )}
-                                        {types.find(item => item._id === product._type) ? (
-                                            <Chip>
-                                                {(types.find(item => item._id === product._type))?.name}
-                                            </Chip>
-                                        ) : (
-                                            <Chip color='danger'>Невідомий тип</Chip>
-                                        )}
-                                    </Stack>
-
-                                </td>
-                                <td>
-                                    {product.discount > 0 ? (
-                                        <Stack direction="column" spacing={1}>
-                                            <Chip variant="solid"  color="danger" size='sm'>
-                                                - {product.discount} %
-                                            </Chip>
-                                            <p style={{ fontSize: '18px', color: '#7c1313' }}>{product.price - product.price / 100 * product.discount} грн.</p>
-                                            <p style={{ fontSize: '14px', textDecoration: "line-through" }}>{product.price} грн.</p>
-                                        </Stack>
-                                    ) : (
-                                        <p style={{ fontSize: '18px' }}> {product.price} грн.</p>
-                                    )}
-                                </td>
-
-                                <td>
-                                    <Chip color={product.quantity < 10 ? 'danger' : 'success'}>{product.quantity}</Chip>
-                                </td>
-                                <td>
-                                    <Box>
-                                        <Typography><b>Колір: </b>{product?.info?.color}</Typography>
-                                        <Typography><b>Розмір: </b>{product?.info?.size}</Typography>
-                                        <Typography><b>Матеріал: </b>{product?.info?.material}</Typography>
-                                        <Typography><b>Опис: </b>{product?.info?.description}</Typography>
-                                    </Box>
-                                </td>
-                                <td><RowMenu product={product} /></td>
                             </tr>
+                        ) : (
+                            paginatedProducts.map(product => (
+                                <tr key={product._id}>
+                                    <td>
+                                        <Typography level="title-sm" sx={{ fontFamily: 'monospace' }}>
+                                            {product.article}
+                                        </Typography>
+                                    </td>
+                                    <td>
+                                        <Box className="gallery-container">
+                                            {product.images.slice(0, 2).map((image, index) => (
+                                                <Box key={index} className="image-wrapper">
+                                                    <img src={image} alt={`img-${index}`} className="image" />
+                                                </Box>
+                                            ))}
+                                            {product.images.length > 2 && (
+                                                <Button
+                                                    className="more-images"
+                                                    style={{ backgroundImage: `url(${product.images[2]})` }}
+                                                    onClick={() => handleOpenImages(product)}
+                                                >
+                                                    <Box className="overlay">+{product.images.length - 2}</Box>
+                                                </Button>
+                                            )}
+                                        </Box>
+                                    </td>
+                                    <td>
+                                        <Link2
+                                            underline="none"
+                                            color="primary"
+                                            component="button"
+                                            onClick={() => handleShowDetails(product)}
+                                            fontWeight="lg"
+                                        >
+                                            <Link className="link" to={`/product/${(toUrlFriendly(product.name))}`}>
+                                                {product.name}
+                                            </Link>
+                                        </Link2>
+                                    </td>
+                                    <td>
+                                        <Stack direction="column" spacing={0.5}>
+                                            {categories.find(item => item._id === product._category) ? (
+                                                <Chip color="primary" size="sm">
+                                                    {(categories.find(item => item._id === product._category)).name}
+                                                </Chip>
+                                            ) : (
+                                                <Chip color="danger" size="sm">Невідома категорія</Chip>
+                                            )}
+                                            {types.find(item => item._id === product._type) ? (
+                                                <Chip size="sm" variant="soft">
+                                                    {(types.find(item => item._id === product._type))?.name}
+                                                </Chip>
+                                            ) : (
+                                                <Chip color="danger" size="sm">Невідомий тип</Chip>
+                                            )}
+                                        </Stack>
+                                    </td>
+                                    <td>
+                                        {product.discount > 0 ? (
+                                            <Stack direction="column" spacing={0.5}>
+                                                <Chip variant="solid" color="danger" size="sm">
+                                                    - {product.discount} %
+                                                </Chip>
+                                                <Typography level="title-md" sx={{ color: '#c92a2a', fontWeight: 'bold' }}>
+                                                    {product.price - (product.price / 100) * product.discount} грн.
+                                                </Typography>
+                                                <Typography level="body-xs" sx={{ textDecoration: 'line-through', color: 'text.tertiary' }}>
+                                                    {product.price} грн.
+                                                </Typography>
+                                            </Stack>
+                                        ) : (
+                                            <Typography level="title-md">
+                                                {product.price} грн.
+                                            </Typography>
+                                        )}
+                                    </td>
+                                    <td>
+                                        <Chip color={product.quantity < 10 ? 'danger' : 'success'} size="sm">
+                                            {product.quantity}
+                                        </Chip>
+                                    </td>
+                                    <td>
+                                        <Box className="char-container">
+                                            <Box className="char-tags">
+                                                {product?.info?.color && (
+                                                    <span className="char-tag">
+                                                        <b>Колір:</b>&nbsp;{product.info.color}
+                                                    </span>
+                                                )}
+                                                {product?.info?.size && (
+                                                    <span className="char-tag">
+                                                        <b>Розмір:</b>&nbsp;{product.info.size}
+                                                    </span>
+                                                )}
+                                                {product?.info?.material && (
+                                                    <span className="char-tag">
+                                                        <b>Матеріал:</b>&nbsp;{product.info.material}
+                                                    </span>
+                                                )}
+                                            </Box>
+                                            {product?.info?.description && (
+                                                <Box>
+                                                    {expandedIds[product._id] ? (
+                                                        <Box>
+                                                            <Box className="char-desc-full">
+                                                                {product.info.description}
+                                                            </Box>
+                                                            <button
+                                                                type="button"
+                                                                className="char-expand-btn"
+                                                                onClick={() => toggleExpand(product._id)}
+                                                            >
+                                                                Згорнути ▲
+                                                            </button>
+                                                        </Box>
+                                                    ) : (
+                                                        <Box>
+                                                            <div className="char-desc-snippet">
+                                                                <b>Опис: </b>
+                                                                {product.info.description.length > 95
+                                                                    ? `${product.info.description.slice(0, 95)}...`
+                                                                    : product.info.description}
+                                                            </div>
+                                                            {product.info.description.length > 95 && (
+                                                                <button
+                                                                    type="button"
+                                                                    className="char-expand-btn"
+                                                                    onClick={() => toggleExpand(product._id)}
+                                                                >
+                                                                    Детальніше (розмірна сітка / опис) ▼
+                                                                </button>
+                                                            )}
+                                                        </Box>
+                                                    )}
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    </td>
+                                    <td>
+                                        <RowMenu product={product} />
+                                    </td>
+                                </tr>
+                            ))
                         )}
                     </tbody>
-                </Table >
-            </Sheet >
-        </Box >
+                </Table>
+            </Sheet>
+
+            {totalPages > 1 && (
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4, mt: 1 }}>
+                    <Typography level="body-xs" textColor="text.tertiary" sx={{ mb: 1 }}>
+                        Сторінка <b>{page}</b> з <b>{totalPages}</b> (Показано {paginatedProducts.length} з {filteredProducts.length} товарів)
+                    </Typography>
+                    <Pagination size="sm">
+                        {paginationItems}
+                    </Pagination>
+                </Box>
+            )}
+        </Box>
 
     );
 }

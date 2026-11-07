@@ -3,7 +3,7 @@
 
 /* tablet */
 @media (min-width:641px) and (max-width: 1024px) {
-    .homepage__image--mb {
+    .homepage__image--adaptive {
         width: 100vw;
         height: 100%;
         object-fit: cover;
@@ -18,7 +18,7 @@
 
 /* mobile */
 @media (max-width:640px) {
-    .homepage__image--mb {
+    .homepage__image--adaptive {
         height: 100%;
         opacity: 0.8;
     }
@@ -34,10 +34,6 @@
         width: 100vw;
         height: 80vh;
 
-    }
-
-    .homepage__image--pc {
-        display: none;
     }
 
     .homepage__dark-box {
@@ -63,12 +59,8 @@
         width: 100vw;
     }
 
-    .homepage__image--pc {
+    .homepage__image--adaptive {
         width: 100%;
-    }
-
-    .homepage__image--mb {
-        display: none;
     }
 
     .homepage__dark-box {

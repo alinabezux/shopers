@@ -1,41 +1,232 @@
-/* mobile */
+.complete-order-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 160px);
+    padding: 48px 16px;
+    background-color: #F6F6F6;
+    box-sizing: border-box;
+}
+
+.complete-order-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.complete-order-card {
+    max-width: 560px;
+    width: 100%;
+    background-color: #FFFFFF !important;
+    border-radius: 20px !important;
+    border: 1px solid #E5E7EB !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+    padding: 48px 36px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.complete-order-logo-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.complete-order-brand-logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.complete-order-icon-wrapper {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: #ECFDF5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
+}
+
+.complete-order-icon-wrapper.invalid {
+    background: #FEF2F2;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.15);
+}
+
+.complete-order-check-icon {
+    font-size: 56px !important;
+    color: #10B981 !important;
+}
+
+.complete-order-title {
+    font-size: 30px !important;
+    font-weight: 800 !important;
+    color: #111111 !important;
+    letter-spacing: -0.5px !important;
+    margin: 0 0 10px 0 !important;
+    line-height: 1.25 !important;
+    font-family: 'Geologica', sans-serif !important;
+}
+
+.complete-order-subtitle {
+    font-size: 16px !important;
+    color: #6B7280 !important;
+    margin: 0 0 28px 0 !important;
+    line-height: 1.5 !important;
+    font-family: 'Geologica', sans-serif !important;
+    max-width: 440px;
+}
+
+.complete-order-number-box {
+    background-color: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 16px 24px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.complete-order-number-label {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    color: #9CA3AF !important;
+    margin-bottom: 4px !important;
+    font-family: 'Geologica', sans-serif !important;
+}
+
+.complete-order-number-value {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #111111 !important;
+    letter-spacing: 0.5px !important;
+    font-family: 'Geologica', sans-serif !important;
+}
+
+.complete-order-email-alert {
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 14px;
+    text-align: left;
+    margin-bottom: 32px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.complete-order-email-icon {
+    font-size: 24px !important;
+    color: #4A5568 !important;
+    margin-top: 2px !important;
+    flex-shrink: 0;
+}
+
+.complete-order-email-text {
+    font-size: 13.5px !important;
+    color: #4A5568 !important;
+    line-height: 1.55 !important;
+    font-family: 'Geologica', sans-serif !important;
+    margin: 0 !important;
+}
+
+.complete-order-main-btn {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    font-family: 'Geologica', sans-serif !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    padding: 16px 36px !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    max-width: 380px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.2s ease-in-out !important;
+    text-decoration: none !important;
+}
+
+.complete-order-main-btn:hover {
+    background-color: #222222 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Mobile responsive */
 @media (max-width: 640px) {
-    .completeOrderPage img {
-        width: 80%;
+    .complete-order-wrapper {
+        padding: 24px 12px;
+        min-height: calc(100vh - 120px);
     }
 
-
-}
-
-/* tablet */
-@media (min-width:641px) and (max-width: 1024px) {
-    .completeOrderPage img {
-        width: 50%;
+    .complete-order-card {
+        padding: 32px 18px !important;
+        border-radius: 16px !important;
     }
 
-    .completeOrderPage h4 {
-        font-size: 32px;
+    .complete-order-icon-wrapper {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 18px;
     }
-}
 
-@media (min-width: 1025px) {
-    .completeOrderPage img {
-        width: 18%;
+    .complete-order-check-icon {
+        font-size: 46px !important;
     }
-}
 
-.completeOrderPage {
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+    .complete-order-title {
+        font-size: 24px !important;
+        margin-bottom: 8px !important;
+    }
 
-.completeOrderPage div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 0;
+    .complete-order-subtitle {
+        font-size: 14px !important;
+        margin-bottom: 22px !important;
+    }
+
+    .complete-order-number-box {
+        padding: 14px 18px;
+        margin-bottom: 20px;
+    }
+
+    .complete-order-number-value {
+        font-size: 20px !important;
+    }
+
+    .complete-order-email-alert {
+        padding: 14px 14px;
+        gap: 10px;
+        margin-bottom: 26px;
+    }
+
+    .complete-order-email-text {
+        font-size: 12.5px !important;
+    }
+
+    .complete-order-main-btn {
+        padding: 14px 20px !important;
+        font-size: 13px !important;
+        max-width: 100% !important;
+    }
 }

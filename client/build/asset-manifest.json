@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7a92df89.css",
+    "main.js": "/static/js/main.cd2d5c04.js",
+    "static/js/453.258b012d.chunk.js": "/static/js/453.258b012d.chunk.js",
+    "static/media/fon2.jpg": "/static/media/fon2.1da4fa88cbd8c30a9904.jpg",
+    "static/media/loginpage.jpg": "/static/media/loginpage.988a5d74528e175d5fbd.jpg",
+    "static/media/SHOPERS_VI2.jpg": "/static/media/SHOPERS_VI2.db9a317561c50d681963.jpg",
+    "static/media/fon.jpeg": "/static/media/fon.446917e4ca5e2ca9ecb3.jpeg",
+    "static/media/novapost.png": "/static/media/novapost.fb526ed4abea0431f559.png",
+    "static/media/ukrpost.png": "/static/media/ukrpost.5e77b021cb4dfeef109d.png",
+    "static/media/emoji present.png": "/static/media/emoji present.02da567c44520db1b9b6.png",
+    "static/media/inst logo.png": "/static/media/inst logo.05c4c0f15baeb3be9cc2.png",
+    "static/media/inst.png": "/static/media/inst.83891edfe90b444750c4.png",
+    "static/media/plata_light_bg@2x.png": "/static/media/plata_light_bg@2x.b7fc41cde14daec75c3e.png",
+    "index.html": "/index.html",
+    "main.7a92df89.css.map": "/static/css/main.7a92df89.css.map",
+    "main.cd2d5c04.js.map": "/static/js/main.cd2d5c04.js.map",
+    "453.258b012d.chunk.js.map": "/static/js/453.258b012d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7a92df89.css",
+    "static/js/main.cd2d5c04.js"
+  ]
+}

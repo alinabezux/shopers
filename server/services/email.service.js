@@ -31,7 +31,7 @@ const sendEmail = async (receiverMail, emailAction, locals = {}) => {
     const html = await templateRenderer.render(templateInfo.templateName, locals);
 
     return transporter.sendMail({
-        from: 'SHOPERS_VI',
+        from: `"SHOPERS_VI" <${NO_REPLY_EMAIL}>`,
         to: receiverMail,
         subject: locals.subject || templateInfo.subject,
         html

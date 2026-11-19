@@ -52,11 +52,6 @@ const CompleteOrderPage = () => {
                     <img src={logo} alt="SHOPERS_VI" className="complete-order-brand-logo" />
                 </Box>
 
-                {/* Big success checkmark icon */}
-                <Box className="complete-order-icon-wrapper">
-                    <CheckCircleRoundedIcon className="complete-order-check-icon" />
-                </Box>
-
                 {/* Main headings */}
                 <Typography level="h2" className="complete-order-title">
                     Дякуємо за замовлення!
